@@ -1,34 +1,32 @@
-
-
 .key-value {
-  --data-table-th-bg: #2c2c2c;
-  --data-table-th-border: var(--panel-border);
-  --data-table-tr-even-bg: #333;
-  --data-table-tr-odd-bg: #2c2c2c;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  margin: 0;
-  color: var(--panel-fg);
+    --data-table-th-bg: #2c2c2c;
+    --data-table-th-border: var(--panel-border);
+    --data-table-tr-even-bg: #333;
+    --data-table-tr-odd-bg: #2c2c2c;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    margin: 0;
+    color: var(--panel-fg);
 }
 
 .key-value dt,
 .key-value dd {
-  padding: 0.25rem;
-  font-size: 0.65rem;
-  font-weight: normal;
+    padding: 0.25rem;
+    font-size: 0.65rem;
+    font-weight: normal;
 }
 
 .key-value dd {
-  text-align: right;
+    text-align: right;
 }
 
-.key-value dt:nth-child(4n+1),
-.key-value dd:nth-child(4n+2) {
-  background-color: var(--key-value-odd-bg) !important;
+.key-value dt:nth-child(4n + 1),
+.key-value dd:nth-child(4n + 2) {
+    background-color: var(--key-value-odd-bg) !important;
 }
 
-.key-value dt:nth-child(4n+3),
+.key-value dt:nth-child(4n + 3),
 .key-value dd:nth-child(4n) {
-  background-color: var(--key-value-even-bg) !important;
+    background-color: var(--key-value-even-bg) !important;
 }

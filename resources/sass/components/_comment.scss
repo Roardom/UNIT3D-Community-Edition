@@ -1,64 +1,64 @@
 .comment {
-  display: grid;
-  grid-template-columns: 55px 1fr auto 28px 28px;
-  grid-template-areas:
-            "avatar author timestamp edit delete"
-            "avatar content content content content";
-  gap: 0 0.25rem;
-  align-items: center;
-  padding: 0.75rem;
-  margin: 0.25rem;
-  border-radius: 0.25rem;
-  color: var(--comment-fg);
-  background-color: var(--comment-bg);
-  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, .12);
+    display: grid;
+    grid-template-columns: 55px 1fr auto 28px 28px;
+    grid-template-areas:
+        'avatar author timestamp edit delete'
+        'avatar content content content content';
+    gap: 0 0.25rem;
+    align-items: center;
+    padding: 0.75rem;
+    margin: 0.25rem;
+    border-radius: 0.25rem;
+    color: var(--comment-fg);
+    background-color: var(--comment-bg);
+    box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
 }
 
 .comment__header {
-  display: contents;
+    display: contents;
 }
 
 .comment__avatar {
-  grid-area: avatar;
-  border-radius: 50%;
-  width: 40px;
-  align-self: self-start;
+    grid-area: avatar;
+    border-radius: 50%;
+    width: 40px;
+    align-self: self-start;
 }
 
 .comment__author {
-  grid-area: author;
-  margin: 0;
-  font-size: 0.85rem;
-  align-self: self-start;
+    grid-area: author;
+    margin: 0;
+    font-size: 0.85rem;
+    align-self: self-start;
 }
 
 .comment__timestamp {
-  grid-area: timestamp;
-  font-size: 0.8rem;
+    grid-area: timestamp;
+    font-size: 0.8rem;
 }
 
 .comment__edit {
-  grid-area: edit;
+    grid-area: edit;
 }
 
 .comment__delete {
-  grid-area: delete;
-  display: inline-block
+    grid-area: delete;
+    display: inline-block;
 }
 
 .comment__edit,
 .comment__delete > button {
-  background-color: transparent;
-  border-radius: 50%;
-  aspect-ratio: 1;
+    background-color: transparent;
+    border-radius: 50%;
+    aspect-ratio: 1;
 }
 
 .comment__edit:hover,
 .comment__delete > button:hover {
-  filter: brightness(0.8);
-  backdrop-filter: brightness(0.8);
+    filter: brightness(0.8);
+    backdrop-filter: brightness(0.8);
 }
 
 .comment__content {
-  grid-area: content;
+    grid-area: content;
 }

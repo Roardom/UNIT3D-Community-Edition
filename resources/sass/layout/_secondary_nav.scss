@@ -1,44 +1,44 @@
 .nav2 {
-  margin: 0 max(0px, 24vw - 160px) 1rem max(0px, 24vw - 160px);
-  display: flex;
-  justify-content: space-between;
-  background-color: var(--nav-bg);
-  overflow-x: auto;
-  border: var(--nav-border);
-  border-radius: var(--nav-border-radius);
-  box-shadow: var(--nav-box-shadow);
+    margin: 0 max(0px, 24vw - 160px) 1rem max(0px, 24vw - 160px);
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--nav-bg);
+    overflow-x: auto;
+    border: var(--nav-border);
+    border-radius: var(--nav-border-radius);
+    box-shadow: var(--nav-box-shadow);
 }
 
 .nav__left,
 .nav__right {
-  list-style-type: none;
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: stretch;
-  margin: 0;
-  padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    margin: 0;
+    padding: 0;
 }
 
 .nav-item {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 .nav-item__link {
-  padding: 0.5rem 1rem;
-  white-space: nowrap;
-  display: inline-block;
-  color: var(--nav-item-fg);
-  background-color: var(--nav-item-bg);
-  font-size: 0.8rem;
-  border-bottom: var(--nav-item-border);
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+    display: inline-block;
+    color: var(--nav-item-fg);
+    background-color: var(--nav-item-bg);
+    font-size: 0.8rem;
+    border-bottom: var(--nav-item-border);
 }
 
 .nav-item__link:hover {
-  padding: 0.5rem 1rem calc(0.5rem - 2px)  1rem;
-  color: var(--nav-item-hover-fg);
-  border-bottom: var(--nav-item-hover-border);
-  background-color: var(--nav-item-hover-bg);
+    padding: 0.5rem 1rem calc(0.5rem - 2px) 1rem;
+    color: var(--nav-item-hover-fg);
+    border-bottom: var(--nav-item-hover-border);
+    background-color: var(--nav-item-hover-bg);
 }
 
 /*
@@ -51,7 +51,7 @@
 .bon-nav__gifts .bon-nav__gifts-item .nav-item__link,
 .bon-nav__tips .bon-nav__tips-item .nav-item__link,
 .bon-nav__send-gift .bon-nav__send-gift-item .nav-item__link {
-  color: var(--nav-item-selected-fg);
-  background-color: var(--nav-item-selected-bg);
-  border-bottom: var(--nav-item-selected-border);
+    color: var(--nav-item-selected-fg);
+    background-color: var(--nav-item-selected-bg);
+    border-bottom: var(--nav-item-selected-border);
 }
