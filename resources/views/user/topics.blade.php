@@ -20,90 +20,51 @@
     </li>
 @endsection
 
+@section('secondary-nav')
+    <x-nav>
+        <x-nav.tab href="{{ route('user_posts', ['username' => $user->username]) }}">
+            {{ __('user.posts') }}
+        </x-nav.tab>
+        <x-nav.tab href="{{ route('user_topics', ['username' => $user->username]) }}">
+            {{ __('user.topics') }}
+        </x-nav.tab>
+    </x-nav>
+@endsection
+
 @section('content')
-    <div class="container">
-        @if (!auth()->user()->isAllowed($user,'forum','show_topic'))
-            <div class="container pl-0 text-center">
-                <div class="jumbotron shadowed">
-                    <div class="container">
-                        <h1 class="mt-5 text-center">
-                            <i class="{{ config('other.font-awesome') }} fa-times text-danger"></i>{{ __('user.private-profile') }}
-                        </h1>
-                        <div class="separator"></div>
-                        <p class="text-center">{{ __('user.not-authorized') }}</p>
-                    </div>
-                </div>
-            </div>
-        @else
-            <div class="block">
-                @if (auth()->user()->id == $user->id || auth()->user()->group->is_modo)
-                    @include('user.buttons.forum')
-                @else
-                    @include('user.buttons.public')
-                @endif
-                <div class="forum-categories">
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th>{{ __('forum.forum') }}</th>
-                            <th>{{ __('forum.topic') }}</th>
-                            <th>{{ __('forum.author') }}</th>
-                            <th>{{ __('forum.stats') }}</th>
-                            <th>{{ __('forum.last-post-info') }}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach ($results as $r)
-                            @if ($r->viewable())
-                                <tr>
-                                    <td class="f-display-topic-icon"><span
-                                                class="badge-extra text-bold">{{ $r->forum->name }}</span></td>
-                                    <td class="f-display-topic-title">
-                                        <strong><a href="{{ route('forum_topic', ['id' => $r->id]) }}">{{ $r->name }}</a></strong>
-                                        @if ($r->state == "close") <span
-                                                class='label label-sm label-default'>{{ strtoupper(__('forum.closed')) }}</span>
-                                        @endif
-                                        @if ($r->approved == "1") <span
-                                                class='label label-sm label-success'>{{ strtoupper(__('forum.approved')) }}</span>
-                                        @endif
-                                        @if ($r->denied == "1") <span
-                                                class='label label-sm label-danger'>{{ strtoupper(__('forum.denied')) }}</span>
-                                        @endif
-                                        @if ($r->solved == "1") <span
-                                                class='label label-sm label-info'>{{ strtoupper(__('forum.solved')) }}</span> @endif
-                                        @if ($r->invalid == "1") <span
-                                                class='label label-sm label-warning'>{{ strtoupper(__('forum.invalid')) }}</span>
-                                        @endif
-                                        @if ($r->bug == "1") <span
-                                                class='label label-sm label-danger'>{{ strtoupper(__('forum.bug')) }}</span> @endif
-                                        @if ($r->suggestion == "1") <span
-                                                class='label label-sm label-primary'>{{ strtoupper(__('forum.suggestion')) }}</span>
-                                        @endif
-                                    </td>
-                                    <td class="f-display-topic-started"><a
-                                                href="{{ route('users.show', ['username' => $r->first_post_user_username]) }}">{{ $r->first_post_user_username }}</a>
-                                    </td>
-                                    <td class="f-display-topic-stats">
-                                        {{ $r->num_post - 1 }} {{ __('forum.replies') }}
-                                        \ {{ $r->views }} {{ __('forum.views') }}
-                                    </td>
-                                    <td class="f-display-topic-last-post">
-                                        <a
-                                                href="{{ route('users.show', ['username' => $r->last_post_user_username]) }}">{{ $r->last_post_user_username }}</a>,
-                                        <time datetime="{{ date('d-m-Y h:m', strtotime($r->updated_at)) }}">
-                                            {{ date('M d Y', strtotime($r->updated_at)) }}
-                                        </time>
-                                    </td>
-                                </tr>
-                            @endif
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                <div class="text-center col-md-12">
-                    {{ $results->links() }}
-                </div>
-            </div>
-        @endif
-    </div>
+    @if (!auth()->user()->isAllowed($user,'forum','show_topic'))
+        <x-panel :heading="__('user.private-profile')">
+            {{ __('user.not-authorized') }}
+        </x-panel>
+    @else
+        <ul class="topic-listings">
+            @foreach ($results->filter(fn ($topic) => $topic->viewable()) as $topic)
+                <li class="topic-listings__item">
+                    <x-forum.topic-listing
+                        :name="$topic->name"
+                        :link="route('forum_topic', ['id' => $topic->id])"
+                        :authorUsername="$topic->first_post_user_username"
+                        :authorLink="route('users.show', ['username' => $topic->first_post_user_username])"
+                        :postCount="$topic->num_post - 1"
+                        :viewCount="$topic->views"
+                        :isPinned="$topic->pinned == 1"
+                        :isClosed="$topic->state == 'close'"
+                        :isApproved="$topic->approved == '1'"
+                        :isDenied="$topic->denied == '1'"
+                        :isSolved="$topic->solved == '1'"
+                        :isInvalid="$topic->invalid == '1'"
+                        :isBug="$topic->bug == '1'"
+                        :isSuggestion="$topic->suggestion == '1'"
+                        :isImplemented="$topic->implemented == '1'"
+                        :latestPostAuthorUsername="$topic->last_post_user_username"
+                        :latestPostAuthorLink="route('users.show', ['username' => $topic->last_post_user_username])"
+                        :latestPostDatetime="$topic->last_reply_at"
+                        :latestPostDatetimeHuman="optional($topic->last_reply_at)->diffForHumans() ?? __('common.unknown')"
+                        :forumName="$topic->forum->name"
+                    />
+                </li>
+            @endforeach
+        </ul>
+        {{ $results->links() }}
+    @endif
 @endsection

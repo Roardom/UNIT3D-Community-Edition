@@ -1,0 +1,30 @@
+.profile__user-actions {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.profile__user-actions li {
+  list-style-type: none;
+}
+
+.profile__user-actions form {
+  width: 100%;
+}
+.profile__user-actions button,
+.profile__user-actions a {
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  padding: 0.5rem;
+  background-color: transparent;
+  color: var(--panel-fg);
+  font-size: 0.8rem;
+}
+
+.profile__user-actions button:hover {
+  background-color: var(--nav-item-hover-bg);
+  color: var(--nav-item-hover-fg);
+}

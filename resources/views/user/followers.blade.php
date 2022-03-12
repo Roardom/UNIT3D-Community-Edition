@@ -21,7 +21,6 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
         @if (!auth()->user()->isAllowed($user,'follower','show_follower'))
             <div class="container pl-0 text-center">
                 <div class="jumbotron shadowed">
@@ -35,52 +34,44 @@
                 </div>
             </div>
         @else
-            <div class="block">
-                @if (auth()->user()->id == $user->id || auth()->user()->group->is_modo)
-                    @include('user.buttons.follower')
-                @else
-                    @include('user.buttons.public')
-                @endif
-                <div class="forum-categories">
-                    <table class="table table-bordered table-hover">
-                        <thead>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>{{ __('user.avatar') }}</th>
+                        <th>{{ __('user.user') }}</th>
+                        <th>{{ __('common.created_at') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($results as $follower)
                         <tr>
-                            <th>{{ __('user.avatar') }}</th>
-                            <th>{{ __('user.user') }}</th>
-                            <th>{{ __('common.created_at') }}</th>
+                            <td>
+                                <a href="{{ route('users.show', ['username' => $follower->user->username]) }}">
+                                    <img
+                                        src="{{ url($follower->user->image ? 'files/img/'.$follower->user->image : 'img/profile.png') }}"
+                                        alt="avatar"
+                                        title="{{ $follower->user->username }}"
+                                        style="height: 50px"
+                                    >
+                                </a>
+                            </td>
+                            <td>
+                                <x-chip.user
+                                    :anon="false"
+                                    :userId="$follower->user->id"
+                                    :username="$follower->user->username"
+                                    :href="route('users.show', ['username' => $follower->user->username])"
+                                    :icon="$follower->user->group->icon"
+                                    :color="$follower->user->group->color"
+                                    :group="$follower->user->group->name"
+                                    :effect="$follower->user->group->effect"
+                                />
+                            </td>
+                            <td>{{ $follower->created_at }}</td>
                         </tr>
-                        </thead>
-                        <tbody>
-                        @foreach ($results as $f)
-                            <tr>
-                                @if ($f->user->image != null)
-                                    <td><a href="{{ route('users.show', ['username' => $f->user->username]) }}">
-                                            <img src="{{ url('files/img/' . $f->user->image) }}" alt="avatar"
-                                                 data-toggle="tooltip"
-                                                 title="{{ $f->user->username }}" height="50px"
-                                                 data-original-title="{{ $f->user->username }}">
-                                        </a></td>
-                                @else
-                                    <td><a href="{{ route('users.show', ['username' => $f->user->username]) }}">
-                                            <img src="{{ url('img/profile.png') }}" alt="avatar" data-toggle="tooltip"
-                                                 title="{{ $f->user->username }}" height="50px"
-                                                 data-original-title="{{ $f->user->username }}">
-                                        </a></td>
-                                @endif
-                                <td><a href="{{ route('users.show', ['username' => $f->user->username]) }}">
-                                            <span class="badge-user text-bold"
-                                                  style="color:{{ $f->user->group->color }};">{{ $f->user->username }}</span>
-                                    </a></td>
-                                <td>{{ $f->created_at }}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                <div class="text-center col-md-12">
-                    {{ $results->links() }}
-                </div>
-            </div>
+                    @endforeach
+                </tbody>
+            </table>
+            {{ $results->links() }}
         @endif
-    </div>
 @endsection

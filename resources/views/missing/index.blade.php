@@ -18,7 +18,5 @@
             vertical-align: middle !important;
         }
 	</style>
-	<div class="box container">
-		@livewire('missing-media-search')
-	</div>
+	@livewire('missing-media-search')
 @endsection

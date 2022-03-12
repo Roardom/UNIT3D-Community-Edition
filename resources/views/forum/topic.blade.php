@@ -56,133 +56,159 @@
         </div>
         <br>
         <div class="topic-posts">
-            @foreach ($posts as $k => $p)
-                <div class="post" id="post-{{ $p->id }}">
-                    <div class="block">
-                        <div class="profil">
-                            <div class="head">
-                                <p>{{ date('M d Y', $p->created_at->getTimestamp()) }}
-                                    ({{ $p->created_at->diffForHumans() }}) <a class="text-bold permalink"
-                                                                               href="{{ route('forum_topic', ['id' => $p->topic->id]) }}?page={{ $p->getPageNumber() }}#post-{{ $p->id }}">{{ __('forum.permalink') }}</a>
-                                </p>
-                            </div>
-                            <aside class="col-md-2 post-info">
-                                @if ($p->user->image != null)
-                                    <img src="{{ url('files/img/' . $p->user->image) }}" alt="{{ $p->user->username }}"
-                                         class="img-thumbnail post-info-image">
-                                @else
-                                    <img src="{{ url('img/profile.png') }}" alt="{{ $p->user->username }}"
-                                         class="img-thumbnail post-info-image">
-                                @endif
-                                <p>
-                                    <span class="badge-user text-bold">
-                                        <a href="{{ route('users.show', ['username' => $p->user->username]) }}"
-                                           class="post-info-username"
-                                           style="color:{{ $p->user->group->color }}; display:inline;">{{ $p->user->username }}</a>
-                                        @if ($p->user->isOnline())
-                                            <i class="{{ config('other.font-awesome') }} fa-circle text-green"
-                                               data-toggle="tooltip"
-                                               data-original-title="Online"></i>
-                                        @else
-                                            <i class="{{ config('other.font-awesome') }} fa-circle text-red"
-                                               data-toggle="tooltip"
-                                               data-original-title="Offline"></i>
-                                        @endif
-                                        <a
-                                                href="{{ route('create', ['receiver_id' => $p->user->id, 'username' => $p->user->username]) }}">
-                                            <i class="{{ config('other.font-awesome') }} fa-envelope text-info"></i>
-                                        </a>
-                                    </span>
-                                </p>
+            @foreach ($posts as $post)
+                <x-forum.post
+                    :id="$post->id"
+                    :topicId="$post->topic->id"
+                    :page="$post->getPageNumber()"
+                    :datetime="$post->created_at"
+                    :datetimeHuman="$post->created_at->diffForHumans()"
+                    :authorId="$post->user->id"
+                    :authorUsername="$post->user->username"
+                    :authorAvatar="url($post->user->image == null ? 'img/profile.png' : 'files/img/'.$p->user->image)"
+                    :authorIcon="$post->user->group->icon"
+                    :authorColor="$post->user->group->color"
+                    :authorGroup="$post->user->group->name"
+                    :authorEffect="$post->user->group->effect"
+                    :authorTitle="$post->user->title"
+                    :authorJoinDatetime="$post->user->created_at"
+                    :authorJoinDatetimeHuman="date('d M Y', $post->user->created_at->getTimestamp())"
+                    :authorTopicCount="optional($post->user->topics)->count() ?? 0"
+                    :authorPostsCount="optional($post->user->posts)->count() ?? 0"
+                    :authorSignature="$post->user->signature ? $post->user->getSignature() : ''"
+                    :isAuthorOnline="$post->user->isOnline()"
+                    :tipCost="optional($post->tips)->sum('cost') ?? 0"
+                    :isTopicOpen="$topic->state == 'open'"
+                    :contentBbcode="$post->content"
+                >
+                    @joypixels($post->getContentHtml())
+                </x-forum.post>
+{{--                <div class="post" id="post-{{ $p->id }}">--}}
+{{--                    <div class="block">--}}
+{{--                        <div class="profil">--}}
+{{--                            <div class="head">--}}
+{{--                                <p>{{ date('M d Y', $p->created_at->getTimestamp()) }}--}}
+{{--                                    ({{ $p->created_at->diffForHumans() }}) <a class="text-bold permalink"--}}
+{{--                                                                               href="{{ route('forum_topic', ['id' => $p->topic->id]) }}?page={{ $p->getPageNumber() }}#post-{{ $p->id }}">{{ __('forum.permalink') }}</a>--}}
+{{--                                </p>--}}
+{{--                            </div>--}}
+{{--                            <aside class="col-md-2 post-info">--}}
+{{--                                @if ($p->user->image != null)--}}
+{{--                                    <img src="{{ url('files/img/' . $p->user->image) }}" alt="{{ $p->user->username }}"--}}
+{{--                                         class="img-thumbnail post-info-image">--}}
+{{--                                @else--}}
+{{--                                    <img src="{{ url('img/profile.png') }}" alt="{{ $p->user->username }}"--}}
+{{--                                         class="img-thumbnail post-info-image">--}}
+{{--                                @endif--}}
+{{--                                <p>--}}
+{{--                                    <span class="badge-user text-bold">--}}
+{{--                                        <a href="{{ route('users.show', ['username' => $p->user->username]) }}"--}}
+{{--                                           class="post-info-username"--}}
+{{--                                           style="color:{{ $p->user->group->color }}; display:inline;">{{ $p->user->username }}</a>--}}
+{{--                                        @if ($p->user->isOnline())--}}
+{{--                                            <i class="{{ config('other.font-awesome') }} fa-circle text-green"--}}
+{{--                                               data-toggle="tooltip"--}}
+{{--                                               data-original-title="Online"></i>--}}
+{{--                                        @else--}}
+{{--                                            <i class="{{ config('other.font-awesome') }} fa-circle text-red"--}}
+{{--                                               data-toggle="tooltip"--}}
+{{--                                               data-original-title="Offline"></i>--}}
+{{--                                        @endif--}}
+{{--                                        <a--}}
+{{--                                                href="{{ route('create', ['receiver_id' => $p->user->id, 'username' => $p->user->username]) }}">--}}
+{{--                                            <i class="{{ config('other.font-awesome') }} fa-envelope text-info"></i>--}}
+{{--                                        </a>--}}
+{{--                                    </span>--}}
+{{--                                </p>--}}
 
-                                <p><span class="badge-user text-bold"
-                                         style="color:{{ $p->user->group->color }}; background-image:{{ $p->user->group->effect }};"><i
-                                                class="{{ $p->user->group->icon }}" data-toggle="tooltip"
-                                                data-original-title="{{ $p->user->group->name }}"></i>
-                                        {{ $p->user->group->name }}</span>
-                                </p>
-                                @if (!empty($p->user->title))
-                                    <p><span class="badge-user title">{{ $p->user->title }}</span></p>
-                                @endif
-                                <p>
-                                    <span class="badge-user text-bold">Joined: {{ date('d M Y', $p->user->created_at->getTimestamp()) }}</span>
-                                </p>
+{{--                                <p><span class="badge-user text-bold"--}}
+{{--                                         style="color:{{ $p->user->group->color }}; background-image:{{ $p->user->group->effect }};"><i--}}
+{{--                                                class="{{ $p->user->group->icon }}" data-toggle="tooltip"--}}
+{{--                                                data-original-title="{{ $p->user->group->name }}"></i>--}}
+{{--                                        {{ $p->user->group->name }}</span>--}}
+{{--                                </p>--}}
+{{--                                @if (!empty($p->user->title))--}}
+{{--                                    <p><span class="badge-user title">{{ $p->user->title }}</span></p>--}}
+{{--                                @endif--}}
+{{--                                <p>--}}
+{{--                                    <span class="badge-user text-bold">Joined: {{ date('d M Y', $p->user->created_at->getTimestamp()) }}</span>--}}
+{{--                                </p>--}}
 
-                                <p>
-                                    @if($p->user->topics && $p->user->topics->count() > 0)
-                                        <span class="badge-user text-bold">
-                                            <a href="{{ route('user_topics', ['username' => $p->user->username]) }}"
-                                               class="post-info-username">{{ $p->user->topics->count() }} {{ __('forum.topics') }}</a>
-                                        </span>
-                                    @endif
-                                    @if($p->user->posts && $p->user->posts->count() > 0)
-                                        <span class="badge-user text-bold">
-                                            <a href="{{ route('user_posts', ['username' => $p->user->username]) }}"
-                                               class="post-info-username">{{ $p->user->posts->count() }} {{ __('forum.posts') }}</a>
-                                        </span>
-                                    @endif
-                                </p>
+{{--                                <p>--}}
+{{--                                    @if($p->user->topics && $p->user->topics->count() > 0)--}}
+{{--                                        <span class="badge-user text-bold">--}}
+{{--                                            <a href="{{ route('user_topics', ['username' => $p->user->username]) }}"--}}
+{{--                                               class="post-info-username">{{ $p->user->topics->count() }} {{ __('forum.topics') }}</a>--}}
+{{--                                        </span>--}}
+{{--                                    @endif--}}
+{{--                                    @if($p->user->posts && $p->user->posts->count() > 0)--}}
+{{--                                        <span class="badge-user text-bold">--}}
+{{--                                            <a href="{{ route('user_posts', ['username' => $p->user->username]) }}"--}}
+{{--                                               class="post-info-username">{{ $p->user->posts->count() }} {{ __('forum.posts') }}</a>--}}
+{{--                                        </span>--}}
+{{--                                    @endif--}}
+{{--                                </p>--}}
 
 
-                                <span class="inline">
-                                    @if ($topic->state == 'open')
-                                        <button id="quote"
-                                                class="btn btn-xs btn-xxs btn-info">{{ __('forum.quote') }}</button>
-                                    @endif
-                                    @if (auth()->user()->group->is_modo || $p->user_id === auth()->user()->id)
-                                        <a href="{{ route('forum_post_edit_form', ['id' => $topic->id, 'postId' => $p->id]) }}"><button
-                                                    class="btn btn-xs btn-xxs btn-warning">{{ __('common.edit') }}</button></a>
-                                    @endif
-                                    @if (auth()->user()->group->is_modo || ($p->user_id === auth()->user()->id && $topic->state === 'open'))
-                                        <form role="form" method="POST"
-                                              action="{{ route('forum_post_delete', ['id' => $topic->id, 'postId' => $p->id]) }}"
-                                              style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-xs btn-xxs btn-danger">
-                                                {{ __('common.delete') }}
-                                            </button>
-                                        </form>
-                                    @endif
-                                </span>
-                            </aside>
+{{--                                <span class="inline">--}}
+{{--                                    @if ($topic->state == 'open')--}}
+{{--                                        <button id="quote"--}}
+{{--                                                class="btn btn-xs btn-xxs btn-info">{{ __('forum.quote') }}</button>--}}
+{{--                                    @endif--}}
+{{--                                    @if (auth()->user()->group->is_modo || $p->user_id === auth()->user()->id)--}}
+{{--                                        <a href="{{ route('forum_post_edit_form', ['id' => $topic->id, 'postId' => $p->id]) }}"><button--}}
+{{--                                                    class="btn btn-xs btn-xxs btn-warning">{{ __('common.edit') }}</button></a>--}}
+{{--                                    @endif--}}
+{{--                                    @if (auth()->user()->group->is_modo || ($p->user_id === auth()->user()->id && $topic->state === 'open'))--}}
+{{--                                        <form role="form" method="POST"--}}
+{{--                                              action="{{ route('forum_post_delete', ['id' => $topic->id, 'postId' => $p->id]) }}"--}}
+{{--                                              style="display: inline;">--}}
+{{--                                            @csrf--}}
+{{--                                            @method('DELETE')--}}
+{{--                                            <button type="submit" class="btn btn-xs btn-xxs btn-danger">--}}
+{{--                                                {{ __('common.delete') }}--}}
+{{--                                            </button>--}}
+{{--                                        </form>--}}
+{{--                                    @endif--}}
+{{--                                </span>--}}
+{{--                            </aside>--}}
 
-                            <article class="col-md-10 post-content" data-bbcode="{{ $p->content }}">
-                                @joypixels($p->getContentHtml())
-                            </article>
+{{--                            <article class="col-md-10 post-content" data-bbcode="{{ $p->content }}">--}}
+{{--                                @joypixels($p->getContentHtml())--}}
+{{--                            </article>--}}
 
-                            <div class="post-signature col-md-12 mt-10">
-                                <div id="forumTip{{ $p->id }}" class="text-center">
-                                    @if($p->tips && $p->tips->sum('cost') > 0)
-                                        <div>{{ __('forum.tip-post-total') }} {{ $p->tips->sum('cost') }}
-                                            BON
-                                        </div>
-                                    @endif
-                                    <div id="forumTip" route="{{ route('tip_poster') }}"
-                                         leaveTip="{{ __('torrent.leave-tip') }}" quickTip="{{ __('torrent.quick-tip') }}">
-                                        <a class="forumTip" href="#/" post="{{ $p->id }}"
-                                           user="{{ $p->user->id }}">{{ __('forum.tip-this-post') }}</a></div>
-                                </div>
-                            </div>
+{{--                            <div class="post-signature col-md-12 mt-10">--}}
+{{--                                <div id="forumTip{{ $p->id }}" class="text-center">--}}
+{{--                                    @if($p->tips && $p->tips->sum('cost') > 0)--}}
+{{--                                        <div>{{ __('forum.tip-post-total') }} {{ $p->tips->sum('cost') }}--}}
+{{--                                            BON--}}
+{{--                                        </div>--}}
+{{--                                    @endif--}}
+{{--                                    <div id="forumTip" route="{{ route('tip_poster') }}"--}}
+{{--                                         leaveTip="{{ __('torrent.leave-tip') }}" quickTip="{{ __('torrent.quick-tip') }}">--}}
+{{--                                        <a class="forumTip" href="#/" post="{{ $p->id }}"--}}
+{{--                                           user="{{ $p->user->id }}">{{ __('forum.tip-this-post') }}</a></div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
 
-                            <div class="likes">
-                                <span class="badge-extra">
-                                    @livewire('like-button', ['post' => $p->id])
-                                    @livewire('dislike-button', ['post' => $p->id])
-                                </span>
-                            </div>
+{{--                            <div class="likes">--}}
+{{--                                <span class="badge-extra">--}}
+{{--                                    @livewire('like-button', ['post' => $p->id])--}}
+{{--                                    @livewire('dislike-button', ['post' => $p->id])--}}
+{{--                                </span>--}}
+{{--                            </div>--}}
 
-                            @if ($p->user->signature != null)
-                                <div class="post-signature col-md-12">
-                                    {!! $p->user->getSignature() !!}
-                                </div>
-                            @endif
+{{--                            @if ($p->user->signature != null)--}}
+{{--                                <div class="post-signature col-md-12">--}}
+{{--                                    {!! $p->user->getSignature() !!}--}}
+{{--                                </div>--}}
+{{--                            @endif--}}
 
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-                </div>
-                <br>
+{{--                            <div class="clearfix"></div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                <br>--}}
             @endforeach
             <div class="text-center">{{ $posts->links() }}</div>
             <br>

@@ -1,0 +1,14 @@
+.ratio-bar {
+  display: flex;
+  justify-content: center;
+}
+
+.ratio-bar__list {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ratio-bar__list-item {
+  list-style-type: none;
+}

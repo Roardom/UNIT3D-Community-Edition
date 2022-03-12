@@ -18,48 +18,59 @@
 @endsection
 
 @section('content')
-    <div class="container box">
-        <h2>{{ __('staff.articles') }}</h2>
-        <a href="{{ route('staff.articles.create') }}" class="btn btn-primary">
-            {{ __('common.add') }} {{ __('staff.articles') }}
-        </a>
-        <div class="table-responsive">
-            <table class="table table-condensed table-striped table-bordered table-hover">
-                <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Date</th>
-                    <th>{{ __('common.action') }}</th>
-                </tr>
-                </thead>
-                <tbody>
+    <x-panel>
+        <x-slot name="heading">
+            {{ __('staff.articles') }}
+            <a href="{{ route('staff.articles.create') }}">
+                <i class="{{ config('other.font-awesome') }} fa-plus"></i>
+            </a>
+        </x-slot>
+        <table class="data-table articles-table">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Date</th>
+                <th>{{ __('common.comments') }}</th>
+                <th>{{ __('common.action') }}</th>
+            </tr>
+            </thead>
+            <tbody>
                 @foreach ($articles as $article)
-                    <tr>
+                    <tr class="articles-table__article">
                         <td>
-                            <a href="{{ route('staff.articles.edit', ['id' => $article->id]) }}">{{ $article->title }}</a>
+                            <a href="{{ route('staff.articles.edit', ['id' => $article->id]) }}">
+                                {{ $article->title }}
+                            </a>
                         </td>
                         <td>
-                            <a
-                                    href="{{ route('users.show', ['username' => $article->user->username]) }}">{{ $article->user->username }}</a>
+                            <a href="{{ route('users.show', ['username' => $article->user->username]) }}">
+                                {{ $article->user->username }}
+                            </a>
                         </td>
-                        <td>{{ $article->created_at->toDayDateTimeString() }}</td>
+                        <td>{{ $article->created_at }}</td>
+                        <td>{{ $article->comments->count() }}</td>
                         <td>
-                            <form action="{{ route('staff.articles.destroy', ['id' => $article->id]) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <a href="{{ route('staff.articles.edit', ['id' => $article->id]) }}"
-                                   class="btn btn-warning">{{ __('common.edit') }}</a>
-                                <button type="submit" class="btn btn-danger">{{ __('common.delete') }}</button>
-                            </form>
+                            <div class="data-table__actions">
+                                <a href="{{ route('staff.articles.edit', ['id' => $article->id]) }}">
+                                    <i class="{{ config('other.font-awesome') }} fa-pencil"></i>
+                                </a>
+                                <form
+                                    action="{{ route('staff.articles.destroy', ['id' => $article->id]) }}"
+                                    method="POST"
+                                >
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit">
+                                        <i class="{{ config('other.font-awesome') }} fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @endforeach
-                </tbody>
-            </table>
-        </div>
-        <div class="text-center">
-            {{ $articles->links() }}
-        </div>
-    </div>
+            </tbody>
+        </table>
+        <div>{{ $articles->links() }}</div>
+    </x-panel>
 @endsection

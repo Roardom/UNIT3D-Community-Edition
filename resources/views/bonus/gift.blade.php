@@ -13,68 +13,49 @@
     </li>
 @endsection
 
+@section('secondary-nav')
+    @include('bonus.buttons', ['nav' => 'bon-nav__gift'])
+@endsection
+
 @section('content')
-    <div class="container">
-        <div class="block">
-            @include('bonus.buttons')
-            <div class="some-padding">
-                <div class="row">
-                    <div class="col-sm-8">
-                        <div class="well">
-                            <div class="container-fluid">
-                                <form role="form" method="POST" action="{{ route('bonus_send_gift') }}" id="send_bonus">
-                                    @csrf
+    <x-panel :padded="true" :heading="__('bon.gift-to')">
+        <form role="form" method="POST" action="{{ route('bonus_send_gift') }}" id="send_bonus">
+            @csrf
+            <label for="to_username">
+                {{ __('pm.select') }}
+                <input
+                    name="to_username"
+                    placeholder="{{ __('common.username') }}"
+                    required
+                >
+            </label>
+            <label for="bonus_points">
+                {{ __('bon.amount') }}
+                <input
+                    placeholder="{{ __('common.enter') }} {{ strtolower(__('common.amount')) }}"
+                    name="bonus_points"
+                    type="number"
+                    required
+                >
+            </label>
+            <label for="bonus_message">
+                {{ __('pm.message') }}
+                <textarea
+                    name="bonus_message"
+                    cols="50"
+                    rows="10"
+                ></textarea>
+            </label>
+            <input type="submit" value="{{ __('common.submit') }}">
+        </form>
+    </x-panel>
+@endsection
 
-                                    <div class="form-group">
-                                        <label for="to_username">{{ __('bon.gift-to') }}</label>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="users">{{ __('pm.select') }}</label>
-                                        <label>
-                                            <input name="to_username" class="form-control"
-                                                   placeholder="{{ __('common.username') }}" required>
-                                        </label>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="bonus_points">{{ __('bon.amount') }}</label>
-                                    </div>
-                                    <div class="form-group">
-                                        <input class="form-control"
-                                               placeholder="{{ __('common.enter') }} {{ strtolower(__('common.amount')) }}"
-                                               name="bonus_points" type="number" id="bonus_points" required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="bonus_message">{{ __('pm.message') }}</label>
-                                    </div>
-                                    <div class="form-group">
-                                        <textarea class="form-control" name="bonus_message" cols="50" rows="10"
-                                                  id="bonus_message"></textarea>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <input class="btn btn-primary" type="submit" value="{{ __('common.submit') }}">
-                                    </div>
-
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-
-                        <div class="text-blue well well-sm text-center">
-                            <h2><strong>{{ __('bon.your-points') }}: <br></strong>{{ $userbon }}</h2>
-                        </div>
-
-                        <div class="well well-sm mt-20">
-                            <p class="lead text-orange text-center">{{ __('bon.exchange-warning') }}
-                                <br><strong>{{ __('bon.no-refund') }}</strong>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+@section('sidebar')
+    <x-panel :padded="true" :heading="__('bon.your-points')">
+        {{ $userbon }}
+    </x-panel>
+    <x-panel :padded="true" :heading="__('bon.no-refund')">
+        <strong>{{ __('bon.exchange-warning') }}</strong>
+    </x-panel>
 @endsection

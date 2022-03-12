@@ -14,25 +14,22 @@
 @endsection
 
 @section('content')
-    <div class="container box">
-        <h2>{{ __('staff.pages') }}</h2>
-        <a href="{{ route('staff.pages.create') }}" class="btn btn-primary">
-            {{ __('common.add') }}
-            {{ trans_choice('common.a-an-art',false) }}
-            {{ __('common.new-adj') }}
-            {{ __('staff.page') }}
-        </a>
-
-        <div class="table-responsive">
-            <table class="table table-condensed table-striped table-bordered table-hover">
-                <thead>
+    <x-panel>
+        <x-slot name="heading">
+            {{ __('staff.pages') }}
+            <a href="{{ route('staff.pages.create') }}" class="btn btn-primary">
+                <i class="{{ config('other.font-awesome') }} fa-plus"></i>
+            </a>
+        </x-slot>
+        <table class="data-table">
+            <thead>
                 <tr>
                     <th>{{ __('common.title') }}</th>
                     <th>{{ __('common.date') }}</th>
                     <th>{{ __('common.action') }}</th>
                 </tr>
-                </thead>
-                <tbody>
+            </thead>
+            <tbody>
                 @foreach ($pages as $page)
                     <tr>
                         <td>
@@ -44,18 +41,22 @@
                             {{ $page->created_at }} ({{ $page->created_at->diffForHumans() }})
                         </td>
                         <td>
-                            <form action="{{ route('staff.pages.destroy', ['id' => $page->id]) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <a href="{{ route('staff.pages.edit', ['id' => $page->id]) }}"
-                                   class="btn btn-warning">{{ __('common.edit') }}</a>
-                                <button type="submit" class="btn btn-danger">{{ __('common.delete') }}</button>
-                            </form>
+                            <div class="data-table__actions">
+                                <a href="{{ route('staff.pages.edit', ['id' => $page->id]) }}">
+                                    <i class="{{ config('other.font-awesome') }} fa-pencil"></i>
+                                </a>
+                                <form action="{{ route('staff.pages.destroy', ['id' => $page->id]) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit">
+                                        <i class="{{ config('other.font-awesome') }} fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
+            </tbody>
+        </table>
+    </x-panel>
 @endsection

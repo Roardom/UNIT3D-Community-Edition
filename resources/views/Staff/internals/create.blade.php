@@ -13,52 +13,26 @@
     </li>
     <li class="active">
         <a href="{{ route('staff.internals.create') }}" itemprop="url" class="l-breadcrumb-item-link">
-            <span itemprop="title" class="l-breadcrumb-item-link-title">{{ __('common.add') }} Internal</span>
+            <span itemprop="title" class="l-breadcrumb-item-link-title">{{ __('common.add') }} Internal Group</span>
         </a>
     </li>
 @endsection
 
 @section('content')
-    <div class="container box">
-        <h2>{{ __('common.add') }} Internal-Group</h2>
-        <div class="table-responsive">
-            <form role="form" method="POST" action="{{ route('staff.internals.store') }}" enctype="multipart/form-data">
-                @csrf
-                <div class="table-responsive">
-                    <table class="table table-condensed table-striped table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th>{{ __('common.name') }}</th>
-                            <th>Icon</th>
-                            <th>Effect</th>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-                        <tr>
-                            <td>
-                                <label>
-                                    <input type="text" class="form-control" name="name" required>
-                                </label>
-                            </td>
-
-                            <td>
-                                <label>
-                                    <input type="text" class="form-control" name="icon" value="fa-magic">
-                                </label>
-                            </td>
-
-                            <td>
-                                <label>
-                                    <input type="text" class="form-control" name="effect" value="none">
-                                </label>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <button type="submit" class="btn btn-default">{{ __('common.submit') }}</button>
-            </form>
-        </div>
-    </div>
+    <form role="form" method="POST" action="{{ route('staff.internals.store') }}" enctype="multipart/form-data">
+        @csrf
+        <label>
+            {{ __('common.name') }}
+            <input type="text" class="form-control" name="name" required>
+        </label>
+        <label>
+            Icon
+            <input type="text" class="form-control" name="icon" value="fa-magic">
+        </label>
+        <label>
+            Effect
+            <input type="text" class="form-control" name="effect" value="none">
+        </label>
+        <button type="submit">{{ __('common.submit') }}</button>
+    </form>
 @endsection

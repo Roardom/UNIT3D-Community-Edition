@@ -24,7 +24,5 @@
 @endsection
 
 @section('content')
-    <div>
-        @livewire('backup-panel')
-    </div>
+    @livewire('backup-panel')
 @endsection

@@ -22,110 +22,58 @@
     </li>
 @endsection
 
-@section('content')
-    <div class="container box">
-        <div class="button-holder">
-            @include('forum.buttons')
-            <div class="button-right">
-                <form role="form" method="GET" action="{{ route('forum_search_form') }}" class="form-inline">
+@section('secondary-nav')
+    <x-nav>
+        {{--            @include('forum.buttons')--}}
+        <x-slot name="right">
+            <x-nav.tab>
+                <form role="form" method="GET" action="{{ route('forum_search_form') }}">
                     <input type="hidden" name="sorting" value="updated_at">
                     <input type="hidden" name="direction" value="desc">
                     <input type="hidden" name="category" value="{{ $forum->id }}">
                     <label for="name"></label>
-                    <input type="text" name="name" id="name"
+                    <input type="hidden" name="name" id="name"
                            value="{{ isset($params) && is_array($params) && array_key_exists('name', $params) ? $params['name'] : '' }}"
-                           placeholder="{{ __('forum.category-quick-search') }}" class="form-control">
-                    <button type="submit" class="btn btn-success">
-                        <i class="{{ config('other.font-awesome') }} fa-search"></i> {{ __('common.search') }}
-                    </button>
+                           placeholder="{{ __('forum.category-quick-search') }}"
+                    >
+                    <button type="submit">{{ __('common.search') }}</button>
                 </form>
-            </div>
-        </div>
-        <div class="forum-categories">
-            <table class="table table-bordered table-hover">
-                <thead class="no-space">
-                <tr class="no-space">
-                    <td colspan="6" class="no-space">
-                        <div class="header gradient teal some-padding">
-                            <div class="inner_content">
-                                <h1 class="no-space">{{ $forum->name }}</h1>
-                                <div class="text-center some-padding">{{ $forum->description }}</div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                </thead>
-                <thead>
-                <tr>
-                    <th></th>
-                    <th>{{ __('forum.forum') }}</th>
-                    <th>{{ __('forum.topic') }}</th>
-                    <th>{{ __('forum.author') }}</th>
-                    <th>{{ __('forum.stats') }}</th>
-                    <th>{{ __('forum.last-post-info') }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach ($topics as $t)
-                    <tr>
-                        @if ($t->pinned == 0)
-                            <td class="f-display-topic-icon"><img src="{{ url('img/f_icon_read.png') }}" alt="read">
-                            </td>
-                        @else
-                            <td class="f-display-topic-icon"><span class="text-green"><i
-                                            class="{{ config('other.font-awesome') }} fa-thumbtack fa-2x"></i></span>
-                            </td>
-                        @endif
-                        <td class="f-display-topic-icon"><span
-                                    class="badge-extra text-bold">{{ $t->forum->name }}</span>
-                        </td>
-                        <td class="f-display-topic-title">
-                            <strong><a href="{{ route('forum_topic', ['id' => $t->id]) }}">{{ $t->name }}</a></strong>
-                            @if ($t->state == "close") <span
-                                    class='label label-sm label-default'>{{ strtoupper(__('forum.closed')) }}</span> @endif
-                            @if ($t->approved == "1") <span
-                                    class='label label-sm label-success'>{{ strtoupper(__('forum.approved')) }}</span> @endif
-                            @if ($t->denied == "1") <span
-                                    class='label label-sm label-danger'>{{ strtoupper(__('forum.denied')) }}</span> @endif
-                            @if ($t->solved == "1") <span
-                                    class='label label-sm label-info'>{{ strtoupper(__('forum.solved')) }}</span> @endif
-                            @if ($t->invalid == "1") <span
-                                    class='label label-sm label-warning'>{{ strtoupper(__('forum.invalid')) }}</span> @endif
-                            @if ($t->bug == "1") <span
-                                    class='label label-sm label-danger'>{{ strtoupper(__('forum.bug')) }}</span> @endif
-                            @if ($t->suggestion == "1") <span
-                                    class='label label-sm label-primary'>{{ strtoupper(__('forum.suggestion')) }}</span>
-                            @endif
-                            @if ($t->implemented == "1") <span
-                                    class='label label-sm label-success'>{{ strtoupper(__('forum.implemented')) }}</span>
-                            @endif
-                        </td>
-                        <td class="f-display-topic-started"><a
-                                    href="{{ route('users.show', ['username' => $t->first_post_user_username]) }}">{{ $t->first_post_user_username }}</a>
-                        </td>
-                        <td class="f-display-topic-stats">
-                            {{ $t->num_post - 1 }} {{ __('forum.replies') }}
-                            \ {{ $t->views }} {{ __('forum.views') }}
-                        </td>
-                        @php $last_post = DB::table('posts')->where('topic_id', '=', $t->id)->orderBy('id',
-                            'desc')->first() @endphp
-                        <td class="f-display-topic-last-post">
-                            <a
-                                    href="{{ route('users.show', ['username' => $t->last_post_user_username]) }}">{{ $t->last_post_user_username }}</a>
-                            on
-                            <time datetime="{{ date('M d Y', strtotime($last_post->created_at ?? 'UNKNOWN')) }}">
-                                {{ date('M d Y', strtotime($last_post->created_at ?? 'UNKNOWN')) }}
-                            </time>
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-        </div>
-        <div class="text-center col-md-12">
-            {{ $topics->links() }}
-        </div>
+            </x-nav.tab>
+        </x-slot>
+    </x-nav>
+@endsection
 
-        @include('forum.stats')
-    </div>
+@section('content')
+    <x-panel :heading="$forum->description">
+        <ul class="topic-listings">
+            @foreach ($topics as $topic)
+                <li class="topic-listings__item">
+                    <x-forum.topic-listing
+                        :name="$topic->name"
+                        :link="route('forum_topic', ['id' => $topic->id])"
+                        :authorUsername="$topic->first_post_user_username"
+                        :authorLink="route('users.show', ['username' => $topic->first_post_user_username])"
+                        :postCount="$topic->num_post - 1"
+                        :viewCount="$topic->views"
+                        :isPinned="$topic->pinned == 1"
+                        :isClosed="$topic->state == 'close'"
+                        :isApproved="$topic->approved == '1'"
+                        :isDenied="$topic->denied == '1'"
+                        :isSolved="$topic->solved == '1'"
+                        :isInvalid="$topic->invalid == '1'"
+                        :isBug="$topic->bug == '1'"
+                        :isSuggestion="$topic->suggestion == '1'"
+                        :isImplemented="$topic->implemented == '1'"
+                        :latestPostAuthorUsername="$topic->last_post_user_username"
+                        :latestPostAuthorLink="route('users.show', ['username' => $topic->last_post_user_username])"
+                        :latestPostDatetime="$topic->last_reply_at"
+                        :latestPostDatetimeHuman="optional($topic->last_reply_at)->diffForHumans() ?? __('common.unknown')"
+                        :forumName="$topic->forum->name"
+                    />
+                </li>
+            @endforeach
+        </ul>
+    </x-panel>
+    {{ $topics->links() }}
+    @include('forum.stats')
 @endsection

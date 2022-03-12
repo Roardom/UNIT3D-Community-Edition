@@ -1,0 +1,47 @@
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* !important can be removed once themes are ported over to css variables */
+  background-color: transparent !important;
+  padding: 1rem 1rem 0 1rem;
+  color: #888;
+}
+
+.footer section {
+  min-width: 10rem;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.footer h2 {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.footer ul {
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+.footer li {
+  list-style-type: none;
+  font-size: 0.8rem;
+}
+
+.footer a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.footer a:hover {
+  color: #aaa;
+}
+
+.footer__subfooter {
+  padding: 0.5rem;
+  font-size: 0.7rem;
+  width: 100%;
+  text-align: center;
+}

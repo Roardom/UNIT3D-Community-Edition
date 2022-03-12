@@ -18,43 +18,53 @@
 
 @section('content')
     <div class="container box">
-        <div class="row">
-            <div class="col-md-4 box centered-form">
-                <form role="form" method="POST" action="{{ route('contact.store') }}">
-                    @csrf
-                    <div class="form-group">
+        <div class="sidebar2">
+            <main>
+                <x-panel.padded :heading="__('common.contact')">
+                    <form role="form" method="POST" action="{{ route('contact.store') }}">
+                        @csrf
                         <label>
-                            <input type="text" name="contact-name" placeholder="{{ __('common.name') }}"
-                                   value="{{ auth()->user()->username }}" class="form-control" required>
+                            <input
+                                type="text"
+                                name="contact-name"
+                                placeholder="{{ __('common.name') }}"
+                                value="{{ auth()->user()->username }}"
+                                required
+                            >
                         </label>
-                    </div>
-
-                    <div class="form-group">
                         <label>
-                            <input type="email" name="email" placeholder="{{ __('common.email') }}"
-                                   value="{{ auth()->user()->email }}" class="form-control" required>
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="{{ __('common.email') }}"
+                                value="{{ auth()->user()->email }}"
+                                required
+                            >
                         </label>
-                    </div>
-
-                    <div class="form-group">
                         <label>
-                            <textarea name="message" placeholder="{{ __('common.message') }}" class="form-control"
-                                      cols="30" rows="10"></textarea>
+                            <textarea
+                                name="message"
+                                placeholder="{{ __('common.message') }}"
+                                class="form-control"
+                                cols="30"
+                                rows="10"
+                            >
+                            </textarea>
                         </label>
-                    </div>
-
-                    <button type="submit" class="btn btn-lg btn-primary btn-block">{{ __('common.submit') }}</button>
-                </form>
-            </div>
-
-            <div class="col-sm-8">
-                <div class="well well-sm mt-0">
-                    <p class="lead text-green text-center"><i class="{{ config('other.font-awesome') }} fa-star"></i>
-                        <strong>{{ __('common.contact-header') }}</strong> <i
-                                class="{{ config('other.font-awesome') }} fa-star"></i></p>
-                    <p class="lead text-orange text-center">{{ __('common.contact-desc') }}.</p>
-                </div>
-            </div>
+                        <button type="submit">{{ __('common.submit') }}</button>
+                    </form>
+                </x-panel.padded>
+            </main>
+            <aside>
+                <x-panel.padded>
+                    <x-slot name="heading">
+                        <i class="{{ config('other.font-awesome') }} fa-star"></i>
+                        {{ __('common.contact-header') }}
+                        <i class="{{ config('other.font-awesome') }} fa-star"></i>
+                    </x-slot>
+                    {{ __('common.contact-desc') }}.
+                </x-panel.padded>
+            </aside>
         </div>
     </div>
 @endsection

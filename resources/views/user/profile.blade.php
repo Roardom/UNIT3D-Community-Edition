@@ -18,801 +18,831 @@
     </li>
 @endsection
 
-@section('content')
-    <div class="container">
-        @if (!auth()->user()->isAllowed($user))
-            <div class="container pl-0 text-center">
-                <div class="jumbotron shadowed">
-                    <div class="container">
-                        <h1 class="mt-5 text-center">
-                            <i class="{{ config('other.font-awesome') }} fa-times text-danger"></i>{{ __('user.private-profile') }}
-                        </h1>
-                        <div class="separator"></div>
-                        <p class="text-center">{{ __('user.not-authorized') }}</p>
-                    </div>
-                </div>
-            </div>
-        @else
-            <div class="block">
-                @if (auth()->user()->id == $user->id || auth()->user()->group->is_modo)
-                    @include('user.buttons.profile')
-                @else
-                    @include('user.buttons.public')
-                @endif
-                <div class="header gradient blue">
-                    <div class="inner_content">
-                        <div class="content">
-                            <div class="col-md-2">
-                                @if ($user->image != null)
-                                    <img src="{{ url('files/img/' . $user->image) }}" alt="{{ $user->username }}"
-                                         class="img-circle">
-                                @else
-                                    <img src="{{ url('img/profile.png') }}" alt="{{ $user->username }}"
-                                         class="img-circle">
-                                @endif
-                            </div>
-                            <div class="col-lg-10">
-                                <h2>{{ $user->username }}
-                                    @if ($user->isOnline())
-                                        <i class="{{ config('other.font-awesome') }} fa-circle text-green"
-                                           data-toggle="tooltip" title=""
-                                           data-original-title="{{ __('user.online') }}"></i>
-                                    @else
-                                        <i class="{{ config('other.font-awesome') }} fa-circle text-red"
-                                           data-toggle="tooltip" title=""
-                                           data-original-title="{{ __('user.offline') }}"></i>
-                                    @endif
-                                    <a href="{{ route('create', ['receiver_id' => $user->id, 'username' => $user->username]) }}">
-                                        <i class="{{ config('other.font-awesome') }} fa-envelope text-info"></i>
-                                    </a>
-                                    <a href="#modal_user_gift" data-toggle="modal"
-                                       data-target="#modal_user_gift"><i
-                                                class="{{ config('other.font-awesome') }} fa-gift text-info"></i></a>
-                                    @if ($user->getWarning() > 0)
-                                        <i class="{{ config('other.font-awesome') }} fa-exclamation-circle text-orange"
-                                           aria-hidden="true"
-                                           data-toggle="tooltip" title=""
-                                           data-original-title="{{ __('user.active-warning') }}">
-                                        </i>
-                                    @endif
-                                    @if ($user->notes->count() > 0 && auth()->user()->group->is_modo)
-                                        <a href="{{ route('user_setting', ['username' => $user->username]) }}"
-                                           class="edit">
-                                            <i class="{{ config('other.font-awesome') }} fa-comment fa-beat text-danger"
-                                               aria-hidden="true" data-toggle="tooltip"
-                                               title="" data-original-title="{{ __('user.staff-noted') }}">
-                                            </i>
-                                        </a>
-                                    @endif
-                                    @php $watched = App\Models\Watchlist::whereUserId($user->id)->first(); @endphp
-                                    @if ($watched && auth()->user()->group->is_modo)
-                                        <i class="{{ config('other.font-awesome') }} fa-eye fa-beat text-danger"
-                                           aria-hidden="true" data-toggle="tooltip"
-                                           title="" data-original-title="User is being watched!">
-                                        </i>
-                                    @endif
-                                </h2>
-                                <h4>{{ __('common.group') }}: <span class="badge-user text-bold"
-                                                                 style="color:{{ $user->group->color }}; background-image:{{ $user->group->effect }};"><i
-                                                class="{{ $user->group->icon }}" data-toggle="tooltip" title=""
-                                                data-original-title="{{ $user->group->name }}"></i> {{ $user->group->name }}</span>
-                                </h4>
-                                <h4>{{ __('user.registration-date') }} {{ $user->created_at === null ? "N/A" : date('M d Y', $user->created_at->getTimestamp()) }}</h4>
-                                @if (auth()->user()->id != $user->id)
-                                    <span style="float:right;">
-                                        @if (auth()->user()->group->is_modo)
-                                            <button class="btn btn-xs btn-danger" data-toggle="modal"
-                                                    data-target="#modal_warn_user">
-                                            <span class="{{ config('other.font-awesome') }} fa-radiation-alt"></span> Warn User
-                                        </button>
-                                            <button class="btn btn-xs btn-warning" data-toggle="modal"
-                                                    data-target="#modal_user_note"><span
-                                                        class="{{ config('other.font-awesome') }} fa-sticky-note"></span> {{ __('user.note') }} </button>
-                                            @if(! $watched)
-                                                <button class="btn btn-xs btn-danger" data-toggle="modal"
-                                                        data-target="#modal_user_watch">
-                                            <span class="{{ config('other.font-awesome') }} fa-eye"></span> Watch </button>
-                                            @else
-                                                <form style="display: inline;"
-                                                      action="{{ route('staff.watchlist.destroy', ['id' => $watched->id]) }}"
-                                                      method="POST">
-							                    @csrf
-                                                    @method('DELETE')
-							                    <button class="btn btn-xs btn-warning" type="submit">
-								                    <i class="{{ config('other.font-awesome') }} fa-eye-slash"></i> Unwatch
-							                    </button>
-						                    </form>
-                                            @endif
-                                            @if ($user->group->id == 5)
-                                                <button class="btn btn-xs btn-warning" data-toggle="modal"
-                                                        data-target="#modal_user_unban"><span
-                                                            class="{{ config('other.font-awesome') }} fa-undo"></span> {{ __('user.unban') }} </button>
-                                            @else
-                                                <button class="btn btn-xs btn-danger" data-toggle="modal"
-                                                        data-target="#modal_user_ban"><span
-                                                            class="{{ config('other.font-awesome') }} fa-ban"></span> {{ __('user.ban') }}</button>
-                                            @endif
-                                            <a href="{{ route('user_setting', ['username' => $user->username]) }}"
-                                               class="btn btn-xs btn-warning"><span
-                                                        class="{{ config('other.font-awesome') }} fa-pencil"></span> {{ __('user.edit') }} </a>
-                                            <button class="btn btn-xs btn-danger" data-toggle="modal"
-                                                    data-target="#modal_user_delete"><span
-                                                        class="{{ config('other.font-awesome') }} fa-trash"></span> {{ __('user.delete') }} </button>
-                                        @endif
-                                        </span>
-                                @endif
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                @if (auth()->user()->isAllowed($user,'profile','show_profile_torrent_count'))
-                    <div class="button-holder some-padding">
-                        <div class="text-center">
-                            <span class="badge-user badge-float p-10"><i
-                                        class="{{ config('other.font-awesome') }} fa-upload"></i> {{ __('user.total-uploads') }}
-                                : <span class="text-green text-bold">{{ $user->torrents_count }}</span></span>
-                            <span class="badge-user badge-float p-10"><i
-                                        class="{{ config('other.font-awesome') }} fa-download"></i> {{ __('user.total-downloads') }}
-                                        : <span
-                                        class="text-red text-bold">{{ $history->where('actual_downloaded', '>', 0)->count() }}</span></span>
-                            <span class="badge-user badge-float p-10"><i
-                                        class="{{ config('other.font-awesome') }} fa-cloud-upload"></i> {{ __('user.total-seeding') }}
-                                        : <span class="text-green text-bold">{{ $user->getSeeding() }}</span></span>
-                            <span class="badge-user badge-float p-10"><i
-                                        class="{{ config('other.font-awesome') }} fa-cloud-download"></i> {{ __('user.total-leeching') }}
-                                        : <span class="text-red text-bold">{{ $user->getLeeching() }}</span></span>
-                        </div>
-                    </div>
-                @endif
-
-                <hr class="no-space">
-
-
-                <h3><i class="{{ config('other.font-awesome') }} fa-unlock"></i> {{ __('user.public-info') }}</h3>
-                <div style="word-wrap: break-word; display: table; width: 100%;">
-                    <table class="table user-info table-condensed table-striped table-bordered">
-                        <tbody>
-                        <tr>
-                            <td colspan="2" class="text-bold">
-                                <div class="button-holder">
-                                    <div class="button-left-small">{{ __('user.user') }} {{ __('user.information') }}:</div>
-                                    <div class="button-right-large">
-
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        @if (auth()->user()->isAllowed($user,'profile','show_profile_title'))
-                            <tr>
-                                <td>{{ __('user.title') }}</td>
-                                <td>
-                                    <span class="badge-extra">{{ $user->title }}</span>
-                                </td>
-                            </tr>
-                        @endif
-                        @if (auth()->user()->isAllowed($user,'profile','show_profile_about'))
-                            <tr>
-                                <td>{{ __('user.about') }}</td>
-                                <td>
-                                    @joypixels($user->getAboutHtml())
-                                </td>
-                            </tr>
-                        @endif
-                        <tr>
-                            <td colspan="2" class="text-bold">
-                                <div class="button-holder">
-                                    <div class="button-left-small">{{ __('torrent.torrent') }} {{ __('torrent.statistics') }}
-                                        :
-                                    </div>
-                                    <div class="button-right-large">
-
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        @if (auth()->user()->isAllowed($user,'profile','show_profile_torrent_ratio'))
-                            <tr>
-                                <td class="col-md-2">{{ __('user.download-recorded') }}</td>
-                                <td>
-                    <span class="badge-extra text-blue" data-toggle="tooltip" title=""
-                          data-original-title="{{ __('user.download-recorded') }}">{{ $realdownload }}</span> =
-                                    <span class="badge-extra text-info" data-toggle="tooltip" title=""
-                                          data-original-title="Default Starter Download">{{ App\Helpers\StringHelper::formatBytes($def_download , 2) }}</span>
-                                    +
-                                    <span class="badge-extra text-red" data-toggle="tooltip" title=""
-                                          data-original-title="{{ __('user.download-true') }}">{{ App\Helpers\StringHelper::formatBytes($his_down , 2) }}</span>
-                                    −
-                                    <span class="badge-extra text-green" data-toggle="tooltip" title=""
-                                          data-original-title="Freeleech Downloads">{{ App\Helpers\StringHelper::formatBytes($free_down , 2) }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>{{ __('user.upload-recorded') }}</td>
-                                <td>
-                    <span class="badge-extra text-blue" data-toggle="tooltip" title=""
-                          data-original-title="{{ __('user.upload-recorded') }}">{{ $user->getUploaded() }}</span> =
-                                    <span class="badge-extra text-info" data-toggle="tooltip" title=""
-                                          data-original-title="Default Starter Upload">{{ App\Helpers\StringHelper::formatBytes($def_upload , 2) }}</span>
-                                    +
-                                    <span class="badge-extra text-green" data-toggle="tooltip" title=""
-                                          data-original-title="{{ __('user.upload-true') }}">{{ App\Helpers\StringHelper::formatBytes($his_upl , 2) }}</span>
-                                    +
-                                    <span class="badge-extra text-info" data-toggle="tooltip" title=""
-                                          data-original-title="Upload from Multipliers">{{ App\Helpers\StringHelper::formatBytes($multi_upload , 2) }}</span>
-                                    +
-                                    <span class="badge-extra text-orange" data-toggle="tooltip" title=""
-                                          data-original-title="{{ __('user.upload-bon') }}">{{ App\Helpers\StringHelper::formatBytes($bonupload , 2) }}</span>
-                                    +
-                                    <span class="badge-extra text-pink" data-toggle="tooltip" title=""
-                                          data-original-title="Manually Added or Misc">{{ App\Helpers\StringHelper::formatBytes($man_upload , 2) }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>{{ __('user.upload-true') }}</td>
-                                <td>
-                    <span class="badge-extra text-green" data-toggle="tooltip" title=""
-                          data-original-title="{{ __('user.upload-true') }}">{{ App\Helpers\StringHelper::formatBytes($his_upl , 2) }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>{{ __('common.ratio') }}</td>
-                                <td><span class="badge-user group-member">{{ $user->getRatioString() }}</span></td>
-                            </tr>
-                            <tr>
-                                <td>{{ __('common.buffer') }}</td>
-                                <td>
-                                    <span class="badge-user group-member">{{ $user->untilRatio(config('other.ratio')) }}</span>
-                                </td>
-                            </tr>
-                        @endif
-                        @if (auth()->user()->isAllowed($user,'profile','show_profile_torrent_seed'))
-                            <tr>
-                                <td>{{ __('user.total-seedtime') }}</td>
-                                <td>
-                                    <span class="badge-user group-member">{{ App\Helpers\StringHelper::timeElapsed($history->sum('seedtime')) }}</span>
-                                    <span>({{ __('user.all-torrents') }})</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>{{ __('user.avg-seedtime') }}</td>
-                                <td>
-                                    <span class="badge-user group-member">{{ App\Helpers\StringHelper::timeElapsed(round($history->sum('seedtime') / max(1, $history->count()))) }}</span>
-                                    <span>({{ __('user.per-torrent') }})</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>{{ __('user.seeding-size') }}</td>
-                                <td>
-                                    <span class="badge-user group-member">{{ App\Helpers\StringHelper::formatBytes($user->getTotalSeedSize() , 2) }}</span>
-                                </td>
-                            </tr>
-                        @endif
-                        <tr>
-                            <td colspan="2" class="text-bold">
-                                <div class="button-holder">
-                                    <div class="button-left-small">{{ __('user.user') }} {{ __('user.statistics') }}:</div>
-                                    <div class="button-right-large">
-
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        @if (auth()->user()->isAllowed($user,'profile','show_profile_bon_extra'))
-                            <tr>
-                                <td>{{ __('user.bon') }}</td>
-                                <td>
-                                    <ul class="list-inline mb-0">
-                                        <li>
-          <span class="badge-extra"><strong>{{ __('bon.bon') }}:</strong>
-            <span class="text-green text-bold">{{ $user->getSeedbonus() }}</span>
-          </span>
-                                        </li>
-                                        <li>
-          <span class="badge-extra"><strong>{{ __('user.tips-received') }}:</strong>
-            <span class="text-pink text-bold">{{ \number_format($user->bonReceived()->where('name', '=', 'tip')->sum('cost'), 0, '.', ' ') }} {{ __('bon.bon') }}</span>
-          </span>
-                                        </li>
-                                        <li>
-          <span class="badge-extra"><strong>{{ __('user.tips-given') }}:</strong>
-            <span class="text-pink text-bold">{{ \number_format($user->bonGiven()->where('name', '=', 'tip')->sum('cost'), 0, '.', ' ') }} {{ __('bon.bon') }}</span>
-          </span>
-                                        </li>
-                                        <li>
-          <span class="badge-extra"><strong>{{ __('user.gift-received') }}:</strong>
-            <span class="text-pink text-bold">{{ \number_format($user->bonReceived()->where('name', '=', 'gift')->sum('cost'), 0, '.', ' ') }} {{ __('bon.bon') }}</span>
-          </span>
-                                        </li>
-                                        <li>
-          <span class="badge-extra"><strong>{{ __('user.gift-given') }}:</strong>
-            <span class="text-pink text-bold">{{ \number_format($user->bonGiven()->where('name', '=', 'gift')->sum('cost'), 0, '.', ' ') }} {{ __('bon.bon') }}</span>
-          </span>
-                                        </li>
-                                        <li>
-          <span class="badge-extra"><strong>{{ __('user.bounty-received') }}:</strong>
-            <span class="text-pink text-bold">{{ \number_format($user->bonReceived()->where('name', '=', 'request')->sum('cost'), 0, '.', ' ') }} {{ __('bon.bon') }}</span>
-          </span>
-                                        </li>
-                                        <li>
-          <span class="badge-extra"><strong>{{ __('user.bounty-given') }}:</strong>
-            <span class="text-pink text-bold">{{ \number_format($user->bonGiven()->where('name', '=', 'request')->sum('cost'), 0, '.', ' ') }} {{ __('bon.bon') }}</span>
-          </span>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        @endif
-                        @if (auth()->user()->isAllowed($user,'profile','show_profile_torrent_extra'))
-                            <tr>
-                                <td>{{ __('user.torrents') }}</td>
-                                <td>
-                                    <ul class="list-inline mb-0">
-                                        <li>
-          <span class="badge-extra"><strong>{{ __('common.fl_tokens') }}:</strong>
-            <span class="text-green text-bold">{{ $user->fl_tokens }}</span>
-          </span>
-                                        </li>
-                                        <li>
-          <span class="badge-extra"><strong>{{ __('user.thanks-received') }}:</strong>
-            <span class="text-pink text-bold">{{ $user->thanksReceived()->count() }}</span>
-          </span>
-                                        </li>
-                                        <li>
-          <span class="badge-extra"><strong>{{ __('user.thanks-given') }}:</strong>
-            <span class="text-pink text-bold"> {{ $user->thanksGiven()->count() }}</span>
-          </span>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        @endif
-                        @if (auth()->user()->isAllowed($user,'profile','show_profile_comment_extra'))
-                            <tr>
-                                <td>{{ __('user.comments') }}</td>
-                                <td>
-                                    <ul class="list-inline mb-0">
-                                        <li>
-          <span class="badge-extra"><strong>{{ __('user.article-comments') }}:</strong>
-            <span class="text-green text-bold">{{ $user->comments()->where('article_id', '>', 0)->count() }}</span>
-          </span>
-                                        </li>
-                                        <li>
-          <span class="badge-extra"><strong>{{ __('user.torrent-comments') }}:</strong>
-            <span class="text-green text-bold">{{ $user->comments()->where('torrent_id', '>', 0)->count() }}</span>
-          </span>
-                                        </li>
-                                        <li>
-          <span class="badge-extra"><strong>{{ __('user.request-comments') }}:</strong>
-            <span class="text-green text-bold">{{ $user->comments()->where('requests_id', '>', 0)->count() }}</span>
-          </span>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        @endif
-                        @if (auth()->user()->isAllowed($user,'profile','show_profile_forum_extra'))
-                            <tr>
-                                <td>{{ __('user.forums') }}</td>
-                                <td>
-                                    <ul class="list-inline mb-0">
-                                        <li>
-          <span class="badge-extra"><strong>{{ __('user.topics-started') }}:</strong>
-            <span class="text-green text-bold">{{ $user->topics->count() }}</span>
-          </span>
-                                        </li>
-                                        <li>
-          <span class="badge-extra"><strong>{{ __('user.posts-posted') }}:</strong>
-            <span class="text-green text-bold">{{ $user->posts->count() }}</span>
-          </span>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        @endif
-                        @if (auth()->user()->isAllowed($user,'profile','show_profile_request_extra'))
-                            <tr>
-                                <td>{{ __('user.requests') }}</td>
-                                <td>
-                                    <ul class="list-inline mb-0">
-                                        <li>
-          <span class="badge-extra"><strong>{{ __('user.requested') }}:</strong>
-            <span class="text-pink text-bold">{{ $requested }}</span>
-          </span>
-                                        </li>
-                                        <li>
-          <span class="badge-extra"><strong>{{ __('user.filled-request') }}:</strong>
-            <span class="text-green text-bold">{{ $filled }}</span>
-          </span>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        @endif
-                        <tr>
-                            <td colspan="2" class="text-bold">{{ __('common.warnings') }}:</td>
-                        </tr>
-                        @if (auth()->user()->isAllowed($user,'profile','show_profile_warning'))
-                            <tr>
-                                <td colspan="2" class="text-right">
-
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-danger progress-bar-striped active"
-                                             role="progressbar"
-                                             style="width:0; border-bottom-color: #8c0408;">
-                                        </div>
-                                        @foreach ($warnings as $warning)
-                                            <div class="progress-bar progress-bar-danger progress-bar-striped active"
-                                                 role="progressbar"
-                                                 style="min-width: 80px; margin: 0 0 5px 5px; border-bottom-color: #8c0408;">
-                                                {{ strtoupper(__('user.warning')) }}
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                    <div class="some-padding">
-                    <span class="badge-user text-red text-bold">
-
-                        <strong>{{ __('user.active-warnings') }}
-                            : {{ $warnings->count() }} / {!! config('hitrun.max_warnings') !!}</strong></span>
-                                        <span class="badge-user"><strong>{{ __('user.hit-n-runs-count') }}:</strong>
-            <span class="{{ $user->hitandruns > 0 ? 'text-red' : 'text-green' }} text-bold">{{ $user->hitandruns }}</span>
-          </span>
-                                        @if (auth()->user()->group->is_modo)
-                                            <a href="{{ route('warnings.show', ['username' => $user->username]) }}"><span
-                                                        class="badge-user text-bold"><strong>{{ __('user.warning-log') }}</strong></span></a>
-                                            <a href="{{ route('banlog', ['username' => $user->username]) }}"><span
-                                                        class="badge-user text-bold"><strong>{{ __('user.ban-log') }}</strong></span></a>
-                                        @endif
-                                    </div>
-                                </td>
-                            </tr>
-                        @endif
-                        </tbody>
-                    </table>
-
-
-                    @if(auth()->user()->id == $user->id)
-                        @include('user.buttons.user')
-                    @elseif(auth()->user()->group && auth()->user()->group->is_modo == 1)
-                        @include('user.buttons.staff')
-                    @endif
-
-
-                </div>
-            </div>
-
-            <div class="well">
-                <div class="row">
-                    <div class="col-md-12 profile-footer">
-                        {{ __('user.badges') }}
-                        <i class="{{ config('other.font-awesome') }} fa-badge text-success"></i>
-                        <span>:</span>
-                        @if (auth()->user()->isAllowed($user,'profile','show_profile_badge'))
-                            @if ($user->getSeeding() >= '150')
-                                <span class="badge-user" style="background-color:#3fb618; color:rgb(255,255,255);"
-                                      data-toggle="tooltip"
-                                      title="" data-original-title="{{ __('user.certified-seeder-desc') }}"><i
-                                            class="{{ config('other.font-awesome') }} fa-upload"></i> {{ __('user.certified-seeder') }}!</span>
-                            @endif
-                            @if ($history->where('actual_downloaded', '>', 0)->count() >= '100')
-                                <span class="badge-user" style="background-color:#ff0039; color:rgb(255,255,255);"
-                                      data-toggle="tooltip"
-                                      title="" data-original-title="{{ __('user.certified-downloader-desc') }}"><i
-                                            class="{{ config('other.font-awesome') }} fa-download"></i> {{ __('user.certified-downloader') }}!</span>
-                            @endif
-                            @if ($user->getSeedbonus() >= '50,000')
-                                <span class="badge-user" style="background-color:#9400d3; color:rgb(255,255,255);"
-                                      data-toggle="tooltip"
-                                      title="" data-original-title="{{ __('user.certified-banker-desc') }}"><i
-                                            class="{{ config('other.font-awesome') }} fa-coins"></i> {{ __('user.certified-banker') }}!</span>
-                            @endif
-                        @endif
-                    </div>
-                </div>
-            </div>
-            <div class="well">
-                <div class="row">
-                    <div class="col-md-12 profile-footer">
-                        {{ __('user.recent-achievements') }}
-                        <i class="{{ config('other.font-awesome') }} fa-trophy text-success"></i>
-                        <span>:</span>
-                        @if (auth()->user()->isAllowed($user,'profile','show_profile_achievement'))
-                            @php
-                                $x=1;
-                            @endphp
-                            @foreach ($user->unlockedAchievements() as $a)
-                                @php
-                                    if($x > 25) { continue; }
-                                @endphp
-                                <img src="/img/badges/{{ $a->details->name }}.png" data-toggle="tooltip" title=""
-                                     height="50px" data-original-title="{{ $a->details->name }}"
-                                     alt="{{ $a->details->name }}">
-                                @php
-                                    $x++;
-                                @endphp
-                            @endforeach
-                        @endif
-                    </div>
-                </div>
-            </div>
-            <div class="well">
-                <div class="row">
-                    <div class="col-md-12 profile-footer followers">
-                        {{ __('user.recent-followers') }}
-                        <i class="{{ config('other.font-awesome') }} fa-users text-success"></i>
-                        <span>:</span>
-                        @if (auth()->user()->isAllowed($user,'profile','show_profile_follower'))
-                            @foreach ($followers as $f)
-                                @if ($f->user->image != null)
-                                    <a href="{{ route('users.show', ['username' => $f->user->username]) }}">
-                                        <img src="{{ url('files/img/' . $f->user->image) }}" data-toggle="tooltip"
-                                             title="{{ $f->user->username }}" height="50px"
-                                             data-original-title="{{ $f->user->username }}"
-                                             alt="{{ $f->user->username }}">
-                                    </a>
-                                @else
-                                    <a href="{{ route('users.show', ['username' => $f->user->username]) }}">
-                                        <img src="{{ url('img/profile.png') }}" data-toggle="tooltip"
-                                             title="{{ $f->user->username }}" height="50px"
-                                             data-original-title="{{ $f->user->username }}"
-                                             alt="{{ $f->user->username }}">
-                                    </a>
-                                @endif
-                            @endforeach
-                        @endif
-                    </div>
-                </div>
-            </div>
-            @if (auth()->user()->id == $user->id || auth()->user()->group->is_modo)
-                <div class="block">
-                    <h3><i class="{{ config('other.font-awesome') }} fa-broadcast-tower"></i> {{ __('user.client-list') }}
-                    </h3>
-                    <div style="word-wrap: break-word; display: table; width: 100%;">
-                        <table class="table table-condensed table-striped table-bordered">
-                            <thead>
-                            <tr>
-                                <th>{{ __('torrent.client') }}</th>
-                                <th>{{ __('common.ip') }}</th>
-                                <th>{{ __('common.port') }}</th>
-                                <th>{{ __('torrent.started') }}</th>
-                                <th>{{ __('torrent.last-update') }}</th>
-                                <th>{{ __('torrent.torrents') }}</th>
-                                @if (\config('announce.connectable_check') == true)
-                                    <th>Connectable</th>
-                                @endif
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @php $peer_array = []; @endphp
-                            @foreach ($peers as $p)
-                                @if (!in_array([$p->ip, $p->port], $peer_array))
-                                    @php $count = App\Models\Peer::where('user_id', '=', $user->id)->where('ip', '=', $p->ip)->where('port', '=', $p->port)->count(); @endphp
-                                    <tr>
-                                        <td>
-                                            <span class="badge-extra text-purple text-bold">{{ $p->agent }}</span>
-                                        </td>
-                                        <td><span class="badge-extra text-bold">{{ $p->ip }}</span></td>
-                                        <td><span class="badge-extra text-bold">{{ $p->port }}</span></td>
-                                        <td>{{ $p->created_at ? $p->created_at->diffForHumans() : 'N/A' }}</td>
-                                        <td>{{ $p->updated_at ? $p->updated_at->diffForHumans() : 'N/A' }}</td>
-                                        <td>
-                                            <a href="{{ route('user_active_by_client', ['username' => $user->username, 'ip' => $p->ip, 'port' => $p->port]) }}"
-                                               itemprop="url" class="l-breadcrumb-item-link">
-                                                <span itemprop="title"
-                                                      class="l-breadcrumb-item-link-title">{{ $count }}</span>
-                                            </a>
-                                        </td>
-                                        @if (\config('announce.connectable_check') == true)
-                                            @php
-                                                $connectable = false;
-                                                if (cache()->has('peers:connectable:'.$p->ip.'-'.$p->port.'-'.$p->agent)) {
-                                                    $connectable = cache()->get('peers:connectable:'.$p->ip.'-'.$p->port.'-'.$p->agent);
-                                                }
-                                            @endphp
-                                            <td>@choice('user.client-connectable-state', $connectable)</td>
-                                        @endif
-                                    </tr>
-                                    @php array_push($peer_array, [$p->ip, $p->port]) @endphp
-                                @endif
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="block">
-                    <h3><i class="{{ config('other.font-awesome') }} fa-lock"></i> {{ __('user.private-info') }}</h3>
-                    <div style="word-wrap: break-word; display: table; width: 100%;">
-                        <table class="table user-info table-condensed table-striped table-bordered">
-                            <tbody>
-                            <tr>
-                                <td colspan="2" class="text-bold">
-                                    <div class="button-holder">
-                                        <div class="button-left-small">{{ __('user.id-permissions') }}:</div>
-                                        <div class="button-right-large">
-
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>{{ __('user.invited-by') }}</td>
-                                <td>
-                                    @if ($invitedBy)
-                                        <a href="{{ route('users.show', ['username' => $invitedBy->sender->username]) }}">
-                            <span class="text-bold" style="color:{{ $invitedBy->sender->group->color }}; ">
-                                <i class="{{ $invitedBy->sender->group->icon }}"></i> {{ $invitedBy->sender->username }}
-                            </span>
-                                        </a>
-                                    @else
-                                        <span class="text-bold">{{ __('user.open-registration') }}</span>
-                                    @endif
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-md-2"> {{ __('user.passkey') }}</td>
-                                <td>
-                                    <div class="col-md-2">
-                                        <button type="button" class="btn btn-xxs btn-info collapsed"
-                                                data-toggle="collapse"
-                                                data-target="#pid_block"
-                                                aria-expanded="false">{{ __('user.show-passkey') }}</button>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div id="pid_block" class="collapse" aria-expanded="false" style="height: 0;">
-                                            <span class="text-monospace">{{ $user->passkey }}</span>
-                                            <br>
-                                        </div>
-                                        <span class="small text-red">{{ __('user.passkey-warning') }}</span>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td> {{ __('user.user-id') }}</td>
-                                <td>{{ $user->id }}</td>
-                            </tr>
-                            <tr>
-                                <td> {{ __('common.email') }}</td>
-                                <td>{{ $user->email }}</td>
-                            </tr>
-                            <tr>
-                                <td> {{ __('user.last-login') }}</td>
-                                <td>@if ($user->last_login != null){{ $user->last_login->toDayDateTimeString() }}
-                                    ({{ $user->last_login->diffForHumans() }})@else N/A @endif</td>
-                            </tr>
-                            <tr>
-                                <td> {{ __('user.can-upload') }}</td>
-                                @if ($user->can_upload == 1)
-                                    <td><i class="{{ config('other.font-awesome') }} fa-check text-green"></i></td>
-                                @else
-                                    <td><i class="{{ config('other.font-awesome') }} fa-times text-red"></i></td>
-                                @endif
-                            </tr>
-                            <tr>
-                                <td> {{ __('user.can-download') }}</td>
-                                @if ($user->can_download == 1)
-                                    <td><i class="{{ config('other.font-awesome') }} fa-check text-green"></i></td>
-                                @else
-                                    <td><i class="{{ config('other.font-awesome') }} fa-times text-red"></i></td>
-                                @endif
-                            </tr>
-                            <tr>
-                                <td> {{ __('user.can-comment') }}</td>
-                                @if ($user->can_comment == 1)
-                                    <td><i class="{{ config('other.font-awesome') }} fa-check text-green"></i></td>
-                                @else
-                                    <td><i class="{{ config('other.font-awesome') }} fa-times text-red"></i></td>
-                                @endif
-                            </tr>
-                            <tr>
-                                <td> {{ __('user.can-request') }}</td>
-                                @if ($user->can_request == 1)
-                                    <td><i class="{{ config('other.font-awesome') }} fa-check text-green"></i></td>
-                                @else
-                                    <td><i class="{{ config('other.font-awesome') }} fa-times text-red"></i></td>
-                                @endif
-                            </tr>
-                            <tr>
-                                <td> {{ __('user.can-chat') }}</td>
-                                @if ($user->can_chat == 1)
-                                    <td><i class="{{ config('other.font-awesome') }} fa-check text-green"></i></td>
-                                @else
-                                    <td><i class="{{ config('other.font-awesome') }} fa-times text-red"></i></td>
-                                @endif
-                            </tr>
-                            <tr>
-                                <td> {{ __('user.can-invite') }}</td>
-                                @if ($user->can_invite == 1)
-                                    <td><i class="{{ config('other.font-awesome') }} fa-check text-green"></i></td>
-                                @else
-                                    <td><i class="{{ config('other.font-awesome') }} fa-times text-red"></i></td>
-                                @endif
-                            </tr>
-                            <tr>
-                                <td> {{ __('user.invites') }}</td>
-                                @if ($user->invites > 0)
-                                    <td><span class="text-success text-bold"> {{ $user->invites }}</span>
-                                    </td>
-                                @else
-                                    <td><span class="text-danger text-bold"> {{ $user->invites }}</span>
-                                    </td>
-                                @endif
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <br>
-                </div>
-
-
-
-
-
-
-
-                <div class="block">
-                    <h3><i class="{{ config('other.font-awesome') }} fa-bell"></i> {{ __('user.important-info') }}</h3>
-                    <div class="table-responsive">
-                        <table class="table user-info table-condensed table-striped table-bordered">
-                            <thead>
-                            <tr>
-                                <th colspan="4" class="text-bold">
-                                    <div class="button-holder">
-                                        <div class="button-left-small">Hit & Runs</div>
-                                        <div class="button-right-large">
-
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            </thead>
-
-                            <thead>
-                            <th>{{ __('torrent.torrent') }}</th>
-                            <th>{{ __('user.warned-on') }}</th>
-                            <th>{{ __('user.expires-on') }}</th>
-                            <th>{{ __('user.active') }}</th>
-                            </thead>
-
-                            <tbody>
-                            @foreach ($hitrun as $hr)
-                                <tr>
-                                    <td>
-                                        <a class="text-bold"
-                                           href="{{ route('torrent', ['id' => $hr->torrenttitle->id]) }}">
-                                            {{ $hr->torrenttitle->name }}
-                                        </a>
-                                    </td>
-                                    <td>
-                                        {{ $hr->created_at }}
-                                    </td>
-                                    <td>
-                                        {{ $hr->expires_on }}
-                                    </td>
-                                    <td>
-                                        @if ($hr->active == 1)
-                                            <span class='label label-success'>{{ __('common.yes') }}</span>
-                                        @else
-                                            <span class='label label-danger'>{{ __('user.expired') }}</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                        {{ $hitrun->links() }}
-                    </div>
-                </div>
-
-
-
-
-
-
-
-            @endif
+@section('secondary-nav')
+    <x-nav>
+        @if (auth()->user()->id == $user->id || auth()->user()->group->is_modo)
+            <x-nav.tab href="{{ route('torrents') }}?bookmarked=1">
+                {{ __('user.bookmarks') }}
+            </x-nav.tab>
+            <x-nav.tab href="{{ route('wishes.index', ['username' => $user->username]) }}">
+                {{ __('user.wishlist') }}
+            </x-nav.tab>
+            <x-nav.tab href="{{ route('seedboxes.index', ['username' => $user->username]) }}">
+                {{ __('user.seedboxes') }}
+            </x-nav.tab>
         @endif
-    </div>
+        <x-slot name="right">
+            @if(auth()->user()->id == $user->id)
+                <x-nav.tab href="{{ route('user_settings', ['username' => $user->username]) }}">
+                    {{ __('user.settings') }}
+                </x-nav.tab>
+                <x-nav.tab href="{{ route('user_edit_profile_form', ['username' => $user->username]) }}">
+                    {{ __('user.edit-profile') }}
+                </x-nav.tab>
+            @else
+                <x-nav.tab>
+                    @if (auth()->user()->isFollowing($user->id))
+                        <form action="{{ route('follow.destroy', ['username' => $user->username]) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" id="delete-follow-{{ $user->target_id }}">
+                                <i class="{{ config('other.font-awesome') }} fa-user"></i>
+                                {{ __('user.unfollow') }}
+                            </button>
+                        </form>
+                    @else
+                        <form action="{{ route('follow.store', ['username' => $user->username]) }}" method="POST">
+                            @csrf
+                            <button type="submit" id="follow-user-{{ $user->id }}">
+                                <i class="{{ config('other.font-awesome') }} fa-user"></i>
+                                {{ __('user.follow') }}
+                            </button>
+                        </form>
+                    @endif
+                </x-nav.tab>
+                <x-nav.tab data-toggle="modal" data-target="#modal_user_report">
+                    <i class="{{ config('other.font-awesome') }} fa-eye"></i>
+                    {{ __('user.report') }}
+                </x-nav.tab>
+            @endif
+        </x-slot>
+    </x-nav>
+@endsection
 
+@section('content')
+    @if (!auth()->user()->isAllowed($user))
+        <x-panel :padded="true" :heading="__('user.private-profile')">
+            {{ __('user.not-authorized') }}
+        </x-panel>
+    @else
+        @if (auth()->user()->isAllowed($user,'profile','show_profile_badge'))
+            <x-panel :padded="true">
+                <x-slot name="heading">
+                    <i class="{{ config('other.font-awesome') }} fa-badge"></i>
+                    {{ __('user.badges') }}
+                </x-slot>
+                    @if (
+                        $user->getSeeding() >= '150'
+                        || $history->where('actual_downloaded', '>', 0)->count() >= '100'
+                        || $user->getSeedbonus() >= '50,000'
+                    )
+                        @if ($user->getSeeding() >= '150')
+                            <span class="chip" title="{{ __('user.certified-seeder-desc') }}">
+                                <i class="{{ config('other.font-awesome') }} fa-upload"></i>
+                                {{ __('user.certified-seeder') }}!
+                            </span>
+                        @endif
+                        @if ($history->where('actual_downloaded', '>', 0)->count() >= '100')
+                            <span class="chip" title="{{ __('user.certified-downloader-desc') }}">
+                                <i class="{{ config('other.font-awesome') }} fa-download"></i>
+                                {{ __('user.certified-downloader') }}!
+                            </span>
+                        @endif
+                        @if ($user->getSeedbonus() >= '50,000')
+                            <span class="chip" title="{{ __('user.certified-banker-desc') }}">
+                                <i class="{{ config('other.font-awesome') }} fa-coins"></i>
+                                {{ __('user.certified-banker') }}!
+                            </span>
+                        @endif
+                    @else
+                        No badges
+                    @endif
+            </x-panel>
+        @endif
+        @if (auth()->user()->isAllowed($user,'profile','show_profile_achievement'))
+            <x-panel :padded="true">
+                <x-slot name="heading">
+                    @if (auth()->user()->isAllowed($user,'achievement','show_achievement'))
+                        @if(auth()->user()->id == $user->id)
+                            <a href="{{ route('achievements.index') }}">
+                                <i class="{{ config('other.font-awesome') }} fa-trophy"></i>
+                                {{ __('user.achievements') }}
+                            </a>
+                        @else
+                            <a href="{{ route('achievements.show', ['username' => $user->username]) }}">
+                                <i class="{{ config('other.font-awesome') }} fa-trophy"></i>
+                                {{ __('user.achievements') }}
+                            </a>
+                        @endif
+                    @else
+                        <i class="{{ config('other.font-awesome') }} fa-trophy"></i>
+                        {{ __('user.achievements') }}
+                    @endif
+                </x-slot>
+                @forelse ($user->unlockedAchievements()->take(25) as $achievement)
+                    <img
+                        src="/img/badges/{{ $achievement->details->name }}.png"
+                        style="height: 50px;"
+                        title="{{ $achievement->details->name }}"
+                        alt="{{ $achievement->details->name }}"
+                    >
+                @empty
+                    No achievements
+                @endforelse
+            </x-panel>
+        @endif
+        @if (auth()->user()->isAllowed($user,'profile','show_profile_follower'))
+            <x-panel :padded="true">
+                <x-slot name="heading">
+                    @if (auth()->user()->isAllowed($user,'follower','show_follower'))
+                        <a href="{{ route('user_followers', ['username' => $user->username]) }}">
+                            <i class="{{ config('other.font-awesome') }} fa-users"></i>
+                            {{ __('user.followers') }}
+                        </a>
+                    @else
+                        <i class="{{ config('other.font-awesome') }} fa-users"></i>
+                        {{ __('user.followers') }}
+                    @endif
+                </x-slot>
+                    @forelse ($followers as $follower)
+                        <a href="{{ route('users.show', ['username' => $follower->user->username]) }}">
+                            <img
+                                src="{{ url($follower->user->image ? 'files/img/'.$follower->user->image : 'img/profile.png') }}"
+                                title="{{ $follower->user->username }}"
+                                style="height: 50px;"
+                                alt="{{ $follower->user->username }}: {{ __('user.avatar') }}"
+                            >
+                        </a>
+                    @empty
+                        No followers
+                    @endforelse
+            </x-panel>
+        @endif
+        @if (auth()->user()->id == $user->id || auth()->user()->group->is_modo)
+            <x-panel>
+                <x-slot name="heading">
+                    <i class="{{ config('other.font-awesome') }} fa-broadcast-tower"></i>
+                    {{ __('user.client-list') }}
+                </x-slot>
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th>{{ __('torrent.client') }}</th>
+                        <th>{{ __('common.ip') }}</th>
+                        <th>{{ __('common.port') }}</th>
+                        <th>{{ __('torrent.started') }}</th>
+                        <th>{{ __('torrent.last-update') }}</th>
+                        <th>{{ __('torrent.torrents') }}</th>
+                        @if (\config('announce.connectable_check') == true)
+                            <th>Connectable</th>
+                        @endif
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @php $peer_array = []; @endphp
+                    @foreach ($peers as $peer)
+                        @if (!in_array([$peer->ip, $peer->port], $peer_array))
+                            @php
+                                $count = App\Models\Peer::where('user_id', '=', $user->id)
+                                    ->where('ip', '=', $peer->ip)
+                                    ->where('port', '=', $peer->port)
+                                    ->count();
+                            @endphp
+                            <tr>
+                                <td>{{ $peer->agent }}</td>
+                                <td>{{ $peer->ip }}</td>
+                                <td>{{ $peer->port }}</td>
+                                <td>{{ $peer->created_at ? $peer->created_at->diffForHumans() : 'N/A' }}</td>
+                                <td>{{ $peer->updated_at ? $peer->updated_at->diffForHumans() : 'N/A' }}</td>
+                                <td>
+                                    <a href="{{ route('user_active_by_client', ['username' => $user->username, 'ip' => $peer->ip, 'port' => $peer->port]) }}">
+                                        {{ $count }}
+                                    </a>
+                                </td>
+                                @if (\config('announce.connectable_check') == true)
+                                    @php
+                                        $connectable = false;
+                                        if (cache()->has('peers:connectable:'.$peer->ip.'-'.$peer->port.'-'.$peer->agent)) {
+                                            $connectable = cache()->get('peers:connectable:'.$peer->ip.'-'.$peer->port.'-'.$peer->agent);
+                                        }
+                                    @endphp
+                                    <td>@choice('user.client-connectable-state', $connectable)</td>
+                                @endif
+                            </tr>
+                            @php $peer_array[] = [$peer->ip, $peer->port] @endphp
+                        @endif
+                    @endforeach
+                    </tbody>
+                </table>
+            </x-panel>
+            <x-panel>
+                <x-slot name="heading">
+                    <i class="{{ config('other.font-awesome') }} fa-bell"></i>
+                    Hit & Runs
+                </x-slot>
+                <table class="data-table">
+                    <thead>
+                        <th>{{ __('torrent.torrent') }}</th>
+                        <th>{{ __('user.warned-on') }}</th>
+                        <th>{{ __('user.expires-on') }}</th>
+                        <th>{{ __('user.active') }}</th>
+                    </thead>
+                    <tbody>
+                        @foreach ($hitrun as $hr)
+                            <tr>
+                                <td>
+                                    <a href="{{ route('torrent', ['id' => $hr->torrenttitle->id]) }}">
+                                        {{ $hr->torrenttitle->name }}
+                                    </a>
+                                </td>
+                                <td>{{ $hr->created_at }}</td>
+                                <td>{{ $hr->expires_on }}</td>
+                                <td>{{ $hr->active ? __('common.yes') : __('user.expired') }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                {{ $hitrun->links() }}
+            </x-panel>
+        @endif
+    @endif
     @include('user.user_modals', ['user' => $user])
+@endsection
+
+@section('sidebar')
+    @if(auth()->user()->isAllowed($user))
+        <x-panel>
+            <x-slot name="heading">
+                <x-chip.user
+                    :anon="false"
+                    :userId="$user->id"
+                    :username="$user->username"
+                    :href="route('users.show', ['username' => $user->username])"
+                    :icon="$user->group->icon"
+                    :color="$user->group->color"
+                    :group="$user->group->name"
+                    :effect="$user->group->effect"
+                />
+                @if ($user->isOnline())
+                    <i
+                        class="{{ config('other.font-awesome') }} fa-circle text-green"
+                        title="{{ __('user.online') }}"
+                    ></i>
+                @else
+                    <i
+                        class="{{ config('other.font-awesome') }} fa-circle text-red"
+                        title="{{ __('user.offline') }}"
+                    ></i>
+                @endif
+                <a href="{{ route('create', ['receiver_id' => $user->id, 'username' => $user->username]) }}">
+                    <i class="{{ config('other.font-awesome') }} fa-envelope text-info"></i>
+                </a>
+                <a
+                    href="#modal_user_gift"
+                    data-toggle="modal"
+                    data-target="#modal_user_gift"
+                >
+                    <i class="{{ config('other.font-awesome') }} fa-gift text-info"></i>
+                </a>
+                @if ($user->getWarning() > 0)
+                    <i
+                        class="{{ config('other.font-awesome') }} fa-exclamation-circle text-orange"
+                        title="{{ __('user.active-warning') }}"
+                    ></i>
+                @endif
+                @if ($user->notes->count() > 0 && auth()->user()->group->is_modo)
+                    <a href="{{ route('user_setting', ['username' => $user->username]) }}" class="edit">
+                        <i
+                            class="{{ config('other.font-awesome') }} fa-comment fa-beat text-danger"
+                            title="{{ __('user.staff-noted') }}"
+                        ></i>
+                    </a>
+                @endif
+                @php $watched = App\Models\Watchlist::whereUserId($user->id)->first(); @endphp
+                @if ($watched && auth()->user()->group->is_modo)
+                    <i
+                        class="{{ config('other.font-awesome') }} fa-eye fa-beat text-danger"
+                        title="User is being watched!"
+                    >
+                    </i>
+                @endif
+            </x-slot>
+            <dl class="key-value">
+                <dt>{{ __('user.avatar') }}</dt>
+                <dd>
+                    <img
+                        src="{{ url($user->image ? 'files/img/'.$user->image : 'img/profile.png') }}"
+                        alt="{{ $user->username }}: {{ __('user.avatar') }}"
+                        class="img-circle"
+                    >
+                </dd>
+                <dt>{{ __('user.registration-date') }}</dt>
+                <dd>
+                    <date datetime="{{ $user->created_at }}" title="{{ $user->created_at }}">
+                        {{ $user->created_at === null ? "N/A" : date('M d Y', $user->created_at->getTimestamp()) }}
+                    </date>
+                </dd>
+                @if (auth()->user()->isAllowed($user,'profile','show_profile_title'))
+                    <dt>{{ __('user.title') }}</dt>
+                    <dd>{{ $user->title }}</dd>
+                @endif
+                @if (auth()->user()->isAllowed($user,'profile','show_profile_about'))
+                    <dt>{{ __('user.about') }}</dt>
+                    <dd>@joypixels($user->getAboutHtml())</dd>
+                @endif
+            </dl>
+        </x-panel>
+    @endif
+    @if (auth()->user()->id == $user->id || auth()->user()->group->is_modo)
+        <x-panel heading="{{ __('user.user') }}{{ __('common.actions') }}">
+            <ul class="profile__user-actions">
+                @if(auth()->user()->id == $user->id)
+                    <li>
+                        @if(auth()->user()->hidden)
+                            <form method="POST" action="{{ route('user_visible', ['username' => $user->username]) }}">
+                                @csrf
+                                <button type="submit">
+                                    <i class='{{ config('other.font-awesome') }} fa-eye'></i>
+                                    {{ __('user.become-visible') }}
+                                </button>
+                            </form>
+                        @else
+                            <form method="POST" action="{{ route('user_hidden', ['username' => $user->username]) }}">
+                                @csrf
+                                <button type="submit">
+                                    <i class='{{ config('other.font-awesome') }} fa-eye-slash'></i>
+                                    {{ __('user.become-hidden') }}
+                                </button>
+                            </form>
+                        @endif
+                    </li>
+                    <li>
+                        @if(auth()->user()->private_profile)
+                            <form method="POST" action="{{ route('user_public', ['username' => $user->username]) }}">
+                                @csrf
+                                <button type="submit">
+                                    <i class='{{ config('other.font-awesome') }} fa-lock-open'></i>
+                                    {{ __('user.go-public') }}
+                                </button>
+                            </form>
+                        @else
+                            <form method="POST" action="{{ route('user_private', ['username' => $user->username]) }}">
+                                @csrf
+                                <button type="submit">
+                                    <i class='{{ config('other.font-awesome') }} fa-lock'></i>
+                                    {{ __('user.go-private') }}
+                                </button>
+                            </form>
+                        @endif
+                    </li>
+                    <li>
+                        @if(auth()->user()->block_notifications)
+                            <form method="POST" action="{{ route('notification_enable', ['username' => $user->username]) }}">
+                                @csrf
+                                <button type="submit">
+                                    <i class='{{ config('other.font-awesome') }} fa-bell'></i>
+                                    {{ __('user.enable-notifications') }}
+                                </button>
+                            </form>
+                        @else
+                            <form method="POST" action="{{ route('notification_disable', ['username' => $user->username]) }}">
+                                @csrf
+                                <button type="submit">
+                                    <i class='{{ config('other.font-awesome') }} fa-bell-slash'></i>
+                                    {{ __('user.disable-notifications') }}
+                                </button>
+                            </form>
+                        @endif
+                    </li>
+                @endif
+                @if (auth()->user()->group->is_modo)
+                    <li>
+                        <button data-toggle="modal" data-target="#modal_warn_user">
+                            <i class="{{ config('other.font-awesome') }} fa-radiation-alt"></i>
+                            Warn User
+                        </button>
+                    </li>
+                    <li>
+                        <button data-toggle="modal" data-target="#modal_user_note">
+                            <i class="{{ config('other.font-awesome') }} fa-sticky-note"></i>
+                            {{ __('user.note') }}
+                        </button>
+                    </li>
+                    @if(! $watched)
+                        <li>
+                            <button data-toggle="modal" data-target="#modal_user_watch">
+                                <i class="{{ config('other.font-awesome') }} fa-eye"></i>
+                                Watch
+                            </button>
+                        </li>
+                    @else
+                        <li>
+                            <form
+                                action="{{ route('staff.watchlist.destroy', ['id' => $watched->id]) }}"
+                                method="POST"
+                            >
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-xs btn-warning" type="submit">
+                                    <i class="{{ config('other.font-awesome') }} fa-eye-slash"></i>
+                                    Unwatch
+                                </button>
+                            </form>
+                        </li>
+                    @endif
+                    @if ($user->group->id == 5)
+                        <li>
+                            <button data-toggle="modal" data-target="#modal_user_unban">
+                                <i class="{{ config('other.font-awesome') }} fa-undo"></i>
+                                {{ __('user.unban') }}
+                            </button>
+                        </li>
+                    @else
+                        <li>
+                            <button data-toggle="modal" data-target="#modal_user_ban">
+                                <i class="{{ config('other.font-awesome') }} fa-ban"></i>
+                                {{ __('user.ban') }}
+                            </button>
+                        </li>
+                    @endif
+                    <li>
+                        <a href="{{ route('user_setting', ['username' => $user->username]) }}">
+                            <i class="{{ config('other.font-awesome') }} fa-pencil"></i>
+                            {{ __('user.edit') }}
+                        </a>
+                    </li>
+                    <li>
+                        <button data-toggle="modal" data-target="#modal_user_delete">
+                            <i class="{{ config('other.font-awesome') }} fa-trash"></i>
+                            {{ __('user.delete') }}
+                        </button>
+                    </li>
+                    <li>
+                        <a href="{{ route('banlog', ['username' => $user->username]) }}">
+                            {{ __('user.ban-log') }}
+                        </a>
+                    </li>
+                @endif
+            </ul>
+        </x-panel>
+    @endif
+    @if (auth()->user()->isAllowed($user,'profile','show_profile_warning'))
+        <x-panel heading="{{ __('common.warnings') }}">
+            <x-slot name="heading">
+                @if (auth()->user()->group->is_modo)
+                    <a href="{{ route('warnings.show', ['username' => $user->username]) }}">
+                        {{ __('common.warnings') }}
+                    </a>
+                @else
+                    {{ __('common.warnings') }}
+                @endif
+            </x-slot>
+                <dl class="key-value">
+                    <dt>{{ __('user.active-warnings') }}</dt>
+                    <dd>{{ $warnings->count() }} / {!! config('hitrun.max_warnings') !!}</dd>
+                    <dt>{{ __('user.hit-n-runs-count') }}</dt>
+                    @if ($user->hitandruns > 0)
+                        <dd style="color: red">{{ $user->hitandruns }}</dd>
+                    @else
+                        <dd style="color: green">{{ $user->hitandruns }}</dd>
+                    @endif
+                </dl>
+        </x-panel>
+    @endif
+    @if (auth()->user()->isAllowed($user,'profile','show_profile_torrent_count'))
+        <x-panel>
+            <x-slot name="heading">
+                @if (auth()->user()->id == $user->id || auth()->user()->group->is_modo)
+                    <a href="{{ route('user_torrents', ['username' => $user->username]) }}">
+                        {{ __('stat.total-torrents') }}
+                    </a>
+                    @if(!$user->group || !$user->group->is_immune)
+                        <a href="{{ route('user_unsatisfieds', ['username' => $user->username]) }}" style="float: right">
+                            {{ __('user.unsatisfieds') }}
+                        </a>
+                    @endif
+                @else
+                    {{ __('stat.total-torrents') }}
+                @endif
+            </x-slot>
+            <dl class="key-value">
+                <dt>
+                    @if (auth()->user()->isAllowed($user,'torrent','show_upload'))
+                        <a href="{{ route('user_uploads', ['username' => $user->username]) }}">
+                            {{ __('user.total-uploads') }}
+                        </a>
+                    @else
+                        {{ __('user.total-uploads') }}
+                    @endif
+                </dt>
+                <dd>{{ $user->torrents_count }}</dd>
+                <dt>
+                    @if (auth()->user()->isAllowed($user,'torrent','show_download'))
+                        <a href="{{ route('user_downloads', ['username' => $user->username]) }}">
+                            {{ __('user.total-downloads') }}
+                        </a>
+                    @else
+                        {{ __('user.total-downloads') }}
+                    @endif
+                </dt>
+                <dd>{{ $history->where('actual_downloaded', '>', 0)->count() }}</dd>
+                <dt>
+                    @if (auth()->user()->id == $user->id || auth()->user()->group->is_modo)
+                        <a href="{{ route('user_active', ['username' => $user->username]) }}">
+                            {{ __('user.total-seeding') }}
+                        </a>
+                    @else
+                        {{ __('user.total-seeding') }}
+                    @endif
+                </dt>
+                <dd>{{ $user->getSeeding() }}</dd>
+                <dt>
+                    @if (auth()->user()->id == $user->id || auth()->user()->group->is_modo)
+                        <a href="{{ route('user_active', ['username' => $user->username]) }}">
+                            {{ __('user.total-leeching') }}
+                        </a>
+                    @else
+                        {{ __('user.total-leeching') }}
+                    @endif
+                </dt>
+                <dd>{{ $user->getLeeching() }}</dd>
+            </dl>
+        </x-panel>
+    @endif
+    @if (auth()->user()->isAllowed($user,'profile','show_profile_torrent_ratio'))
+        <x-panel heading="{{ __('common.download') }} {{ __('torrent.statistics') }}" :condensible="true">
+            <x-slot name="condensed">
+                <dl class="key-value">
+                    <dt>{{ $realdownload }}</dt>
+                    <dd>
+                        = {{ App\Helpers\StringHelper::formatBytes($def_download , 2) }}
+                        + {{ App\Helpers\StringHelper::formatBytes($his_down , 2) }}
+                        - {{ App\Helpers\StringHelper::formatBytes($free_down , 2) }}
+                    </dd>
+                </dl>
+            </x-slot>
+            <dl class="key-value">
+                <dt>{{ __('user.download-recorded') }}</dt>
+                <dd>{{ $realdownload }}</dd>
+                <dt>Default Starter Download</dt>
+                <dd>{{ App\Helpers\StringHelper::formatBytes($def_download , 2) }}</dd>
+                <dt>{{ __('user.download-true') }}</dt>
+                <dd>{{ App\Helpers\StringHelper::formatBytes($his_down , 2) }}</dd>
+                <dt>Freeleech Downloads</dt>
+                <dd>{{ App\Helpers\StringHelper::formatBytes($free_down , 2) }}</dd>
+            </dl>
+        </x-panel>
+        <x-panel heading="{{ __('common.upload') }} {{ __('torrent.statistics') }}" :condensible="true">
+            <x-slot name="condensed">
+                <dl class="key-value">
+                    <dt>{{ $user->getUploaded() }}</dt>
+                    <dd>
+                        = {{ App\Helpers\StringHelper::formatBytes($def_upload , 2) }}
+                        + {{ App\Helpers\StringHelper::formatBytes($his_upl , 2) }}
+                        + {{ App\Helpers\StringHelper::formatBytes($multi_upload , 2) }}
+                        + {{ App\Helpers\StringHelper::formatBytes($bonupload , 2) }}
+                        + {{ App\Helpers\StringHelper::formatBytes($man_upload , 2) }}
+                    </dd>
+                </dl>
+            </x-slot>
+            <dl class="key-value">
+                <dt>{{ __('user.upload-recorded') }}</dt>
+                <dd>{{ $user->getUploaded() }}</dd>
+                <dt>Default Starter Upload</dt>
+                <dd>{{ App\Helpers\StringHelper::formatBytes($def_upload , 2) }}</dd>
+                <dt>{{ __('user.upload-true') }}</dt>
+                <dd>{{ App\Helpers\StringHelper::formatBytes($his_upl , 2) }}</dd>
+                <dt>Upload from Multipliers</dt>
+                <dd>{{ App\Helpers\StringHelper::formatBytes($multi_upload , 2) }}</dd>
+                <dt>{{ __('user.upload-bon') }}</dt>
+                <dd>{{ App\Helpers\StringHelper::formatBytes($bonupload , 2) }}</dd>
+                <dt>Manually Added or Misc</dt>
+                <dd>{{ App\Helpers\StringHelper::formatBytes($man_upload , 2) }}</dd>
+            </dl>
+        </x-panel>
+    @endif
+    @if (
+        auth()->user()->isAllowed($user,'profile','show_profile_torrent_ratio')
+        || auth()->user()->isAllowed($user,'profile','show_profile_torrent_seed')
+    )
+        <x-panel heading="Contribution">
+            <dl class="key-value">
+                @if (auth()->user()->isAllowed($user,'profile','show_profile_torrent_ratio'))
+                    <dt>{{ __('common.ratio') }}</dt>
+                    <dd>{{ $user->getRatioString() }}</dd>
+                    <dt>{{ __('common.buffer') }}</dt>
+                    <dd>{{ $user->untilRatio(config('other.ratio')) }}</dd>
+                @endif
+                @if (auth()->user()->isAllowed($user,'profile','show_profile_torrent_seed'))
+                    <dt title="{{ __('user.all-torrents') }}">{{ __('user.total-seedtime') }}</dt>
+                    <dd>{{ App\Helpers\StringHelper::timeElapsed($history->sum('seedtime')) }}</dd>
+                    <dt title="{{ __('user.per-torrent') }}">{{ __('user.avg-seedtime') }}</dt>
+                    <dd>{{ App\Helpers\StringHelper::timeElapsed(round($history->sum('seedtime') / max(1, $history->count()))) }}</dd>
+                    <dt>{{ __('user.seeding-size') }}</dt>
+                    <dd>{{ App\Helpers\StringHelper::formatBytes($user->getTotalSeedSize() , 2) }}</dd>
+                @endif
+            </dl>
+        </x-panel>
+    @endif
+    @if (auth()->user()->isAllowed($user,'profile','show_profile_bon_extra'))
+        <x-panel>
+            <x-slot name="heading">
+                @if(auth()->user()->id == $user->id)
+                    <a href="{{ route('bonus') }}">{{ __('bon.bonus') }} {{ __('bon.points') }}</a>
+                @else
+                    {{ __('bon.bonus') }} {{ __('bon.points') }}
+                @endif
+            </x-slot>
+            <dl class="key-value">
+                <dt>{{ __('bon.bon') }}</dt>
+                <dd>{{ $user->getSeedbonus() }}</dd>
+                <dt>{{ __('user.tips-received') }}</dt>
+                <dd>{{ \number_format($user->bonReceived()->where('name', '=', 'tip')->sum('cost'), 0, '.', ' ') }}</dd>
+                <dt>{{ __('user.tips-given') }}</dt>
+                <dd>{{ \number_format($user->bonGiven()->where('name', '=', 'tip')->sum('cost'), 0, '.', ' ') }}</dd>
+                <dt>{{ __('user.gift-received') }}</dt>
+                <dd>{{ \number_format($user->bonReceived()->where('name', '=', 'gift')->sum('cost'), 0, '.', ' ') }}</dd>
+                <dt>{{ __('user.gift-given') }}</dt>
+                <dd>{{ \number_format($user->bonGiven()->where('name', '=', 'gift')->sum('cost'), 0, '.', ' ') }}</dd>
+                <dt>{{ __('user.bounty-received') }}</dt>
+                <dd>{{ \number_format($user->bonReceived()->where('name', '=', 'request')->sum('cost'), 0, '.', ' ') }}</dd>
+                <dt>{{ __('user.bounty-given') }}</dt>
+                <dd>{{ \number_format($user->bonGiven()->where('name', '=', 'request')->sum('cost'), 0, '.', ' ') }}</dd>
+                <dt>{{ __('common.fl_tokens') }}</dt>
+                <dd>{{ $user->fl_tokens }}</dd>
+            </dl>
+        </x-panel>
+    @endif
+    @if (auth()->user()->isAllowed($user,'profile','show_profile_torrent_extra'))
+        <x-panel>
+            <x-slot name="heading">
+                @if(auth()->user()->id == $user->id || auth()->user()->group->is_modo)
+                    <a href="{{ route('user_resurrections', ['username' => $user->username]) }}">
+                        {{ __('user.resurrections') }}
+                    </a>
+                @else
+                    {{ __('user.resurrections') }}
+                @endif
+            </x-slot>
+            <dl class="key-value">
+                <dt>{{ __('common.fl_tokens') }}</dt>
+                <dd>{{ $user->fl_tokens }}</dd>
+            </dl>
+        </x-panel>
+    @endif
+    @if (
+        auth()->user()->isAllowed($user,'profile','show_profile_comment_extra')
+        || auth()->user()->isAllowed($user,'profile','show_profile_forum_extra')
+        || auth()->user()->isAllowed($user,'profile','show_profile_torrent_extra')
+        || auth()->user()->isAllowed($user,'profile','show_profile_request_extra')
+    )
+        <x-panel heading="{{ __('common.community') }} {{ __('forum.activity') }}">
+            <dl class="key-value">
+                @if (auth()->user()->isAllowed($user,'profile','show_profile_comment_extra'))
+                    <dt>{{ __('user.article-comments') }}</dt>
+                    <dd>{{ $user->comments()->where('article_id', '>', 0)->count() }}</dd>
+                    <dt>{{ __('user.torrent-comments') }}</dt>
+                    <dd>{{ $user->comments()->where('torrent_id', '>', 0)->count() }}</dd>
+                    <dt>{{ __('user.request-comments') }}</dt>
+                    <dd>{{ $user->comments()->where('requests_id', '>', 0)->count() }}</dd>
+                @endif
+                @if (auth()->user()->isAllowed($user,'profile','show_profile_forum_extra'))
+                    <dt>
+                        @if (auth()->user()->isAllowed($user,'forum','show_topic'))
+                            <a href="{{ route('user_topics', ['username' => $user->username]) }}">
+                                {{ __('user.topics-started') }}
+                            </a>
+                        @else
+                            {{ __('user.topics-started') }}
+                        @endif
+                    </dt>
+                    <dd>{{ $user->topics->count() }}</dd>
+                    <dt>
+                        @if (auth()->user()->isAllowed($user,'forum','show_post'))
+                            <a href="{{ route('user_posts', ['username' => $user->username]) }}">
+                                {{ __('user.posts-posted') }}
+                            </a>
+                        @else
+                            {{ __('user.posts-posted') }}
+                        @endif
+                    </dt>
+                    <dd>{{ $user->posts->count() }}</dd>
+                @endif
+                @if (auth()->user()->isAllowed($user,'profile','show_profile_torrent_extra'))
+                    <dt>{{ __('user.thanks-received') }}</dt>
+                    <dd>{{ $user->thanksReceived()->count() }}</dd>
+                    <dt>{{ __('user.thanks-given') }}</dt>
+                    <dd> {{ $user->thanksGiven()->count() }}</dd>
+                @endif
+                @if (auth()->user()->isAllowed($user,'profile','show_profile_request_extra'))
+                    <dt>
+                        @if (auth()->user()->isAllowed($user,'forum','show_requested'))
+                            <a href="{{ route('user_requested', ['username' => $user->username]) }}">
+                                {{ __('user.requested') }}
+                            </a>
+                        @else
+                            {{ __('user.requested') }}
+                        @endif
+                    </dt>
+                    <dd>{{ $requested }}</dd>
+                    <dt>{{ __('user.filled-request') }}</dt>
+                    <dd>{{ $filled }}</dd>
+                @endif
+            </dl>
+        </x-panel>
+    @endif
+    @if (auth()->user()->id == $user->id || auth()->user()->group->is_modo)
+        <x-panel>
+            <x-slot name="heading">
+                <i class="{{ config('other.font-awesome') }} fa-lock"></i>
+                {{ __('user.private-info') }}
+            </x-slot>
+            <dl class="key-value">
+                <dt>{{ __('user.invited-by') }}</dt>
+                <dd>
+                    @if ($invitedBy)
+                        <x-chip.user
+                            :anon="false"
+                            :userId="$invitedBy->sender->id"
+                            :username="$invitedBy->sender->username"
+                            :href="route('users.show', ['username' => $invitedBy->sender->username])"
+                            :icon="$invitedBy->sender->group->icon"
+                            :color="$invitedBy->sender->group->color"
+                            :group="$invitedBy->sender->group->name"
+                            :effect="$invitedBy->sender->group->effect"
+                        />
+                    @else
+                        {{ __('user.open-registration') }}
+                    @endif
+                </dd>
+                <dt>{{ __('user.passkey') }}</dt>
+                <dd>
+                    <details>
+                        <summary style="cursor: pointer">
+                            <span>{{ __('user.show-passkey') }}</span>
+                        </summary>
+                        {{ $user->passkey }}
+                        <span>{{ __('user.passkey-warning') }}</span>
+                    </details>
+                </dd>
+                <dt>{{ __('user.user-id') }}</dt>
+                <dd>{{ $user->id }}</dd>
+                <dt>{{ __('common.email') }}</dt>
+                <dd>{{ $user->email }}</dd>
+                <dt>{{ __('user.last-login') }}</dt>
+                <dd>
+                    @if ($user->last_login != null)
+                        {{ $user->last_login->toDayDateTimeString() }}<br>
+                        ({{ $user->last_login->diffForHumans() }})
+                    @else
+                        N/A
+                    @endif
+                </dd>
+                <dt>{{ __('user.can-upload') }}</dt>
+                <dd>
+                    @if ($user->can_upload == 1)
+                        <i class="{{ config('other.font-awesome') }} fa-check" style="color: green;"></i>
+                    @else
+                        <i class="{{ config('other.font-awesome') }} fa-times" style="color: red;"></i>
+                    @endif
+                </dd>
+                <dt>{{ __('user.can-download') }}</dt>
+                <dd>
+                    @if ($user->can_download == 1)
+                        <i class="{{ config('other.font-awesome') }} fa-check" style="color: green;"></i>
+                    @else
+                        <i class="{{ config('other.font-awesome') }} fa-times" style="color: red"></i>
+                    @endif
+                </dd>
+                <dt>{{ __('user.can-comment') }}</dt>
+                <dd>
+                    @if ($user->can_comment == 1)
+                        <i class="{{ config('other.font-awesome') }} fa-check" style="color: green;"></i>
+                    @else
+                        <i class="{{ config('other.font-awesome') }} fa-times" style="color: red"></i>
+                    @endif
+                </dd>
+                <dt>{{ __('user.can-request') }}</dt>
+                <dd>
+                    @if ($user->can_request == 1)
+                        <i class="{{ config('other.font-awesome') }} fa-check" style="color: green;"></i>
+                    @else
+                        <i class="{{ config('other.font-awesome') }} fa-times" style="color: red"></i>
+                    @endif
+                </dd>
+                <dt>{{ __('user.can-chat') }}</dt>
+                <dd>
+                    @if ($user->can_chat == 1)
+                        <i class="{{ config('other.font-awesome') }} fa-check" style="color: green;"></i>
+                    @else
+                        <i class="{{ config('other.font-awesome') }} fa-times" style="color: red"></i>
+                    @endif
+                </dd>
+                <dt>{{ __('user.can-invite') }}</dt>
+                <dd>
+                    @if ($user->can_invite == 1)
+                        <i class="{{ config('other.font-awesome') }} fa-check" style="color: green;"></i>
+                    @else
+                        <i class="{{ config('other.font-awesome') }} fa-times" style="color: red"></i>
+                    @endif
+                </dd>
+                <dt>
+                    <a href="{{ route('invites.index', ['username' => $user->username]) }}">
+                        {{ __('user.invites') }}
+                    </a>
+                </dt>
+                <dd>{{ $user->invites }}</dd>
+            </dl>
+        </x-panel>
+    @endif
 @endsection

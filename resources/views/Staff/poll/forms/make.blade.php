@@ -1,56 +1,36 @@
 <form method="POST" action="{{ route('staff.polls.store') }}">
-    @if (count($errors) > 0)
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
     @csrf
-
-    <div class="form-group">
-        <label for="stitle">{{ __('common.title') }}:</label>
-        <label>
-            <input type="text" name="title" class="form-control" value="" required>
-        </label>
-    </div>
-
-    <div class="form-group">
-        <label for="option1">{{ __('poll.option') }} 1:</label>
-        <label>
-            <input type="text" name="options[]" class="form-control" value="">
-        </label>
-    </div>
-
-    <div class="form-group">
-        <label for="option2">{{ __('poll.option') }} 2:</label>
-        <label>
-            <input type="text" name="options[]" class="form-control" value="">
-        </label>
-    </div>
-
+    @if (count($errors) > 0)
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    @endif
+    <label>
+        {{ __('common.title') }}
+        <input type="text" name="title" value="" required>
+    </label>
+    <label>
+        {{ __('poll.option') }} 1:
+        <input type="text" name="options[]" value="">
+    </label>
+    <label>
+        {{ __('poll.option') }} 2:
+        <input type="text" name="options[]" value="">
+    </label>
     <div class="more-options"></div>
-
-    <div class="form-group">
-        <button id="add" class="btn btn-primary">{{ __('poll.add-option') }}</button>
-        <button id="del" class="btn btn-primary">{{ __('poll.delete-option') }}</button>
-    </div>
-
-    <hr>
-
-    <div class="checkbox">
-        <label>
-            <input type="checkbox" name="multiple_choice" value="1">{{ __('poll.multiple-choice') }}
-        </label>
-    </div>
-
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">{{ __('poll.create-poll') }}</button>
-    </div>
+    <button id="add">{{ __('poll.add-option') }}</button>
+    <button id="del">{{ __('poll.delete-option') }}</button>
+    <label>
+        <input type="checkbox" name="multiple_choice" value="1">{{ __('poll.multiple-choice') }}
+    </label>
+    <button type="submit">{{ __('poll.create-poll') }}</button>
 </form>
+
+<template>
+    <label
+</template>
 
 @section('javascripts')
     <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce('script') }}">
@@ -60,9 +40,9 @@
       $('#add').on('click', function (e) {
         e.preventDefault()
         options += 1
-        const optionHTML = '<div class="form-group extra-option"><label for="option' + options + '">' + langOption
+        const optionHTML = '<div class="extra-option"><label for="option' + options + '">' + langOption
           + options
-          + ':</label><input type="text" name="options[]" class="form-control" value="" required></div>'
+          + ':</label><input type="text" name="options[]" value="" required></div>'
         $('.more-options').append(optionHTML)
       })
 

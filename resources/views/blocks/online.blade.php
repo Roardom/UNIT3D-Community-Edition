@@ -1,63 +1,40 @@
-<div class="col-md-10 col-sm-10 col-md-offset-1">
-    <div class="clearfix visible-sm-block"></div>
-    <div class="panel panel-chat shoutbox">
-        <div class="panel-heading">
-            <h4><i class="{{ config('other.font-awesome') }} fa-users"></i> {{ __('blocks.users-online') }}
-                <span class="label label-default">{{ $users->count() }}</span>
-            </h4>
-        </div>
-
-        <div class="panel-body">
-            @foreach ($users as $user)
-                @if ($user->hidden == 1 || !$user->isVisible($user, 'other', 'show_online'))
-                    <span class="badge-user text-orange text-bold" style="margin-bottom: 10px;">
-                        <i class="{{ config('other.font-awesome') }} fa-user-ninja"></i>
-                        {{ strtoupper(__('common.hidden')) }}
-                        @if (auth()->user()->group->is_modo)
-                            <a href="{{ route('users.show', ['username' => $user->username]) }}">
-                                {{ $user->username }}
-                                @if ($user->warnings_count > 0)
-                                    <i class="{{ config('other.font-awesome') }} fa-exclamation-circle text-orange"
-                                       aria-hidden="true"
-                                       data-toggle="tooltip" data-original-title="{{ __('common.active-warning') }}"></i>
-                                @endif
-                            </a>
-                        @endif
-                    </span>
-                @else
-                    <a href="{{ route('users.show', ['username' => $user->username]) }}">
-                        <span class="badge-user text-bold"
-                              style="color:{{ $user->group->color }}; background-image:{{ $user->group->effect }}; margin-bottom: 10px;">
-                            <i class="{{ $user->group->icon }}" data-toggle="tooltip"
-                               data-original-title="{{ $user->group->name }}"></i>
-                            {{ $user->username }}
-                            @if ($user->warnings_count > 0)
-                                <i class="{{ config('other.font-awesome') }} fa-exclamation-circle text-orange"
-                                   aria-hidden="true"
-                                   data-toggle="tooltip" data-original-title="{{ __('common.active-warning') }}"></i>
-                            @endif
-                        </span>
-                    </a>
-                @endif
+<x-panel :padded="true" class="block--online">
+    <x-slot name="heading">
+        <i class="{{ config('other.font-awesome') }} fa-users"></i>
+        {{ __('blocks.users-online') }}
+        ({{ $users->count() }})
+    </x-slot>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 1rem;">
+        @foreach ($users as $user)
+            <x-chip.user
+                :anon="$user->hidden == 1 || !$user->isVisible($user, 'other', 'show_online')"
+                :userId="$user->id"
+                :username="$user->username"
+                :href="route('users.show', ['username' => $user->username])"
+                :icon="$user->group->icon"
+                :color="$user->group->color"
+                :group="$user->group->name"
+            />
+        @endforeach
+    </div>
+    <x-slot name="footer">
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 1rem; padding: 0.5rem;">
+            <x-chip.user
+                :anon="false"
+                :username="__('common.hidden')"
+                icon="fa-eye-slash"
+                :group="__('common.hidden')"
+            />
+            @foreach ($groups as $group)
+                <x-chip.user
+                    :anon="false"
+                    :username="$group->name"
+                    :icon="$group->icon"
+                    :color="$group->color"
+                    :group="$group->name"
+                    :effect="$group->effect"
+                />
             @endforeach
         </div>
-        <div class="panel-footer">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="text-center">
-                        <span class="badge-user text-orange text-bold">
-                            <i class="{{ config('other.font-awesome') }} fa-eye-slash" aria-hidden="true"></i>
-                            {{ strtoupper(__('common.hidden')) }}
-                        </span>
-                        @foreach ($groups as $group)
-                            <span class="badge-user text-bold"
-                                  style="color:{{ $group->color }}; background-image:{{ $group->effect }};">
-                                <i class="{{ $group->icon }}" aria-hidden="true"></i> {{ $group->name }}
-                            </span>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+    </x-slot>
+</x-panel>

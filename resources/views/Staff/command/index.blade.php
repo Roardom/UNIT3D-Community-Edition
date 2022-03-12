@@ -22,174 +22,108 @@
 @endsection
 
 @section('content')
-    <div class="container">
-        <div class="block">
-            <div class="row text-center">
-                <div class="col-md-4">
-                    <div class="block">
-                        <div class="panel-body">
-                            <h3 class="text-bold text-green">
-                                <i class="{{ config('other.font-awesome') }} fa-terminal"></i> Enable Maintenance Mode
-                            </h3>
-                            <h4 class="text-muted">This commands enables maintenance mode while whitelisting only you IP
-                                Address.</h4>
-                            <form role="form" method="POST" action="{{ url('/dashboard/commands/maintance-enable') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-primary">
-                                    <i class='{{ config('other.font-awesome') }} fa-check-circle'></i> Run Commnd
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="block">
-                        <div class="panel-body">
-                            <h3 class="text-bold text-green">
-                                <i class="{{ config('other.font-awesome') }} fa-terminal"></i> Disable Maintenance Mode
-                            </h3>
-                            <h4 class="text-muted">This commands disables maintenance mode. Bringing the site backup for
-                                all
-                                to access.</h4>
-                            <form role="form" method="POST" action="{{ url('/dashboard/commands/maintance-disable') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-primary">
-                                    <i class='{{ config('other.font-awesome') }} fa-check-circle'></i> Run Commnd
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="block">
-                        <div class="panel-body">
-                            <h3 class="text-bold text-green">
-                                <i class="{{ config('other.font-awesome') }} fa-terminal"></i> Clear Cache
-                            </h3>
-                            <h4 class="text-muted">This commands clears your sites cache. This cache depends on what
-                                driver
-                                you are using.</h4>
-                            <form role="form" method="POST" action="{{ url('/dashboard/commands/clear-cache') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-primary">
-                                    <i class='{{ config('other.font-awesome') }} fa-check-circle'></i> Run Commnd
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <br>
-                <br>
-
-                <div class="col-md-4">
-                    <div class="block">
-                        <div class="panel-body">
-                            <h3 class="text-bold text-green">
-                                <i class="{{ config('other.font-awesome') }} fa-terminal"></i> Clear View Cache
-                            </h3>
-                            <h4 class="text-muted">This commands clears your sites compiled views cache.</h4>
-                            <form role="form" method="POST" action="{{ url('/dashboard/commands/clear-view-cache') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-primary">
-                                    <i class='{{ config('other.font-awesome') }} fa-check-circle'></i> Run Commnd
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="block">
-                        <div class="panel-body">
-                            <h3 class="text-bold text-green">
-                                <i class="{{ config('other.font-awesome') }} fa-terminal"></i> Clear Route Cache
-                            </h3>
-                            <h4 class="text-muted">This commands clears your sites compiled routes cache.</h4>
-                            <form role="form" method="POST" action="{{ url('/dashboard/commands/clear-route-cache') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-primary">
-                                    <i class='{{ config('other.font-awesome') }} fa-check-circle'></i> Run Commnd
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="block">
-                        <div class="panel-body">
-                            <h3 class="text-bold text-green">
-                                <i class="{{ config('other.font-awesome') }} fa-terminal"></i> Clear Config Cache
-                            </h3>
-                            <h4 class="text-muted">This commands clears your sites compiled configs cache.</h4>
-                            <form role="form" method="POST"
-                                  action="{{ url('/dashboard/commands/clear-config-cache') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-primary">
-                                    <i class='{{ config('other.font-awesome') }} fa-check-circle'></i> Run Commnd
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <br>
-                <br>
-
-                <div class="col-md-4">
-                    <div class="block">
-                        <div class="panel-body">
-                            <h3 class="text-bold text-green">
-                                <i class="{{ config('other.font-awesome') }} fa-terminal"></i> Clear All Cache
-                            </h3>
-                            <h4 class="text-muted">This commands clears ALL of your sites cache.</h4>
-                            <form role="form" method="POST" action="{{ url('/dashboard/commands/clear-all-cache') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-primary">
-                                    <i class='{{ config('other.font-awesome') }} fa-check-circle'></i> Run Commnd
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="block">
-                        <div class="panel-body">
-                            <h3 class="text-bold text-green">
-                                <i class="{{ config('other.font-awesome') }} fa-terminal"></i> Set All Cache
-                            </h3>
-                            <h4 class="text-muted">This commands sets ALL of your sites cache.</h4>
-                            <form role="form" method="POST" action="{{ url('/dashboard/commands/set-all-cache') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-primary">
-                                    <i class='{{ config('other.font-awesome') }} fa-check-circle'></i> Run Commnd
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="block">
-                        <div class="panel-body">
-                            <h3 class="text-bold text-green">
-                                <i class="{{ config('other.font-awesome') }} fa-terminal"></i> Send Test Email
-                            </h3>
-                            <h4 class="text-muted">This commands tests your email configuration.</h4>
-                            <form role="form" method="POST" action="{{ url('/dashboard/commands/test-email') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-primary">
-                                    <i class='{{ config('other.font-awesome') }} fa-check-circle'></i> Run Commnd
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem;">
+        <x-panel heading="Maintenance mode">
+            <ul class="staff-dashboard__menu">
+                <li>
+                    <form role="form" method="POST" action="{{ url('/dashboard/commands/maintance-enable') }}">
+                        @csrf
+                        <button
+                            type="submit"
+                            title="This commands enables maintenance mode while whitelisting only your IP Address."
+                        >
+                            <i class='{{ config('other.font-awesome') }} fa-terminal'></i>
+                            Enable Maintenance Mode
+                        </button>
+                    </form>
+                </li>
+                <li>
+                    <form role="form" method="POST" action="{{ url('/dashboard/commands/maintance-disable') }}">
+                        @csrf
+                        <button
+                            type="submit"
+                            title="This commands disables maintenance mode. Bringing the site backup for all to access."
+                        >
+                            <i class='{{ config('other.font-awesome') }} fa-terminal'></i>
+                            Disable Maintenance Mode
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </x-panel>
+        <x-panel heading="Caching">
+            <ul class="staff-dashboard__menu">
+                <li>
+                    <form role="form" method="POST" action="{{ url('/dashboard/commands/clear-cache') }}">
+                        @csrf
+                        <button
+                            type="submit"
+                            title="This commands clears your sites cache. This cache depends on what driver you are using."
+                        >
+                            <i class='{{ config('other.font-awesome') }} fa-terminal'></i>
+                            Clear cache
+                        </button>
+                    </form>
+                </li>
+                <li>
+                    <form role="form" method="POST" action="{{ url('/dashboard/commands/clear-view-cache') }}">
+                        @csrf
+                        <button type="submit" title="This commands clears your sites compiled views cache.">
+                            <i class='{{ config('other.font-awesome') }} fa-terminal'></i>
+                            Clear view cache
+                        </button>
+                    </form>
+                </li>
+                <li>
+                    <form role="form" method="POST" action="{{ url('/dashboard/commands/clear-route-cache') }}">
+                        @csrf
+                        <button type="submit" title="This commands clears your sites compiled routes cache.">
+                            <i class='{{ config('other.font-awesome') }} fa-terminal'></i>
+                            Clear route cache
+                        </button>
+                    </form>
+                </li>
+                <li>
+                    <form role="form" method="POST" action="{{ url('/dashboard/commands/clear-config-cache') }}">
+                        @csrf
+                        <button type="submit" title="This commands clears your sites compiled configs cache.">
+                            <i class='{{ config('other.font-awesome') }} fa-terminal'></i>
+                            Clear config cache
+                        </button>
+                    </form>
+                </li>
+                <li>
+                    <form role="form" method="POST" action="{{ url('/dashboard/commands/clear-all-cache') }}">
+                        @csrf
+                        <button type="submit" title="This commands clears ALL of your sites cache.">
+                            <i class='{{ config('other.font-awesome') }} fa-terminal'></i>
+                            Clear all cache
+                        </button>
+                    </form>
+                </li>
+                <li>
+                    <form role="form" method="POST" action="{{ url('/dashboard/commands/set-all-cache') }}">
+                        @csrf
+                        <button type="submit" title="This commands sets ALL of your sites cache.">
+                            <i class='{{ config('other.font-awesome') }} fa-terminal'></i>
+                            Set all cache
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </x-panel>
+        <x-panel heading="Email">
+            <ul class="staff-dashboard__menu">
+                <li>
+                    <form role="form" method="POST" action="{{ url('/dashboard/commands/test-email') }}">
+                        @csrf
+                        <button type="submit" title="This commands tests your email configuration.">
+                            <i class='{{ config('other.font-awesome') }} fa-terminal'></i>
+                            Send test email
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </x-panel>
     </div>
 @endsection

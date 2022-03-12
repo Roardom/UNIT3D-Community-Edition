@@ -1,0 +1,74 @@
+.data-table {
+  width: 100%;
+  border: 0;
+  color: var(--panel-fg);
+  border-collapse: collapse;
+}
+
+.data-table th {
+  background-color: var(--data-table-th-bg);
+  border-bottom: var(--data-table-thead-border);
+  text-align: left;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.4rem;
+  font-size: 0.75rem;
+}
+
+.data-table tr:nth-child(even) > td {
+  background-color: var(--data-table-tr-even-bg);
+}
+
+.data-table tr:nth-child(odd) > td {
+  background-color: var(--data-table-tr-odd-bg);
+}
+
+.data-table > tfoot > tr > td {
+  border-top: var(--data-table-tfoot-border);
+}
+
+.data-table th,
+.data-table > tfoot > tr > td {
+  font-weight: bold;
+}
+
+.data-table__actions {
+  display: flex;
+  justify-content: end;
+  gap: 1rem;
+}
+
+.data-table__actions a,
+.data-table__actions button,
+.data-table__actions form {
+  visibility: hidden;
+
+  .data-table tr:hover & {
+    visibility: visible;
+  }
+}
+
+.data-table__actions a,
+.data-table__actions button {
+  border: none;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+.data-table__actions i {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  line-height: 1.75rem;
+  text-align: center;
+  color: #bbb;
+  background-color: #424242;
+  cursor: pointer;
+
+  &:hover {
+    color: #ddd;
+    background-color: #484848;
+  }
+}

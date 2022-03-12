@@ -1,41 +1,44 @@
 <!DOCTYPE html>
 <html lang="{{ auth()->user()->locale }}">
+    <head>
+        @include('partials.head')
+    </head>
 
-<head>
-    @include('partials.head')
-</head>
-
-@if (auth()->user()->nav == 0)
-
-    <body hoe-navigation-type="vertical-compact" hoe-nav-placement="left" theme-layout="wide-layout">
-    @else
-
-        <body hoe-navigation-type="vertical" hoe-nav-placement="left" theme-layout="wide-layout">
-        @endif
-        <div id="hoeapp-wrapper" class="hoe-hide-lpanel" hoe-device-type="desktop">
+    <body>
+        <header>
             @include('partials.top_nav')
-            <div id="hoeapp-container" hoe-color-type="lpanel-bg5" hoe-lpanel-effect="shrink">
-                @include('partials.side_nav')
-                <section id="main-content">
-                    @include('partials.userbar')
-                    @include('partials.breadcrumb')
-                    @include('cookie-consent::index')
-                    @include('partials.alerts')
-                    @if (Session::has('achievement'))
-                        @include('partials.achievement_modal')
-                    @endif
-                    @if ($errors->any())
-                        <div id="ERROR_COPY" style="display: none;">
-                            @foreach ($errors->all() as $error)
-                                {{ $error }}<br>
-                            @endforeach
-                        </div>
-                    @endif
+            @include('partials.breadcrumb')
+            @include('cookie-consent::index')
+            @include('partials.alerts')
+            @if (Session::has('achievement'))
+                @include('partials.achievement_modal')
+            @endif
+            @if ($errors->any())
+                <div id="ERROR_COPY" style="display: none;">
+                    @foreach ($errors->all() as $error)
+                        {{ $error }}<br>
+                    @endforeach
+                </div>
+            @endif
+            @yield('secondary-nav')
+        </header>
+        <main>
+            @hasSection('sidebar')
+                <article class="sidebar2">
+                    <div>
+                        @yield('content')
+                    </div>
+                    <aside>
+                        @yield('sidebar')
+                    </aside>
+                </article>
+            @else
+                <article>
                     @yield('content')
-                    @include('partials.footer')
-                </section>
-            </div>
-        </div>
+                </article>
+            @endif
+        </main>
+        @include('partials.footer')
 
         <script src="{{ mix('js/app.js') }}" crossorigin="anonymous"></script>
         <script src="{{ mix('js/unit3d.js') }}" crossorigin="anonymous"></script>
@@ -166,5 +169,5 @@
             })
           })
         </script>
-        </body>
+    </body>
 </html>

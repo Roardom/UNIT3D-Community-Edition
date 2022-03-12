@@ -14,42 +14,39 @@
 @endsection
 
 @section('content')
-    <div class="container box">
-        <h2>{{ __('torrent.categories') }}</h2>
-        <a href="{{ route('staff.categories.create') }}" class="btn btn-primary">
-            {{ __('common.add') }}
-            {{ trans_choice('common.a-an-art',false) }}
-            {{ __('torrent.category') }}
-        </a>
-
-        <div class="table-responsive">
-            <table class="table table-condensed table-striped table-bordered table-hover">
-                <thead>
-                <tr>
-                    <th>{{ __('common.position') }}</th>
-                    <th>{{ __('common.name') }}</th>
-                    <th>{{ __('common.icon') }}</th>
-                    <th>{{ __('common.image') }}</th>
-                    <th>Movie Meta</th>
-                    <th>TV Meta</th>
-                    <th>Game Meta</th>
-                    <th>Music Meta</th>
-                    <th>No Meta</th>
-                    <th>{{ __('common.action') }}</th>
-                </tr>
-                </thead>
-                <tbody>
+    <x-panel>
+        <x-slot name="heading">
+            {{ __('torrent.categories') }}
+            <a href="{{ route('staff.categories.create') }}" class="btn btn-primary">
+                <i class="{{ config('other.font-awesome') }} fa-plus"></i>
+            </a>
+        </x-slot>
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th>{{ __('common.position') }}</th>
+                <th>{{ __('common.name') }}</th>
+                <th>{{ __('common.icon') }}</th>
+                <th>{{ __('common.image') }}</th>
+                <th>Movie Meta</th>
+                <th>TV Meta</th>
+                <th>Game Meta</th>
+                <th>Music Meta</th>
+                <th>No Meta</th>
+                <th>{{ __('common.action') }}</th>
+            </tr>
+            </thead>
+            <tbody>
                 @foreach ($categories as $category)
                     <tr>
+                        <td>{{ $category->position }}</td>
                         <td>
-                            {{ $category->position }}
+                            <a href="{{ route('staff.categories.edit', ['id' => $category->id]) }}">
+                                {{ $category->name }}
+                            </a>
                         </td>
                         <td>
-                            <a
-                                    href="{{ route('staff.categories.edit', ['id' => $category->id]) }}">{{ $category->name }}</a>
-                        </td>
-                        <td>
-                            <i class="{{ $category->icon }}" aria-hidden="true"></i>
+                            <i class="{{ $category->icon }}"></i>
                         </td>
                         <td>
                             @if ($category->image != null)
@@ -60,55 +57,57 @@
                         </td>
                         <td>
                             @if ($category->movie_meta)
-                                <i class="{{ config('other.font-awesome') }} fa-check text-green"></i>
+                                <i class="{{ config('other.font-awesome') }} fa-check" style="color: green"></i>
                             @else
-                                <i class="{{ config('other.font-awesome') }} fa-times text-red"></i>
+                                <i class="{{ config('other.font-awesome') }} fa-times" style="color: red"></i>
                             @endif
                         </td>
                         <td>
                             @if ($category->tv_meta)
-                                <i class="{{ config('other.font-awesome') }} fa-check text-green"></i>
+                                <i class="{{ config('other.font-awesome') }} fa-check" style="color: green"></i>
                             @else
-                                <i class="{{ config('other.font-awesome') }} fa-times text-red"></i>
+                                <i class="{{ config('other.font-awesome') }} fa-times" style="color: red"></i>
                             @endif
                         </td>
                         <td>
                             @if ($category->game_meta)
-                                <i class="{{ config('other.font-awesome') }} fa-check text-green"></i>
+                                <i class="{{ config('other.font-awesome') }} fa-check" style="color: green"></i>
                             @else
-                                <i class="{{ config('other.font-awesome') }} fa-times text-red"></i>
+                                <i class="{{ config('other.font-awesome') }} fa-times" style="color: red"></i>
                             @endif
                         </td>
                         <td>
                             @if ($category->music_meta)
-                                <i class="{{ config('other.font-awesome') }} fa-check text-green"></i>
+                                <i class="{{ config('other.font-awesome') }} fa-check" style="color: green"></i>
                             @else
-                                <i class="{{ config('other.font-awesome') }} fa-times text-red"></i>
+                                <i class="{{ config('other.font-awesome') }} fa-times" style="color: red"></i>
                             @endif
                         </td>
                         <td>
                             @if ($category->no_meta)
-                                <i class="{{ config('other.font-awesome') }} fa-check text-green"></i>
+                                <i class="{{ config('other.font-awesome') }} fa-check" style="color: green"></i>
                             @else
-                                <i class="{{ config('other.font-awesome') }} fa-times text-red"></i>
+                                <i class="{{ config('other.font-awesome') }} fa-times" style="color: red"></i>
                             @endif
                         </td>
-                        <td>
-                            <form action="{{ route('staff.categories.destroy', ['id' => $category->id]) }}"
-                                  method="POST">
+                        <td class="data-table__actions">
+                            <a href="{{ route('staff.categories.edit', ['id' => $category->id]) }}">
+                                <i class="{{ config('other.font-awesome') }} fa-pencil"></i>
+                            </a>
+                            <form
+                                action="{{ route('staff.categories.destroy', ['id' => $category->id]) }}"
+                                method="POST"
+                            >
                                 @csrf
                                 @method('DELETE')
-                                <a href="{{ route('staff.categories.edit', ['id' => $category->id]) }}"
-                                   class="btn btn-warning">
-                                    {{ __('common.edit') }}
-                                </a>
-                                <button type="submit" class="btn btn-danger">{{ __('common.delete') }}</button>
+                                <button type="submit">
+                                    <i class="{{ config('other.font-awesome') }} fa-trash"></i>
+                                </button>
                             </form>
                         </td>
                     </tr>
                 @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
+            </tbody>
+        </table>
+    </x-panel>
 @endsection

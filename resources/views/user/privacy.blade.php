@@ -20,792 +20,473 @@
     </li>
 @endsection
 
-@section('content')
-    <div class="container">
-        <div class="block">
-            @include('user.buttons.settings')
-            <div class="container-fluid p-0 some-padding">
-                <ul class="nav nav-tabs" role="tablist" id="basetabs">
-                    <li class="active"><a href="#profile_tab" data-toggle="tab">Profile</a></li>
-                    <li><a href="#achievement_tab" data-toggle="tab">Achievements</a></li>
-                    <li><a href="#follower_tab" data-toggle="tab">Followers</a></li>
-                    <li><a href="#forum_tab" data-toggle="tab">Forums</a></li>
-                    <li><a href="#request_tab" data-toggle="tab">Requests</a></li>
-                    <li><a href="#torrent_tab" data-toggle="tab">Torrents</a></li>
-                    <li><a href="#other_tab" data-toggle="tab">Other</a></li>
-                </ul>
-                <br>
-                <div class="tab-content">
+@section('secondary-nav')
+    <x-nav>
+        <x-nav.tab href="{{ route('users.show', ['username' => $user->username]) }}">
+            {{ __('user.profile') }}
+        </x-nav.tab>
+        <x-nav.tab href="{{ route('user_settings', ['username' => $user->username]) }}">
+            {{ __('user.general') }}
+        </x-nav.tab>
+        <x-nav.tab href="{{ route('user_security', ['username' => $user->username]) }}">
+            {{ __('user.security') }}
+        </x-nav.tab>
+        <x-nav.tab href="{{ route('user_privacy', ['username' => $user->username]) }}">
+            {{ __('user.privacy') }}
+        </x-nav.tab>
+        <x-nav.tab href="{{ route('user_notification', ['username' => $user->username]) }}">
+            {{ __('user.notification') }}
+        </x-nav.tab>
+    </x-nav>
 
-
-                    <div role="tabpanel" class="tab-pane" id="other_tab">
-                        <form role="form" method="POST"
-                              action="{{ route('privacy_other', ['username' => $user->username]) }}"
-                              enctype="multipart/form-data">
-                            @csrf
-                            <div class="well">
-                                <h3>{{ __('user.other-privacy') }}:</h3>
-                                <div class="help-block">{{ __('user.other-help') }}.</div>
-                                <hr>
-                                <div class="form-group">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.other-privacy-online') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy && $user->privacy->show_online == 1))
-                                                <label>
-                                                    <input type="checkbox" name="show_online" value="1" CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_online" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <h3>{{ __('user.visible-to-other') }}:</h3>
-                                    <div class="help-block">{{ __('user.visible-to-other-help') }}.</div>
-                                    <hr>
-                                    <div class="form-group">
-                                        @foreach($groups as $group)
-                                            @if($group->is_modo || $group->is_admin)
-                                            @else
-                                                <div class="button-holder">
-                                                    <div class="button-left">
-                                                        {{ $group->name }}
-                                                    </div>
-                                                    <div class="button-right">
-                                                        @if(!$user->privacy || !$user->privacy->json_other_groups ||
-                                                            $group->isAllowed($user->privacy->json_other_groups,$group->id))
-                                                            <label>
-                                                                <input type="checkbox" name="approved[]"
-                                                                       value="{{ $group->id }}"
-                                                                       CHECKED/>
-                                                            </label>
-                                                        @else
-                                                            <label>
-                                                                <input type="checkbox" name="approved[]"
-                                                                       value="{{ $group->id }}"/>
-                                                            </label>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                <hr class="some-padding">
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                    <hr class="some-padding">
-                                </div>
-                            </div>
-                            <div class="well text-center">
-                                <button type="submit" class="btn btn-primary">{{ __('common.save') }}
-                                    {{ __('user.other-privacy') }}</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="request_tab">
-                        <form role="form" method="POST"
-                              action="{{ route('privacy_request', ['username' => $user->username]) }}"
-                              enctype="multipart/form-data">
-                            @csrf
-                            <div class="well">
-                                <h3>{{ __('user.request-privacy') }}:</h3>
-                                <div class="help-block">{{ __('user.request-help') }}.</div>
-                                <hr>
-                                <div class="form-group">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.request-privacy-requested') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy && $user->privacy->show_requested == 1))
-                                                <label>
-                                                    <input type="checkbox" name="show_requested" value="1" CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_requested" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <h3>{{ __('user.visible-to-request') }}:</h3>
-                                    <div class="help-block">{{ __('user.visible-to-request-help') }}.</div>
-                                    <hr>
-                                    <div class="form-group">
-                                        @foreach($groups as $group)
-                                            @if($group->is_modo || $group->is_admin)
-                                            @else
-                                                <div class="button-holder">
-                                                    <div class="button-left">
-                                                        {{ $group->name }}
-                                                    </div>
-                                                    <div class="button-right">
-                                                        @if(!$user->privacy || !$user->privacy->json_request_groups ||
-                                                            $group->isAllowed($user->privacy->json_request_groups,$group->id))
-                                                            <label>
-                                                                <input type="checkbox" name="approved[]"
-                                                                       value="{{ $group->id }}"
-                                                                       CHECKED/>
-                                                            </label>
-                                                        @else
-                                                            <label>
-                                                                <input type="checkbox" name="approved[]"
-                                                                       value="{{ $group->id }}"/>
-                                                            </label>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                <hr class="some-padding">
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                    <hr class="some-padding">
-                                </div>
-                            </div>
-                            <div class="well text-center">
-                                <button type="submit" class="btn btn-primary">{{ __('common.save') }}
-                                    {{ __('user.request-privacy') }}</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="torrent_tab">
-                        <form role="form" method="POST"
-                              action="{{ route('privacy_torrent', ['username' => $user->username]) }}"
-                              enctype="multipart/form-data">
-                            @csrf
-                            <div class="well">
-                                <h3>{{ __('user.torrent-privacy') }}:</h3>
-                                <div class="help-block">{{ __('user.torrent-help') }}.</div>
-                                <hr>
-                                <div class="form-group">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.torrent-privacy-upload') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy && $user->privacy->show_upload == 1))
-                                                <label>
-                                                    <input type="checkbox" name="show_upload" value="1" CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_upload" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.torrent-privacy-download') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy && $user->privacy->show_download == 1))
-                                                <label>
-                                                    <input type="checkbox" name="show_download" value="1" CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_download" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.torrent-privacy-peer') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy && $user->privacy->show_peer == 1))
-                                                <label>
-                                                    <input type="checkbox" name="show_peer" value="1" CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_peer" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <h3>{{ __('user.visible-to-torrent') }}:</h3>
-                                    <div class="help-block">{{ __('user.visible-to-torrent-help') }}.</div>
-                                    <hr>
-                                    <div class="form-group">
-                                        @foreach($groups as $group)
-                                            @if($group->is_modo || $group->is_admin)
-                                            @else
-                                                <div class="button-holder">
-                                                    <div class="button-left">
-                                                        {{ $group->name }}
-                                                    </div>
-                                                    <div class="button-right">
-                                                        @if(!$user->privacy || !$user->privacy->json_torrent_groups ||
-                                                            $group->isAllowed($user->privacy->json_torrent_groups,$group->id))
-                                                            <label>
-                                                                <input type="checkbox" name="approved[]"
-                                                                       value="{{ $group->id }}"
-                                                                       CHECKED/>
-                                                            </label>
-                                                        @else
-                                                            <label>
-                                                                <input type="checkbox" name="approved[]"
-                                                                       value="{{ $group->id }}"/>
-                                                            </label>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                <hr class="some-padding">
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                    <hr class="some-padding">
-                                </div>
-                            </div>
-                            <div class="well text-center">
-                                <button type="submit" class="btn btn-primary">{{ __('common.save') }}
-                                    {{ __('user.torrent-privacy') }}</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div role="tabpanel" class="tab-pane active" id="profile_tab">
-                        <form role="form" method="POST"
-                              action="{{ route('privacy_profile', ['username' => $user->username]) }}"
-                              enctype="multipart/form-data">
-                            @csrf
-                            <div class="well">
-                                <h3>{{ __('user.profile-privacy') }}:</h3>
-                                <div class="help-block">{{ __('user.profile-privacy-help') }}.</div>
-                                <hr>
-                                <div class="form-group">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.profile-privacy-torrent-count') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy &&
-                                                $user->privacy->show_profile_torrent_count == 1))
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_torrent_count" value="1"
-                                                           CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_torrent_count" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.profile-privacy-title') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_title ==
-                                                1))
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_title" value="1" CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_title" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.profile-privacy-about') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_about ==
-                                                1))
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_about" value="1" CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_about" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.profile-privacy-torrent-ratio') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy &&
-                                                $user->privacy->show_profile_torrent_ratio == 1))
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_torrent_ratio" value="1"
-                                                           CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_torrent_ratio" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.profile-privacy-torrent-seed') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy &&
-                                                $user->privacy->show_profile_torrent_seed == 1))
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_torrent_seed" value="1"
-                                                           CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_torrent_seed" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.profile-privacy-bon-extra') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_bon_extra
-                                                == 1))
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_bon_extra" value="1"
-                                                           CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_bon_extra" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.profile-privacy-torrent-extra') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy &&
-                                                $user->privacy->show_profile_torrent_extra == 1))
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_torrent_extra" value="1"
-                                                           CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_torrent_extra" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.profile-privacy-comment-extra') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy &&
-                                                $user->privacy->show_profile_comment_extra == 1))
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_comment_extra" value="1"
-                                                           CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_comment_extra" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.profile-privacy-request-extra') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy &&
-                                                $user->privacy->show_profile_request_extra == 1))
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_request_extra" value="1"
-                                                           CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_request_extra" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.profile-privacy-forum-extra') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy &&
-                                                $user->privacy->show_profile_forum_extra == 1))
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_forum_extra" value="1"
-                                                           CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_forum_extra" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.profile-privacy-warning') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_warning
-                                                == 1))
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_warning" value="1"
-                                                           CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_warning" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.profile-privacy-badge') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_badge ==
-                                                1))
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_badge" value="1" CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_badge" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.profile-privacy-achievement') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy &&
-                                                $user->privacy->show_profile_achievement == 1))
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_achievement" value="1"
-                                                           CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_achievement" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.profile-privacy-follower') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_follower
-                                                == 1))
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_follower" value="1"
-                                                           CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_profile_follower" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                </div>
-                                <h3>{{ __('user.visible-to-profile') }}:</h3>
-                                <div class="help-block">{{ __('user.visible-to-profile-help') }}.</div>
-                                <hr>
-                                <div class="form-group">
-                                    @foreach($groups as $group)
-                                        @if($group->is_modo || $group->is_admin)
-                                        @else
-                                            <div class="button-holder">
-                                                <div class="button-left">
-                                                    {{ $group->name }}
-                                                </div>
-                                                <div class="button-right">
-                                                    @if(!$user->privacy || !$user->privacy->json_profile_groups ||
-                                                        $group->isAllowed($user->privacy->json_profile_groups,$group->id))
-                                                        <label>
-                                                            <input type="checkbox" name="approved[]"
-                                                                   value="{{ $group->id }}" CHECKED/>
-                                                        </label>
-                                                    @else
-                                                        <label>
-                                                            <input type="checkbox" name="approved[]"
-                                                                   value="{{ $group->id }}"/>
-                                                        </label>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <hr class="some-padding">
-                                        @endif
-                                    @endforeach
-                                </div>
-                            </div>
-                            <div class="well text-center">
-                                <button type="submit" class="btn btn-primary">{{ __('common.save') }}
-                                    {{ __('user.profile-privacy') }}</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="forum_tab">
-                        <form role="form" method="POST"
-                              action="{{ route('privacy_forum', ['username' => $user->username]) }}"
-                              enctype="multipart/form-data">
-                            @csrf
-                            <div class="well">
-                                <h3>{{ __('user.forum-privacy') }}:</h3>
-                                <div class="help-block">{{ __('user.forum-help') }}.</div>
-                                <hr>
-                                <div class="form-group">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.forum-privacy-topic') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy && $user->privacy->show_topic == 1))
-                                                <label>
-                                                    <input type="checkbox" name="show_topic" value="1" CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_topic" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.forum-privacy-post') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy && $user->privacy->show_post == 1))
-                                                <label>
-                                                    <input type="checkbox" name="show_post" value="1" CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_post" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <h3>{{ __('user.visible-to-forum') }}:</h3>
-                                    <div class="help-block">{{ __('user.visible-to-forum-help') }}.</div>
-                                    <hr>
-                                    <div class="form-group">
-                                        @foreach($groups as $group)
-                                            @if($group->is_modo || $group->is_admin)
-                                            @else
-                                                <div class="button-holder">
-                                                    <div class="button-left">
-                                                        {{ $group->name }}
-                                                    </div>
-                                                    <div class="button-right">
-                                                        @if(!$user->privacy || !$user->privacy->json_forum_groups ||
-                                                            $group->isAllowed($user->privacy->json_forum_groups,$group->id))
-                                                            <label>
-                                                                <input type="checkbox" name="approved[]"
-                                                                       value="{{ $group->id }}"
-                                                                       CHECKED/>
-                                                            </label>
-                                                        @else
-                                                            <label>
-                                                                <input type="checkbox" name="approved[]"
-                                                                       value="{{ $group->id }}"/>
-                                                            </label>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                <hr class="some-padding">
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="well text-center">
-                                <button type="submit" class="btn btn-primary">{{ __('common.save') }}
-                                    {{ __('user.forum-privacy') }}</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="follower_tab">
-                        <form role="form" method="POST"
-                              action="{{ route('privacy_follower', ['username' => $user->username]) }}"
-                              enctype="multipart/form-data">
-                            @csrf
-                            <div class="well">
-                                <h3>{{ __('user.follower-privacy') }}:</h3>
-                                <div class="help-block">{{ __('user.follower-help') }}.</div>
-                                <hr>
-                                <div class="form-group">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.follower-privacy-list') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy && $user->privacy->show_follower == 1))
-                                                <label>
-                                                    <input type="checkbox" name="show_follower" value="1" CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_follower" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <h3>{{ __('user.visible-to-follower') }}:</h3>
-                                    <div class="help-block">{{ __('user.visible-to-follower-help') }}.</div>
-                                    <hr>
-                                    <div class="form-group">
-                                        @foreach($groups as $group)
-                                            @if($group->is_modo || $group->is_admin)
-                                            @else
-                                                <div class="button-holder">
-                                                    <div class="button-left">
-                                                        {{ $group->name }}
-                                                    </div>
-                                                    <div class="button-right">
-                                                        @if(!$user->privacy || !$user->privacy->json_follower_groups ||
-                                                            $group->isAllowed($user->privacy->json_follower_groups,$group->id))
-                                                            <label>
-                                                                <input type="checkbox" name="approved[]"
-                                                                       value="{{ $group->id }}"
-                                                                       CHECKED/>
-                                                            </label>
-                                                        @else
-                                                            <label>
-                                                                <input type="checkbox" name="approved[]"
-                                                                       value="{{ $group->id }}"/>
-                                                            </label>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                <hr class="some-padding">
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="well text-center">
-                                <button type="submit" class="btn btn-primary">{{ __('common.save') }}
-                                    {{ __('user.follower-privacy') }}</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="achievement_tab">
-                        <form role="form" method="POST"
-                              action="{{ route('privacy_achievement', ['username' => $user->username]) }}"
-                              enctype="multipart/form-data">
-                            @csrf
-                            <div class="well">
-                                <h3>{{ __('user.achievement-privacy') }}:</h3>
-                                <div class="help-block">{{ __('user.achievement-help') }}.</div>
-                                <hr>
-                                <div class="form-group">
-                                    <div class="button-holder">
-                                        <div class="button-left">
-                                            {{ __('user.achievement-privacy-list') }}.
-                                        </div>
-                                        <div class="button-right">
-                                            @if(!$user->privacy || ($user->privacy && $user->privacy->show_achievement ==
-                                                1))
-                                                <label>
-                                                    <input type="checkbox" name="show_achievement" value="1" CHECKED/>
-                                                </label>
-                                            @else
-                                                <label>
-                                                    <input type="checkbox" name="show_achievement" value="1"/>
-                                                </label>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <hr class="some-padding">
-                                    <h3>{{ __('user.visible-to-achievement') }}:</h3>
-                                    <div class="help-block">{{ __('user.visible-to-achievement-help') }}.</div>
-                                    <hr>
-                                    <div class="form-group">
-                                        @foreach($groups as $group)
-                                            @if($group->is_modo || $group->is_admin)
-                                            @else
-                                                <div class="button-holder">
-                                                    <div class="button-left">
-                                                        {{ $group->name }}
-                                                    </div>
-                                                    <div class="button-right">
-                                                        @if(!$user->privacy || !$user->privacy->json_achievement_groups ||
-                                                            $group->isAllowed($user->privacy->json_achievement_groups,$group->id))
-                                                            <label>
-                                                                <input type="checkbox" name="approved[]"
-                                                                       value="{{ $group->id }}"
-                                                                       CHECKED/>
-                                                            </label>
-                                                        @else
-                                                            <label>
-                                                                <input type="checkbox" name="approved[]"
-                                                                       value="{{ $group->id }}"/>
-                                                            </label>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                <hr class="some-padding">
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="well text-center">
-                                <button type="submit" class="btn btn-primary">{{ __('common.save') }}
-                                    {{ __('user.achievement-privacy') }}</button>
-                            </div>
-                        </form>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
+
+@section('content')
+    <x-panel.tabbed :padded="true" class="container-fluid p-0 some-padding">
+        <x-panel.tabbed.tab tabId="profile" active>Profile</x-panel.tabbed.tab>
+        <x-panel.tabbed.tab tabId="achievements">Achievements</x-panel.tabbed.tab>
+        <x-panel.tabbed.tab tabId="followers">Followers</x-panel.tabbed.tab>
+        <x-panel.tabbed.tab tabId="forums">Forums</x-panel.tabbed.tab>
+        <x-panel.tabbed.tab tabId="requests">Requests</x-panel.tabbed.tab>
+        <x-panel.tabbed.tab tabId="torrents">Torrents</x-panel.tabbed.tab>
+        <x-panel.tabbed.tab tabId="other">Other</x-panel.tabbed.tab>
+        <x-panel.tabbed.pane tabId="other">
+            <form
+                method="POST"
+                action="{{ route('privacy_other', ['username' => $user->username]) }}"
+                enctype="multipart/form-data"
+            >
+                @csrf
+                <fieldset>
+                    <legend>
+                        <h3>{{ __('user.other-privacy') }}</h3>
+                        {!! __('user.other-help') !!}.
+                    </legend>
+                    <label>
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_online == 1))
+                            <input type="checkbox" name="show_online" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_online" value="1"/>
+                        @endif
+                        {{ __('user.other-privacy-online') }}.
+                    </label>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        <h3>__('user.visible-to-other')"</h3>
+                        {!! __('user.visible-to-other-help') !!}.
+                    </legend>
+                        @foreach($groups->filter(fn ($group) => ! ($group->is_modo || $group->is_admin)) as $group)
+                            <label>
+                                @if (
+                                    !$user->privacy
+                                    || !$user->privacy->json_other_groups
+                                    || $group->isAllowed($user->privacy->json_other_groups,$group->id)
+                                )
+                                    <input type="checkbox" name="approved[]" value="{{ $group->id }}" CHECKED/>
+                                @else
+                                    <input type="checkbox" name="approved[]" value="{{ $group->id }}"/>
+                                @endif
+                                {{ $group->name }}
+                            </label>
+                        @endforeach
+                </fieldset>
+                <button type="submit">{{ __('common.save') }} {{ __('user.other-privacy') }}</button>
+            </form>
+        </x-panel.tabbed.pane>
+        <x-panel.tabbed.pane tabId="requests">
+            <form
+                method="POST"
+                action="{{ route('privacy_request', ['username' => $user->username]) }}"
+                enctype="multipart/form-data"
+            >
+                @csrf
+                <fieldset>
+                    <legend>
+                        <h3>{{ __('user.request-privacy') }}</h3>
+                        {!! __('user.request-help') !!}.
+                    </legend>
+                    <label>
+                        {{ __('user.request-privacy-requested') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_requested == 1))
+                            <input type="checkbox" name="show_requested" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_requested" value="1"/>
+                        @endif
+                    </label>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        <h3>{{ __('user.visible-to-request') }}</h3>
+                        {!! __('user.visible-to-request-help') !!}
+                    </legend>
+                    @foreach($groups->filter(fn ($group) => ! ($group->is_modo || $group->is_admin)) as $group)
+                        <label>
+                            {{ $group->name }}
+                            @if(
+                                !$user->privacy
+                                || !$user->privacy->json_request_groups
+                                || $group->isAllowed($user->privacy->json_request_groups,$group->id)
+                            )
+                                <input type="checkbox" name="approved[]" value="{{ $group->id }}" CHECKED/>
+                            @else
+                                <input type="checkbox" name="approved[]" value="{{ $group->id }}"/>
+                            @endif
+                        </label>
+                    @endforeach
+                </fieldset>
+                <button type="submit">{{ __('common.save') }} {{ __('user.request-privacy') }}</button>
+            </form>
+        </x-panel.tabbed.pane>
+        <x-panel.tabbed.pane tabId="torrents">
+            <form role="form" method="POST"
+                  action="{{ route('privacy_torrent', ['username' => $user->username]) }}"
+                  enctype="multipart/form-data">
+                @csrf
+                <fieldset>
+                    <legend>
+                        <h3>{{ __('user.torrent-privacy') }}:</h3>
+                        {!! __('user.torrent-help') !!}
+                    </legend>
+                    <label>
+                        {{ __('user.torrent-privacy-upload') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_upload == 1))
+                            <input type="checkbox" name="show_upload" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_upload" value="1"/>
+                        @endif
+                    </label>
+                    <label>
+                        {{ __('user.torrent-privacy-download') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_download == 1))
+                            <input type="checkbox" name="show_download" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_download" value="1"/>
+                        @endif
+                    </label>
+                    <label>
+                        {{ __('user.torrent-privacy-peer') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_peer == 1))
+                            <input type="checkbox" name="show_peer" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_peer" value="1"/>
+                        @endif
+                    </label>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        <h3>{{ __('user.visible-to-torrent') }}:</h3>
+                        {!! __('user.visible-to-torrent-help') !!}
+                    </legend>
+                    @foreach($groups->filter(fn ($group) => ! ($group->is_modo || $group->is_admin)) as $group)
+                        <label>
+                            {{ $group->name }}
+                            @if(
+                                !$user->privacy
+                                || !$user->privacy->json_torrent_groups
+                                || $group->isAllowed($user->privacy->json_torrent_groups,$group->id)
+                            )
+                                <input type="checkbox" name="approved[]" value="{{ $group->id }}" CHECKED/>
+                            @else
+                                <input type="checkbox" name="approved[]" value="{{ $group->id }}"/>
+                            @endif
+                        </label>
+                    @endforeach
+                </fieldset>
+                <button type="submit">{{ __('common.save') }} {{ __('user.torrent-privacy') }}</button>
+            </form>
+        </x-panel.tabbed.pane>
+        <x-panel.tabbed.pane tabId="profile">
+            <form
+                method="POST"
+                action="{{ route('privacy_profile', ['username' => $user->username]) }}"
+                enctype="multipart/form-data"
+            >
+                @csrf
+                <fieldset>
+                    <legend>
+                        <h3>{{ __('user.profile-privacy') }}:</h3>
+                        {{ __('user.profile-privacy-help') }}.
+                    </legend>
+                    <label>
+                        {{ __('user.profile-privacy-torrent-count') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_torrent_count == 1))
+                            <input type="checkbox" name="show_profile_torrent_count" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_profile_torrent_count" value="1"/>
+                        @endif
+                    </label>
+                    <label>
+                        {{ __('user.profile-privacy-title') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_title == 1))
+                            <input type="checkbox" name="show_profile_title" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_profile_title" value="1"/>
+                        @endif
+                    </label>
+                    <label>
+                        {{ __('user.profile-privacy-about') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_about == 1))
+                            <input type="checkbox" name="show_profile_about" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_profile_about" value="1"/>
+                        @endif
+                    </label>
+                    <label>
+                        {{ __('user.profile-privacy-torrent-ratio') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_torrent_ratio == 1))
+                            <input type="checkbox" name="show_profile_torrent_ratio" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_profile_torrent_ratio" value="1"/>
+                        @endif
+                    </label>
+                    <label>
+                        {{ __('user.profile-privacy-torrent-seed') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_torrent_seed == 1))
+                            <input type="checkbox" name="show_profile_torrent_seed" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_profile_torrent_seed" value="1"/>
+                        @endif
+                    </label>
+                    <label>
+                        {{ __('user.profile-privacy-bon-extra') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_bon_extra == 1))
+                            <input type="checkbox" name="show_profile_bon_extra" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_profile_bon_extra" value="1"/>
+                        @endif
+                    </label>
+                    <label>
+                        {{ __('user.profile-privacy-torrent-extra') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_torrent_extra == 1))
+                            <input type="checkbox" name="show_profile_torrent_extra" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_profile_torrent_extra" value="1"/>
+                        @endif
+                    </label>
+                    <label>
+                        {{ __('user.profile-privacy-comment-extra') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_comment_extra == 1))
+                            <input type="checkbox" name="show_profile_comment_extra" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_profile_comment_extra" value="1"/>
+                        @endif
+                    </label>
+                    <label>
+                        {{ __('user.profile-privacy-request-extra') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_request_extra == 1))
+                            <input type="checkbox" name="show_profile_request_extra" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_profile_request_extra" value="1"/>
+                        @endif
+                    </label>
+                    <label>
+                        {{ __('user.profile-privacy-forum-extra') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_forum_extra == 1))
+                            <input type="checkbox" name="show_profile_forum_extra" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_profile_forum_extra" value="1"/>
+                        @endif
+                    </label>
+                    <label>
+                        {{ __('user.profile-privacy-warning') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_warning == 1))
+                            <input type="checkbox" name="show_profile_warning" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_profile_warning" value="1"/>
+                        @endif
+                    </label>
+                    <label>
+                        {{ __('user.profile-privacy-badge') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_badge == 1))
+                            <input type="checkbox" name="show_profile_badge" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_profile_badge" value="1"/>
+                        @endif
+                    </label>
+                    <label>
+                        {{ __('user.profile-privacy-achievement') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_achievement == 1))
+                            <input type="checkbox" name="show_profile_achievement" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_profile_achievement" value="1"/>
+                        @endif
+                    </label>
+                    <label>
+                        {{ __('user.profile-privacy-follower') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_profile_follower == 1))
+                            <input type="checkbox" name="show_profile_follower" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_profile_follower" value="1"/>
+                        @endif
+                    </label>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        <h3>{{ __('user.visible-to-profile') }}:</h3>
+                        {!! __('user.visible-to-profile-help') !!}
+                    </legend>
+                    @foreach($groups->filter(fn ($group) => ! ($group->is_modo || $group->is_admin)) as $group)
+                        <label>
+                            {{ $group->name }}
+                            @if(
+                                !$user->privacy
+                                || !$user->privacy->json_profile_groups
+                                || $group->isAllowed($user->privacy->json_profile_groups,$group->id)
+                            )
+                                <input type="checkbox" name="approved[]" value="{{ $group->id }}" CHECKED/>
+                            @else
+                                <input type="checkbox" name="approved[]" value="{{ $group->id }}"/>
+                            @endif
+                        </label>
+                    @endforeach
+                </fieldset>
+                <button type="submit">{{ __('common.save') }} {{ __('user.profile-privacy') }}</button>
+            </form>
+        </x-panel.tabbed.pane>
+        <x-panel.tabbed.pane tabId="forums">
+            <form
+                method="POST"
+                action="{{ route('privacy_forum', ['username' => $user->username]) }}"
+                enctype="multipart/form-data"
+            >
+                @csrf
+                <fieldset>
+                    <legend>
+                        <h3>{{ __('user.forum-privacy') }}:</h3>
+                        {!! __('user.forum-help') !!}
+                    </legend>
+                    <label>
+                        {{ __('user.forum-privacy-topic') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_topic == 1))
+                            <input type="checkbox" name="show_topic" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_topic" value="1"/>
+                        @endif
+                    </label>
+                    <label>
+                        {{ __('user.forum-privacy-post') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_post == 1))
+                            <input type="checkbox" name="show_post" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_post" value="1"/>
+                        @endif
+                    </label>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        <h3>{{ __('user.visible-to-forum') }}:</h3>
+                        {!! __('user.visible-to-forum-help') !!}
+                    </legend>
+                    @foreach($groups->filter(fn ($group) => ! ($group->is_modo || $group->is_admin)) as $group)
+                        <label>
+                            {{ $group->name }}
+                            @if(
+                                !$user->privacy
+                                || !$user->privacy->json_forum_groups
+                                || $group->isAllowed($user->privacy->json_forum_groups,$group->id)
+                            )
+                                <input type="checkbox" name="approved[]" value="{{ $group->id }}" CHECKED/>
+                            @else
+                                <input type="checkbox" name="approved[]" value="{{ $group->id }}"/>
+                            @endif
+                        </label>
+                    @endforeach
+                </fieldset>
+                <button type="submit">{{ __('common.save') }} {{ __('user.forum-privacy') }}</button>
+            </form>
+        </x-panel.tabbed.pane>
+        <x-panel.tabbed.pane tabId="followers">
+            <form
+                method="POST"
+                action="{{ route('privacy_follower', ['username' => $user->username]) }}"
+                enctype="multipart/form-data"
+            >
+                @csrf
+                <fieldset>
+                    <legend>
+                        <h3>{{ __('user.follower-privacy') }}:</h3>
+                        {!! __('user.follower-help') !!}
+                    </legend>
+                    <label>
+                        {{ __('user.follower-privacy-list') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_follower == 1))
+                            <input type="checkbox" name="show_follower" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_follower" value="1"/>
+                        @endif
+                    </label>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        <h3>{{ __('user.visible-to-follower') }}:</h3>
+                        {!! __('user.visible-to-follower-help') !!}.
+                    </legend>
+                    @foreach($groups->filter(fn ($group) => ! ($group->is_modo || $group->is_admin)) as $group)
+                        <label>
+                            {{ $group->name }}
+                            @if (
+                                !$user->privacy
+                                || !$user->privacy->json_follower_groups
+                                || $group->isAllowed($user->privacy->json_follower_groups,$group->id)
+                            )
+                                <input type="checkbox" name="approved[]" value="{{ $group->id }}" CHECKED/>
+                            @else
+                                <input type="checkbox" name="approved[]" value="{{ $group->id }}"/>
+                            @endif
+                        </label>
+                    @endforeach
+                    <button type="submit">{{ __('common.save') }} {{ __('user.follower-privacy') }}</button>
+                </fieldset>
+            </form>
+        </x-panel.tabbed.pane>
+        <x-panel.tabbed.pane tabId="achievements">
+            <form
+                method="POST"
+                action="{{ route('privacy_achievement', ['username' => $user->username]) }}"
+                enctype="multipart/form-data"
+            >
+                @csrf
+                <fieldset>
+                    <legend>
+                        <h3>{{ __('user.achievement-privacy') }}:</h3>
+                        {!! __('user.achievement-help') !!}.
+                    </legend>
+                    <label>
+                        {{ __('user.achievement-privacy-list') }}.
+                        @if(!$user->privacy || ($user->privacy && $user->privacy->show_achievement == 1))
+                            <input type="checkbox" name="show_achievement" value="1" CHECKED/>
+                        @else
+                            <input type="checkbox" name="show_achievement" value="1"/>
+                        @endif
+                    </label>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        <h3>{{ __('user.visible-to-achievement') }}:</h3>
+                        {!! __('user.visible-to-achievement-help') !!}.
+                    </legend>
+                    @foreach($groups->filter(fn ($group) => ! ($group->is_modo || $group->is_admin)) as $group)
+                        <label>
+                            {{ $group->name }}
+                            @if(
+                                !$user->privacy
+                                || !$user->privacy->json_achievement_groups
+                                || $group->isAllowed($user->privacy->json_achievement_groups,$group->id)
+                            )
+                                <input type="checkbox" name="approved[]" value="{{ $group->id }}" CHECKED/>
+                            @else
+                                <input type="checkbox" name="approved[]" value="{{ $group->id }}"/>
+                            @endif
+                        </label>
+                    @endforeach
+                </fieldset>
+                <button type="submit" >{{ __('common.save') }} {{ __('user.achievement-privacy') }}</button>
+            </form>
+        </x-panel.tabbed.pane>
+    </x-panel.tabbed>
+@endsection
+
 @section('javascripts')
     <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce('script') }}">
       $(window).on('load', function () {

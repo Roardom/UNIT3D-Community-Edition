@@ -22,62 +22,70 @@
 @endsection
 
 @section('content')
-    <div class="container box">
-        <h2>Forums</h2>
-        <a href="{{ route('staff.forums.create') }}" class="btn btn-primary">Add New Category/Forum</a>
-        <div class="table-responsive">
-            <table class="table table-condensed table-striped table-bordered table-hover">
-                <thead>
+    <x-panel>
+        <x-slot name="heading">
+            {{ __('forum.forums') }}
+            <a href="{{ route('staff.forums.create') }}" class="btn btn-primary">
+                <i class="{{ config('other.font-awesome') }} fa-plus"></i>
+            </a>
+        </x-slot>
+        <table class="data-table">
+            <thead>
                 <tr>
                     <th>{{ __('common.name') }}</th>
-                    <th>Type</th>
+                    <th>{{ __('common.type') }}</th>
                     <th>{{ __('common.position') }}</th>
                     <th>{{ __('common.action') }}</th>
                 </tr>
-                </thead>
-                <tbody>
-                @foreach ($categories as $category)
-                    <tr class="success">
-                        <td>
-                            <a href="{{ route('staff.forums.edit', ['id' => $category->id]) }}">{{ $category->name }}</a>
-                        </td>
-                        <td>
-                            Category
-                        </td>
-                        <td>
-                            {{ $category->position }}
-                        </td>
-                        <td>
+            </thead>
+            <tbody>
+            @foreach ($categories as $category)
+                <tr>
+                    <td>
+                        <a href="{{ route('staff.forums.edit', ['id' => $category->id]) }}">{{ $category->name }}</a>
+                    </td>
+                    <td>{{ __('common.category') }}</td>
+                    <td>{{ $category->position }}</td>
+                    <td>
+                        <div class="data-table__actions">
+                            <a href="{{ route('staff.forums.edit', ['id' => $category->id]) }}">
+                                <i class="{{ config('other.font-awesome') }} fa-pencil"></i>
+                            </a>
                             <form action="{{ route('staff.forums.destroy', ['id' => $category->id]) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger">{{ __('common.delete') }}</button>
+                                <button type="submit">
+                                    <i class="{{ config('other.font-awesome') }} fa-trash"></i>
+                                </button>
                             </form>
+                        </div>
+                    </td>
+                </tr>
+                @foreach ($category->getForumsInCategory()->sortBy('position') as $forum)
+                    <tr>
+                        <td>
+                            <a href="{{ route('staff.forums.edit', ['id' => $forum->id]) }}">---- {{ $forum->name }}</a>
                         </td>
-                    </tr>
-                    @foreach ($category->getForumsInCategory()->sortBy('position') as $forum)
-                        <tr>
-                            <td>
-                                <a href="{{ route('staff.forums.edit', ['id' => $forum->id]) }}">---- {{ $forum->name }}</a>
-                            </td>
-                            <td>
-                                Forum
-                            </td>
-                            <td>
-                                {{ $forum->position }}
-                            </td>
-                            <td>
+                        <td>{{ __('forum.forum') }}</td>
+                        <td>{{ $forum->position }}</td>
+                        <td>
+                            <div class="data-table__actions">
+                                <a href="{{ route('staff.forums.edit', ['id' => $forum->id]) }}">
+                                    <i class="{{ config('other.font-awesome') }} fa-pencil"></i>
+                                </a>
                                 <form action="{{ route('staff.forums.destroy', ['id' => $forum->id]) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">{{ __('common.delete') }}</button>
+                                    <button type="submit">
+                                        <i class="{{ config('other.font-awesome') }} fa-trash"></i>
+                                    </button>
                                 </form>
-                            </td>
-                        </tr>
-                    @endforeach
+                            </div>
+                        </td>
+                    </tr>
                 @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
+            @endforeach
+            </tbody>
+        </table>
+    </x-panel>
 @endsection

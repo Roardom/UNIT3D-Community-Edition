@@ -24,30 +24,24 @@
 @endsection
 
 @section('content')
-    <div class="container box">
-        <h2>{{ __('common.add') }} {{ __('staff.articles') }}</h2>
+    <x-panel heading="{{ __('common.add') }} {{__('common.article') }}">
         <form role="form" method="POST" action="{{ route('staff.articles.store') }}" enctype="multipart/form-data">
             @csrf
-            <div class="form-group">
-                <label for="title">{{ __('common.title') }}</label>
-                <label>
-                    <input type="text" class="form-control" name="title" required>
-                </label>
-            </div>
-
-            <div class="form-group">
-                <label for="image">{{ __('common.image') }}</label>
+            <label>
+                {{ __('common.title') }}
+                <input type="text" name="title" required>
+            </label>
+            <label for="image">
+                {{ __('common.image') }}
                 <input type="file" name="image">
-            </div>
-
-            <div class="form-group">
-                <label for="content">{{ __('staff.article-content') }}</label>
-                <textarea name="content" id="content" cols="30" rows="10" class="form-control"></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-default">{{ __('common.submit') }}</button>
+            </label>
+            <label for="content">
+                {{ __('staff.article-content') }}
+                <textarea name="content" id="content" cols="30" rows="10"></textarea>
+            </label>
+            <button type="submit">{{ __('common.submit') }}</button>
         </form>
-    </div>
+    </x-panel>
 @endsection
 
 @section('javascripts')

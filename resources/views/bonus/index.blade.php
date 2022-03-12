@@ -8,256 +8,168 @@
     </li>
 @endsection
 
-@section('content')
-    <div class="container">
-        <div class="block">
-            @include('bonus.buttons')
-            <div class="some-padding">
-                <div class="row">
-                    <div class="col-sm-8">
-                        <div class="well">
-                            <div class="button-holder" id="userExtension" extension="bonExtension">
-                                <div class="button-left">
-                                    <h3>{{ __('bon.earnings') }}</h3>
-                                </div>
-                                <div class="button-right">
-                                    <span class="small">{{ __('bon.extended-stats') }} :</span>
-                                    <label for="extended"></label><input type="checkbox" value="1" name="extended"
-                                                                         id="extended">
-                                </div>
-                            </div>
-                            <table class="table table-condensed table-striped">
-                                <tbody>
-                                <tr>
-                                    <td>
-                                        <strong>{{ __('torrent.dying-torrent') }}</strong><br>
-                                        <small>{{ __('torrent.last-seeder') }}</small>
-                                    </td>
-                                    <td><strong>{{ $dying }} x 2</strong></td>
-                                    <td>
-                                        {{ $dying * 2 }} {{ __('bon.per-hour') }}<br/>
-                                        <span class="bonExtension" style="display: none;">
-                                                {{ $dying * 2 * 24 }} {{ __('bon.per-day') }}<br/>
-                                                {{ $dying * 2 * 24 * 7 }} {{ __('bon.per-week') }}<br/>
-                                                {{ $dying * 2 * 24 * 30 }} {{ __('bon.per-month') }}<br/>
-                                            </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>{{ __('torrent.legendary-torrent') }}</strong><br>
-                                        <small>{{ __('common.older-than') }} 12
-                                            {{ strtolower(__('common.months')) }}</small>
-                                    </td>
-                                    <td><strong>{{ $legendary }} x 1.5</strong></td>
-                                    <td>
-                                        {{ $legendary * 1.5 }} {{ __('bon.per-hour') }}<br/>
-                                        <span class="bonExtension" style="display: none;">
-                                                {{ $legendary * 1.5 * 24 }} {{ __('bon.per-day') }}<br/>
-                                                {{ $legendary * 1.5 * 24 * 7 }} {{ __('bon.per-week') }}<br/>
-                                                {{ $legendary * 1.5 * 24 * 30 }} {{ __('bon.per-month') }}<br/>
-                                            </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>{{ __('torrent.old-torrent') }}</strong><br>
-                                        <small>{{ __('common.older-than') }} 6
-                                            {{ strtolower(__('common.months')) }}</small>
-                                    </td>
-                                    <td><strong>{{ $old }} x 1</strong></td>
-                                    <td>
-                                        {{ $old * 1 }} {{ __('bon.per-hour') }}<br/>
-                                        <span class="bonExtension" style="display: none;">
-                                                {{ $old * 1 * 24 }} {{ __('bon.per-day') }}<br/>
-                                                {{ $old * 1 * 24 * 7 }} {{ __('bon.per-week') }}<br/>
-                                                {{ $old * 1 * 24 * 30 }} {{ __('bon.per-month') }}<br/>
-                                            </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>{{ __('common.huge') }} {{ __('torrent.torrents') }}</strong><br>
-                                        <small>{{ __('torrent.torrent') }} {{ __('torrent.size') }}<span
-                                                    class="text-bold">></span> 100GiB
-                                        </small>
-                                    </td>
-                                    <td><strong>{{ $huge }} x 0.75</strong></td>
-                                    <td>
-                                        {{ $huge * 0.75 }} {{ __('bon.per-hour') }}<br/>
-                                        <span class="bonExtension" style="display: none;">
-                                                {{ $huge * 0.75 * 24 }} {{ __('bon.per-day') }}<br/>
-                                                {{ $huge * 0.75 * 24 * 7 }} {{ __('bon.per-week') }}<br/>
-                                                {{ $huge * 0.75 * 24 * 30 }} {{ __('bon.per-month') }}<br/>
-                                            </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>{{ __('common.large') }} {{ __('torrent.torrents') }}</strong><br>
-                                        <small>{{ __('torrent.torrent') }} {{ __('torrent.size') }}<span
-                                                    class="text-bold">>=</span>
-                                            25GiB {{ strtolower(__('common.but')) }}
-                                            < 100GiB </small></td>
-                                    <td><strong>{{ $large }} x 0.50</strong></td>
-                                    <td>
-                                        {{ $large * 0.5 }} {{ __('bon.per-hour') }}<br/>
-                                        <span class="bonExtension" style="display: none;">
-                                                {{ $large * 0.5 * 24 }} {{ __('bon.per-day') }}<br/>
-                                                {{ $large * 0.5 * 24 * 7 }} {{ __('bon.per-week') }}<br/>
-                                                {{ $large * 0.5 * 24 * 30 }} {{ __('bon.per-month') }}<br/>
-                                            </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>{{ __('common.everyday') }} {{ __('torrent.torrents') }}</strong><br>
-                                        <small>{{ __('torrent.torrent') }} {{ __('torrent.size') }}<span class="text-bold">
-                                                    >=</span> 1GiB {{ strtolower(__('common.but')) }}
-                                            < 25GiB </small></td>
-                                    <td><strong>{{ $regular }} x 0.25</strong></td>
-                                    <td>
-                                        {{ $regular * 0.25 }} {{ __('bon.per-hour') }}<br/>
-                                        <span class="bonExtension" style="display: none;">
-                                                {{ $regular * 0.25 * 24 }} {{ __('bon.per-day') }}<br/>
-                                                {{ $regular * 0.25 * 24 * 7 }} {{ __('bon.per-week') }}<br/>
-                                                {{ $regular * 0.25 * 24 * 30 }} {{ __('bon.per-month') }}<br/>
-                                            </span>
-                                    </td>
-                                </tr>
+@section('secondary-nav')
+    @include('bonus.buttons', ['nav' => 'bon-nav__bon'])
+@endsection
 
-                                <tr>
-                                    <td>
-                                        <strong>{{ __('torrent.legendary-seeder') }}</strong><br>
-                                        <small>{{ __('torrent.seed-time') }} <span class="text-bold">>=</span>
-                                            1 {{ strtolower(__('common.year')) }}</small>
-                                    </td>
-                                    <td><strong>{{ $legend }} x 2</strong></td>
-                                    <td>
-                                        {{ $legend * 2 }} {{ __('bon.per-hour') }}<br/>
-                                        <span class="bonExtension" style="display: none;">
-                                                {{ $legend * 2 * 24 }} {{ __('bon.per-day') }}<br/>
-                                                {{ $legend * 2 * 24 * 7 }} {{ __('bon.per-week') }}<br/>
-                                                {{ $legend * 2 * 24 * 30 }} {{ __('bon.per-month') }}<br/>
-                                            </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>{{ __('torrent.mvp') }} {{ __('torrent.seeder') }}</strong><br>
-                                        <small>{{ __('torrent.seed-time') }} <span class="text-bold">>=</span>
-                                            6 {{ strtolower(__('common.months')) }}
-                                            {{ strtolower(__('common.but')) }}
-                                            < 1 {{ strtolower(__('common.year')) }}</small></td>
-                                    <td>
-                                        <strong>{{ $mvp }} x 1</strong></td>
-                                    <td>
-                                        {{ $mvp * 1 }} {{ __('bon.per-hour') }}<br/>
-                                        <span class="bonExtension" style="display: none;">
-                                                {{ $mvp * 1 * 24 }} {{ __('bon.per-day') }}<br/>
-                                                {{ $mvp * 1 * 24 * 7 }} {{ __('bon.per-week') }}<br/>
-                                                {{ $mvp * 1 * 24 * 30 }} {{ __('bon.per-month') }}<br/>
-                                            </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>{{ __('torrent.commited') }} {{ __('torrent.seeder') }}</strong><br>
-                                        <small>{{ __('torrent.seed-time') }} <span class="text-bold">>=</span>
-                                            3 {{ strtolower(__('common.months')) }}
-                                            {{ strtolower(__('common.but')) }}
-                                            < 6 {{ strtolower(__('common.months')) }}</small></td>
-                                    <td>
-                                        <strong>{{ $committed }} x 0.75</strong></td>
-                                    <td>
-                                        {{ $committed * 0.75 }} {{ __('bon.per-hour') }}<br/>
-                                        <span class="bonExtension" style="display: none;">
-                                                {{ $committed * 0.75 * 24 }} {{ __('bon.per-day') }}<br/>
-                                                {{ $committed * 0.75 * 24 * 7 }} {{ __('bon.per-week') }}<br/>
-                                                {{ $committed * 0.75 * 24 * 30 }} {{ __('bon.per-month') }}<br/>
-                                            </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>{{ __('torrent.team-player') }} {{ __('torrent.seeder') }}</strong><br>
-                                        <small>{{ __('torrent.seed-time') }} <span class="text-bold">>=</span>
-                                            2 {{ strtolower(__('common.months')) }}
-                                            {{ strtolower(__('common.but')) }}
-                                            < 3 {{ strtolower(__('common.months')) }}</small></td>
-                                    <td>
-                                        <strong>{{ $teamplayer }} x 0.50</strong></td>
-                                    <td>
-                                        {{ $teamplayer * 0.5 }} {{ __('bon.per-hour') }}<br/>
-                                        <span class="bonExtension" style="display: none;">
-                                                {{ $teamplayer * 0.5 * 24 }} {{ __('bon.per-day') }}<br/>
-                                                {{ $teamplayer * 0.5 * 24 * 7 }} {{ __('bon.per-week') }}<br/>
-                                                {{ $teamplayer * 0.5 * 24 * 30 }} {{ __('bon.per-month') }}<br/>
-                                            </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>{{ __('torrent.participant') }} {{ __('torrent.seeder') }}</strong><br>
-                                        <small>{{ __('torrent.seed-time') }} <span class="text-bold">>=</span>
-                                            1 {{ strtolower(__('common.month')) }}
-                                            {{ strtolower(__('common.but')) }}
-                                            < 2 {{ strtolower(__('common.months')) }}</small></td>
-                                    <td>
-                                        <strong>{{ $participant }} x 0.25</strong></td>
-                                    <td>
-                                        {{ $participant * 0.25 }} {{ __('bon.per-hour') }}<br/>
-                                        <span class="bonExtension" style="display: none;">
-                                                {{ $participant * 0.25 * 24 }} {{ __('bon.per-day') }}<br/>
-                                                {{ $participant * 0.25 * 24 * 7 }} {{ __('bon.per-week') }}<br/>
-                                                {{ $participant * 0.25 * 24 * 30 }} {{ __('bon.per-month') }}<br/>
-                                            </span>
-                                    </td>
-                                </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td>
-                                        <strong>{{ __('bon.total') }}</strong><br>
-                                        <small></small>
-                                    </td>
-                                    <td>-</td>
-                                    <td>
-                                        <strong>{{ $total }}</strong> {{ __('bon.per-hour') }}<br/>
-                                        <span class="bonExtension" style="display: none;">
-                                                <strong>{{ $total * 24 }}</strong> {{ __('bon.per-day') }}<br/>
-                                                <strong>{{ $total * 24 * 7 }}</strong> {{ __('bon.per-week') }}<br/>
-                                                <strong>{{ $total * 24 * 30 }}</strong> {{ __('bon.per-month') }}<br/>
-                                            </span>
-                                    </td>
-                                </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="text-blue well well-sm text-center">
-                            <h2><strong>{{ __('bon.your-points') }}: <br></strong>{{ $userbon }}</h2>
-                        </div>
-                        <div class="text-orange well well-sm text-center">
-                            <h2>{{ __('bon.earning') }} <strong>{{ $total }}</strong> {{ __('bon.per-hour') }}</h2>
-                            {{ __('bon.earning-rate') }}
-                            <div class="some-padding text-center">
-                                <h3><strong>{{ $second }}</strong> {{ __('bon.per-second') }}</h3>
-                                <h3><strong>{{ $minute }}</strong> {{ __('bon.per-minute') }}</h3>
-                                <h3><strong>{{ $daily }}</strong> {{ __('bon.per-day') }}</h3>
-                                <h3><strong>{{ $weekly }}</strong> {{ __('bon.per-week') }}</h3>
-                                <h3><strong>{{ $monthly }}</strong> {{ __('bon.per-month') }}</h3>
-                                <h3><strong>{{ $yearly }}</strong> {{ __('bon.per-year') }}</h3>
-                            </div>
-                            <a href="{{ route('user_seeds', ['username' => auth()->user()->username]) }}"
-                               class="btn btn-sm btn-primary">
-                                {{ __('bon.review-seeds') }}
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+@section('content')
+    <x-panel :heading="__('bon.earnings')" x-data="{ extended: false }">
+        <x-slot name="heading">
+            {{ __('bon.earnings') }}
+            <label style="float: right">
+                {{ __('bon.extended-stats') }}:
+                <input x-on:click="extended = !extended" type="checkbox" value="1" name="extended" id="extended">
+            </label>
+        </x-slot>
+        @php
+            $bonuses = array(
+                [
+                    'name'        => __('torrent.dying-torrent'),
+                    'description' => __('torrent.last-seeder'),
+                    'count'       => $dying,
+                    'points'      => 2
+                ],
+                [
+                    'name'        => __('torrent.legendary-torrent'),
+                    'description' => __('common.older-than').' 12 '.__('common.months'),
+                    'count'       => $legendary,
+                    'points'      => 1.5
+                ],
+                [
+                    'name'        => __('torrent.old-torrent'),
+                    'description' => __('common.older-than').' 6 '.__('common.months'),
+                    'count'       => $old,
+                    'points'      => 1
+                ],
+                [
+                    'name'        => __('common.huge').' '.__('torrent.torrents'),
+                    'description' => __('torrent.torrent').' '.__('torrent.size').' > 100 GiB',
+                    'count'       => $huge,
+                    'points'      => 0.75
+                ],
+                [
+                    'name'        => __('common.large').' '.__('torrent.torrents'),
+                    'description' => '25 GiB ≤ '.__('torrent.torrent').' '.__('torrent.size').' < 100 GiB',
+                    'count'       => $large,
+                    'points'      => 0.50
+                ],
+                [
+                    'name'        => __('common.everyday').' '.__('torrent.torrents'),
+                    'description' => '1 GiB ≤ '.__('torrent.torrent').' '.__('torrent.size').' < 25 GiB',
+                    'count'       => $regular,
+                    'points'      => 0.25
+                ],
+                [
+                    'name'        => __('torrent.legendary-seeder'),
+                    'description' => __('torrent.seedtime').' ≥ 1 '.__('common.year'),
+                    'count'       => $legend,
+                    'points'      => 2
+                ],
+                [
+                    'name'        => __('torrent.mvp').' '.__('torrent.seeder'),
+                    'description' => '6 '.__('common.months').' ≤ '.__('torrent.seedtime').' < 1 '.__('common.year'),
+                    'count'       => $mvp,
+                    'points'      => 1
+                ],
+                [
+                    'name'        => __('torrent.commited').' '.__('torrent.seeder'),
+                    'description' => '3 '.__('common.months').' ≤ '.__('torrent.seedtime').' < 6 '.__('common.months'),
+                    'count'       => $committed,
+                    'points'      => 0.75
+                ],
+                [
+                    'name'        => __('torrent.team-player').' '.__('torrent.seeder'),
+                    'description' => '2 '.__('common.months').' ≤ '.__('torrent.seedtime').' < 3 '.__('common.months'),
+                    'count'       => $teamplayer,
+                    'points'      => 0.50
+                ],
+                [
+                    'name'        => __('torrent.participant').' '.__('torrent.seeder'),
+                    'description' => '1 '.__('common.month').' ≤ '.__('torrent.seedtime').' < 2 '.__('common.months'),
+                    'count'       => $participant,
+                    'points'      => 0.25
+                ],
+            );
+        @endphp
+        <table class="data-table">
+            <thead>
+                <th>{{ __('common.name') }}</th>
+                <th>{{ __('common.description') }}</th>
+                <th>{{ __('bon.points') }}</th>
+                <th>{{ __('bon.earning') }}</th>
+            </thead>
+            <tbody>
+                @foreach ($bonuses as $bonus)
+                    <tr>
+                        <td>
+                            {{ $bonus['name'] }}
+                        </td>
+                        <td>
+                            {{ \ucfirst(\strtolower($bonus['description'])) }}
+                        </td>
+                        <td>
+                            {{ $bonus['count'] }} x {{ $bonus['points'] }}
+                        </td>
+                        <td>
+                            {{ $bonus['count'] * $bonus['points'] }}
+                            {{ __('bon.per-hour') }}<br/>
+                            <span x-show="extended">
+                                {{ $bonus['count'] * $bonus['points'] * 24 }}
+                                {{ __('bon.per-day') }}<br/>
+                                {{ $bonus['count'] * $bonus['points'] * 24 * 7 }}
+                                {{ __('bon.per-week') }}<br/>
+                                {{ $bonus['count'] * $bonus['points'] * 24 * 30 }}
+                                {{ __('bon.per-month') }}<br/>
+                            </span>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        {{ __('bon.total') }}
+                    </td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>
+                        {{ $total }} {{ __('bon.per-hour') }}
+                        <span x-show="extended">
+                            {{ $total * 24 }} {{ __('bon.per-day') }}<br/>
+                            {{ $total * 24 * 7 }} {{ __('bon.per-week') }}<br/>
+                            {{ $total * 24 * 30 }} {{ __('bon.per-month') }}<br/>
+                        </span>
+                    </td>
+                </tr>
+                </tfoot>
+        </table>
+    </x-panel>
+@endsection
+
+@section('sidebar')
+    <x-panel :padded="true" :heading="__('bon.your-points')">
+        {{ $userbon }}
+    </x-panel>
+    <x-panel :heading="__('bon.earning')">
+        <dl class="key-value">
+            <dt>{{ __('bon.per-second') }}</dt>
+            <dd>{{ $second }}</dd>
+            <dt>{{ __('bon.per-minute') }}</dt>
+            <dd>{{ $minute }}</dd>
+            <dt>{{ __('bon.per-hour') }}</dt>
+            <dd>{{ $total }}</dd>
+            <dt>{{ __('bon.per-day') }}</dt>
+            <dd>{{ $daily }}</dd>
+            <dt>{{ __('bon.per-week') }}</dt>
+            <dd>{{ $weekly }}</dd>
+            <dt>{{ __('bon.per-month') }}</dt>
+            <dd>{{ $monthly }}</dd>
+            <dt>{{ __('bon.per-year') }}</dt>
+            <dd>{{ $yearly }}</dd>
+        </dl>
+        <a href="{{ route('user_seeds', ['username' => auth()->user()->username]) }}"
+           class="btn btn-sm btn-primary">
+            {{ __('bon.review-seeds') }}
+        </a>
+    </x-panel>
 @endsection

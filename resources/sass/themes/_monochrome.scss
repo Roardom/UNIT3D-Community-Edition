@@ -1,0 +1,54 @@
+:root {
+  --page-bg: #212121;
+  /* Achievements */
+  --achievement-fg: var(--panel-fg);
+  --achievement-bg: #333;
+
+  /* Article cards */
+  --article-card-bg: #333;
+  --article-card-fg: #bbb;
+  --article-card-head-fg: #bbb;
+  --article-card-time-fg: #bbb;
+
+  /* Comments */
+  --comment-bg: #333;
+  --comment-fg: #ddd;
+
+  /* Data tables */
+  --data-table-th-bg: #2c2c2c;
+  --data-table-thead-border: var(--panel-border);
+  --data-table-tr-even-bg: #333;
+  --data-table-tr-odd-bg: #2c2c2c;
+  --data-table-tfoot-border: var(--panel-border);
+
+  /* Key value pairs */
+  --key-value-even-bg: #333;
+  --key-value-odd-bg: #2c2c2c;
+
+  /* Panels */
+  --panel-bg: #292929;
+  --panel-fg: #9c9c9c;
+  --panel-border: 1px solid #393939;
+  --panel-border-radius: 0.33rem;
+  --panel-box-shadow: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.20);
+  --panel-head-bg: #363636;
+  --panel-head-fg: #b6b6b6;
+
+  /* SubForum listings */
+  --subforum-listing-odd-bg: var(--data-table-tr-odd-bg);
+  --subforum-listing-even-bg: var(--data-table-tr-even-bg);
+
+  /* Secondary nav */
+  --nav-bg: var(--panel-head-bg);
+  --nav-border: var(--panel-border);
+  --nav-border-radius: var(--panel-border-radius);
+  --nav-box-shadow: var(--panel-box-shadow);
+  --nav-item-bg: var(--nav-bg);
+  --nav-item-fg: #ccc;
+  --nav-item-hover-bg: #3c3c3c;
+  --nav-item-hover-fg: #bbb;
+  --nav-item-hover-border: 2px solid var(--nav-item-hover-bg);
+  --nav-item-selected-bg: var(--nav-item-bg);
+  --nav-item-selected-fg: #d6d6d6;
+  --nav-item-selected-border: 2px solid #d6d6d6;
+}

@@ -18,41 +18,45 @@
 @endsection
 
 @section('content')
-    <div class="container box">
-        <h2>{{ __('poll.poll') }}</h2>
-        <a href="{{ route('staff.polls.create') }}" class="btn btn-primary">
-            {{ __('common.add') }}
-            {{ trans_choice('common.a-an-art',false) }}
+    <x-panel>
+        <x-slot name="heading">
             {{ __('poll.poll') }}
-        </a>
-        <div class="table-responsive">
-            <table class="table table-condensed table-striped table-bordered table-hover">
-                <thead>
+            <a href="{{ route('staff.polls.create') }}">
+                <i class="{{ config('other.font-awesome') }} fa-plus"></i>
+            </a>
+        </x-slot>
+        <table class="data-table">
+            <thead>
                 <tr>
                     <th>{{ __('poll.title') }}</th>
                     <th>{{ __('common.date') }}</th>
                     <th>{{ __('common.action') }}</th>
                 </tr>
-                </thead>
-                <tbody>
+            </thead>
+            <tbody>
                 @foreach ($polls as $poll)
                     <tr>
-                        <td><a href="{{ route('staff.polls.show', ['id' => $poll->id]) }}">{{ $poll->title }}</a></td>
+                        <td>
+                            <a href="{{ route('staff.polls.show', ['id' => $poll->id]) }}">
+                                {{ $poll->title }}
+                            </a>
+                        </td>
                         <td>{{ date('d M Y', $poll->created_at->getTimestamp()) }}</td>
                         <td>
-                            <form action="{{ route('staff.polls.destroy', ['id' => $poll->id]) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <a href="{{ route('staff.polls.edit', ['id' => $poll->id]) }}"
-                                   class="btn btn-warning">{{ __('common.edit') }}</a>
-                                <button type="submit" class="btn btn-danger">{{ __('common.delete') }}</button>
-                            </form>
-
+                            <div class="data-table__actions">
+                                <a href="{{ route('staff.polls.edit', ['id' => $poll->id]) }}">
+                                    {{ __('common.edit') }}
+                                </a>
+                                <form action="{{ route('staff.polls.destroy', ['id' => $poll->id]) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit">{{ __('common.delete') }}</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
+            </tbody>
+        </table>
+    </x-panel>
 @endsection

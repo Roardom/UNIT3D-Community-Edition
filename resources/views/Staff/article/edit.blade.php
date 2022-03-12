@@ -25,32 +25,29 @@
 @endsection
 
 @section('content')
-    <div class="container box">
-        <h2>{{ __('common.article') }} {{ __('common.edit') }}</h2>
-        <form role="form" method="POST" enctype="multipart/form-data"
-              action="{{ route('staff.articles.update', ['id' => $article->id]) }}">
+    <x-panel heading="{{ __('common.article') }} {{ __('common.edit') }}">
+        <form
+            role="form"
+            method="POST"
+            enctype="multipart/form-data"
+            action="{{ route('staff.articles.update', ['id' => $article->id]) }}"
+        >
             @csrf
-            <div class="form-group">
-                <label for="title">{{ __('common.title') }}</label>
-                <label>
-                    <input type="text" class="form-control" name="title" value="{{ $article->title }}" required>
-                </label>
-            </div>
-
-            <div class="form-group">
-                <label for="image">{{ __('common.image') }}</label>
+            <label>
+                {{ __('common.title') }}
+                <input type="text" class="form-control" name="title" value="{{ $article->title }}" required>
+            </label>
+            <label for="image">
+                {{ __('common.image') }}
                 <input type="file" name="image">
-            </div>
-
-            <div class="form-group">
-                <label for="content">{{ __('staff.article-content') }}</label>
-                <textarea name="content" id="content" cols="30" rows="10"
-                          class="form-control">{{ $article->content }}</textarea>
-            </div>
-
-            <button type="submit" class="btn btn-default">{{ __('common.save') }}</button>
+            </label>
+            <label for="content">
+                {{ __('staff.article-content') }}
+                <textarea name="content" id="content" cols="30" rows="10">{{ $article->content }}</textarea>
+            </label>
+            <button type="submit">{{ __('common.save') }}</button>
         </form>
-    </div>
+    </x-panel>
 @endsection
 
 @section('javascripts')

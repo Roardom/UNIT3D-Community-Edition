@@ -1,0 +1,52 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+/* Stuff to remove after refactor */
+address, dl {
+  margin-bottom: 0 !important;
+}
+
+address {
+  font-style: inherit;
+  line-height: inherit;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+  font-family: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  font-size: inherit;
+  margin-top: inherit;
+  margin-bottom: inherit;
+}
+
+body {
+  font-size: inherit;
+}
+
+time {
+  color: inherit;
+}

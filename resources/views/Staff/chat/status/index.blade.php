@@ -15,22 +15,20 @@
 @endsection
 
 @section('content')
-    <div class="container box">
-        <h2>{{ __('common.user') }} {{ __('staff.chat') }} {{ __('staff.statuses') }}</h2>
-
-        <button class="btn btn-primary" data-toggle="modal" data-target="#addChatStatus">
-            {{ __('common.add') }} {{ __('staff.chat') }} {{ __('staff.status') }}
-        </button>
+    <x-panel>
+        <x-slot name="heading">
+            {{ __('common.user') }} {{ __('staff.chat') }} {{ __('staff.statuses') }}
+            <button data-toggle="modal" data-target="#addChatStatus">
+                {{ __('common.add') }} {{ __('staff.chat') }} {{ __('staff.status') }}
+            </button>
+        </x-slot>
         <div id="addChatStatus" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog{{ modal_style() }}">
                 <div class="modal-content">
-
                     <div class="modal-header" style="text-align: center;">
                         <h3>{{ __('common.add') }} {{ __('staff.chat') }} {{ __('staff.status') }}</h3>
                     </div>
-
-                    <form class="form-horizontal" role="form" method="POST"
-                          action="{{ route('staff.statuses.store') }}">
+                    <form role="form" method="POST" action="{{ route('staff.statuses.store') }}">
                         @csrf
                         <div class="modal-body" style="text-align: center;">
                             <h4>Please fill in all fields for the chat status you would like to create.</h4>
@@ -48,7 +46,6 @@
                                     id="icon"
                                     placeholder="Enter Font Awesome Code Here..." required>
                         </div>
-
                         <div class="modal-footer">
                             <button class="btn btn-md btn-primary" data-dismiss="modal">{{ __('common.cancel') }}</button>
                             <input class="btn btn-md btn-success" type="submit">
@@ -57,51 +54,44 @@
                 </div>
             </div>
         </div>
-
-        <div class="table-responsive">
-            <table class="table table-condensed table-striped table-bordered table-hover">
-                <thead>
+        <table class="data-table">
+            <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>#</th>
                     <th>{{ __('common.name') }}</th>
                     <th>Color</th>
                     <th>Icon</th>
                     <th>{{ __('common.action') }}</th>
                 </tr>
-                </thead>
-                <tbody>
+            </thead>
+            <tbody>
                 @foreach ($chatstatuses as $chatstatus)
                     <tr>
+                        <td>{{ $chatstatus->id }}</td>
+                        <td>{{ $chatstatus->name }}</td>
                         <td>
-                            {{ $chatstatus->id }}
+                            <i
+                                class="{{ config('other.font-awesome') }} fa-circle"
+                                style="color: {{ $chatstatus->color }};"
+                            ></i>
+                            {{ $chatstatus->color }}
                         </td>
                         <td>
-                            <a href="#">
-                                {{ $chatstatus->name }}
-                            </a>
+                            <i class="{{ $chatstatus->icon }}"></i>
+                            [{{ $chatstatus->icon }}]
                         </td>
                         <td>
-                            <i class="{{ config('other.font-awesome') }} fa-circle"
-                               style="color: {{ $chatstatus->color }};"></i> {{ $chatstatus->color }}
-                        </td>
-                        <td>
-                            <i class="{{ $chatstatus->icon }}"></i> [{{ $chatstatus->icon }}]
-                        </td>
-                        <td>
-                            <button class="btn btn-xs btn-warning" data-toggle="modal"
-                                    data-target="#editChatStatus-{{ $chatstatus->id }}">
+                            <button data-toggle="modal" data-target="#editChatStatus-{{ $chatstatus->id }}">
                                 <i class="{{ config('other.font-awesome') }} fa-pen-square"></i>
                             </button>
-                            <button class="btn btn-xs btn-danger" data-toggle="modal"
-                                    data-target="#deleteChatStatus-{{ $chatstatus->id }}">
+                            <button data-toggle="modal" data-target="#deleteChatStatus-{{ $chatstatus->id }}">
                                 <i class="{{ config('other.font-awesome') }} fa-trash"></i>
                             </button>
                             @include('Staff.chat.status.chatstatuses_modals', ['chatstatus' => $chatstatus])
                         </td>
                     </tr>
                 @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
+            </tbody>
+        </table>
+    </x-panel>
 @endsection

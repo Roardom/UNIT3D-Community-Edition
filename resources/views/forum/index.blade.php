@@ -17,110 +17,65 @@
     </li>
 @endsection
 
+@section('secondary-nav')
+    <x-nav>
+        <x-nav.tab>
+            <form role="form" method="GET" action="{{ route('forum_search_form') }}">
+                <input type="hidden" name="sorting" value="created_at">
+                <input type="hidden" name="direction" value="desc">
+                <label for="name"></label>
+                <input
+                    type="hidden"
+                    name="name"
+                    id="name"
+                    value="{{ isset($params) && is_array($params) && array_key_exists('name', $params) ? $params['name'] : '' }}"
+                    placeholder="{{ __('forum.topic-quick-search') }}"
+                >
+                <button type="submit">
+                    <i class="{{ config('other.font-awesome') }} fa-search"></i> {{ __('common.search') }}
+                </button>
+            </form>
+        </x-nav.tab>
+    </x-nav>
+@endsection
 
 @section('content')
-    <div class="box container">
-        <div class="button-holder">
-            @include('forum.buttons')
-            <div class="button-right">
-                <form role="form" method="GET" action="{{ route('forum_search_form') }}" class="form-inline">
-                    <input type="hidden" name="sorting" value="created_at">
-                    <input type="hidden" name="direction" value="desc">
-                    <label for="name"></label>
-                    <input type="text" name="name" id="name"
-                           value="{{ isset($params) && is_array($params) && array_key_exists('name', $params) ? $params['name'] : '' }}"
-                           placeholder="{{ __('forum.topic-quick-search') }}" class="form-control">
-                    <button type="submit" class="btn btn-success">
-                        <i class="{{ config('other.font-awesome') }} fa-search"></i> {{ __('common.search') }}
-                    </button>
-                </form>
-            </div>
-        </div>
-        <div class="forum-categories">
-            <table class="table table-bordered table-hover">
-                @foreach ($categories as $category)
-                    @if ($category->getPermission() != null && $category->getPermission()->show_forum == true &&
-                        $category->getForumsInCategory()->count() > 0)
-                        <thead class="no-space">
-                        <tr class="no-space">
-                            <td colspan="5" class="no-space">
-                                <div class="header gradient teal some-padding">
-                                    <div class="inner_content">
-                                        <h1 class="no-space">{{ $category->name }}</h1>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        </thead>
-                        <thead>
-                        <tr>
-                            <td colspan="5">
-                                <div class="button-holder">
-                                    <div class="button-left"></div>
-                                    <div class="button-right">
-                                        <a href="{{ route('forums.categories.show', ['id' => $category->id]) }}"
-                                           class="btn btn-sm btn-primary">{{ __('forum.view-all') }}</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        </thead>
-                        <thead>
-                        <tr>
-                            <th></th>
-                            <th class="text-left">{{ strtoupper(__('forum.name')) }}</th>
-                            <th class="text-left">{{ strtoupper(__('forum.posts')) }}</th>
-                            <th class="text-left">{{ strtoupper(__('forum.topics')) }}</th>
-                            <th class="text-left">{{ strtoupper(__('forum.latest')) }}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach ($category->getForumsInCategory()->sortBy('position') as $categoryChild)
-                            @if ($categoryChild->getPermission() != null && $categoryChild->getPermission()->show_forum == true)
-                                <tr>
-                                    <td><img src="{{ url('img/forum.png') }}" alt="forum"></td>
-                                    <td>
-                                            <span>
-                                                <h4><a href="{{ route('forums.show', ['id' => $categoryChild->id]) }}"><span
-                                                                class="text-bold">{{ $categoryChild->name }}</span></a></h4>
-                                            </span>
-                                        <span class="">{{ $categoryChild->description }}</span>
-                                    </td>
-                                    <td>{{ $categoryChild->num_post }}</td>
-                                    <td>{{ $categoryChild->num_topic }}</td>
-                                    <td>
-                                            <span>
-                                                <span>{{ __('forum.last-message') }} - {{ strtolower(__('forum.author')) }}</span>
-                                                <i class="{{ config('other.font-awesome') }} fa-user"></i>
-                                                @if ($categoryChild->last_post_user_username !== null)
-                                                    <a href="{{ route('users.show', ['username' => $categoryChild->last_post_user_username]) }}">
-                                                        {{ $categoryChild->last_post_user_username }}
-                                                    </a>
-                                                @endif
-                                            </span>
-                                        <br>
-                                        <span>
-                                                <span>{{ __('forum.topic') }}</span>
-                                                <i class="{{ config('other.font-awesome') }} fa-chevron-right"></i>
-                                                @if ($categoryChild->last_topic_id !== null)
-                                                <a href="{{ route('forum_topic', ['id' => $categoryChild->last_topic_id]) }}">
-                                                    {{ $categoryChild->last_topic_name }}</a>
-                                            @endif
-                                            </span>
-                                        <br>
-                                        <span>
-                                                <span><i class="{{ config('other.font-awesome') }} fa-clock"></i></span>
-                                                {{ $categoryChild->updated_at->diffForHumans() }}
-                                            </span>
-                                    </td>
-                                </tr>
-                            @endif
-                        @endforeach
-                        </tbody>
-                    @endif
-                @endforeach
-            </table>
-        </div>
-        @include('forum.stats')
-    </div>
+    @foreach ($categories as $category)
+        @if (
+            $category->getPermission() != null
+            && $category->getPermission()->show_forum == true
+            && $category->getForumsInCategory()->count() > 0
+        )
+            <x-panel>
+                <x-slot name="heading">
+                    <a href="{{ route('forums.categories.show', ['id' => $category->id]) }}">
+                        {{ $category->name }}
+                    </a>
+                </x-slot>
+                <ul class="subForum-listings">
+                    @foreach ($category->getForumsInCategory()->sortBy('position') as $subforum)
+                        @if($subforum->getPermission() != null && $subforum->getPermission()->show_forum == true)
+                            <li class="subforum-listings__item">
+                                <x-forum.subforum-listing
+                                    :name="$subforum->name"
+                                    :link="route('forums.show', ['id' => $subforum->id])"
+                                    :description="$subforum->description"
+                                    :topicCount="$subforum->num_topic ?: 0"
+                                    :postCount="$subforum->num_post ?: 0"
+                                    :latestLink="route('forum_topic', ['id' => $subforum->last_topic_id ?? 1])"
+                                    :latestName="$subforum->last_topic_name"
+                                    :latestDatetime="$subforum->updated_at"
+                                    :latestDatetimeHuman="$subforum->updated_at->diffForHumans()"
+                                    :latestAuthorUsername="$subforum->last_post_user_username"
+                                    :latestAuthorLink="route('users.show', ['username' => $subforum->last_post_user_username ?? 1])"
+                                    :latestExists="$subforum->last_topic_id !== null && $subforum->last_post_user_username !== null"
+                                />
+                            </li>
+                        @endif
+                    @endforeach
+                </ul>
+            </x-panel>
+        @endif
+    @endforeach
+    @include('forum.stats')
 @endsection

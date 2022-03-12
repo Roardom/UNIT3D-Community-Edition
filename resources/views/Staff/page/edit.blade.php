@@ -13,42 +13,32 @@
     </li>
     <li class="active">
         <a href="{{ route('staff.pages.edit', ['id' => $page->id]) }}" itemprop="url" class="l-breadcrumb-item-link">
-            <span itemprop="title" class="l-breadcrumb-item-link-title">{{ __('common.edit') }} {{ __('staff.page') }}</span>
+            <span itemprop="title" class="l-breadcrumb-item-link-title">
+                {{ __('common.edit') }} {{ __('staff.page') }}: {{ $page->name }}
+            </span>
         </a>
     </li>
 @endsection
 
 @section('content')
-    <div class="container box">
-        <h2>
-            {{ __('common.edit') }}
-            {{ __('staff.page') }}
-            {{ $page->name }}
-        </h2>
-        <form role="form" method="POST" action="{{ route('staff.pages.update', ['id' => $page->id]) }}">
-            @csrf
-            <div class="form-group">
-                <label for="name">{{ __('staff.page') }} {{ __('common.name') }}</label>
-                <label>
-                    <input type="text" name="name" class="form-control" value="{{ $page->name }}">
-                </label>
-            </div>
-
-            <div class="form-group">
-                <label for="content">{{ __('common.content') }}</label>
-                <textarea name="content" id="content" cols="30" rows="10"
-                          class="form-control">{{ $page->content }}</textarea>
-            </div>
-
-            <button type="submit" class="btn btn-default">{{ __('common.save') }}</button>
-        </form>
-    </div>
+    <form role="form" method="POST" action="{{ route('staff.pages.update', ['id' => $page->id]) }}">
+        @csrf
+        <label>
+            {{ __('staff.page') }} {{ __('common.name') }}
+            <input type="text" name="name" value="{{ $page->name }}">
+        </label>
+        <label for="content">
+            {{ __('common.content') }}
+            <textarea name="content" cols="30" rows="10">{{ $page->content }}</textarea>
+        </label>
+        <button type="submit">{{ __('common.save') }}</button>
+    </form>
 @endsection
 
 @section('javascripts')
     <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce('script') }}">
       $(document).ready(function () {
-        $('#content').wysibb({})
+        $('[name=content]').wysibb({})
       })
 
     </script>

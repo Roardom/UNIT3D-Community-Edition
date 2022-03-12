@@ -23,7 +23,7 @@
 
 @section('content')
     <div class="box container">
-        @include('forum.buttons')
+{{--        @include('forum.buttons')--}}
         <div class="forum-categories">
             <table class="table table-bordered table-hover">
                 <thead class="no-space">

@@ -16,26 +16,23 @@
 @endsection
 
 @section('content')
-    <div class="container box">
-        <h2>{{ __('common.media-languages') }}</h2>
-        <p>{{ __('staff.media-languages-desc') }}</p>
-
-        <a href="{{ route('staff.media_languages.create') }}" class="btn btn-primary">
-            {{ __('common.add') }}
-            {{ trans_choice('common.a-an-art',false) }}
-            {{ __('common.media-language') }}
-        </a>
-
-        <div class="table-responsive">
-            <table class="table table-condensed table-striped table-bordered table-hover">
-                <thead>
+    <x-panel>
+        <x-slot name="heading">
+            {{ __('common.media-languages') }}
+            {{ __('staff.media-languages-desc') }}
+            <a href="{{ route('staff.media_languages.create') }}">
+                <i class="{{ config('other.font-awesome') }} fa-plus"></i>
+            </a>
+        </x-slot>
+        <table class="data-table">
+            <thead>
                 <tr>
                     <th>{{ __('common.name') }}</th>
                     <th>{{ __('common.code') }}</th>
                     <th>{{ __('common.action') }}</th>
                 </tr>
-                </thead>
-                <tbody>
+            </thead>
+            <tbody>
                 @foreach($media_languages as $media_language)
                     <tr>
                         <td>
@@ -43,19 +40,17 @@
                                 {{ $media_language->name }}
                             </a>
                         </td>
+                        <td>{{ $media_language->code }}</td>
                         <td>
-                            <span>{{ $media_language->code }}</span>
-                        </td>
-                        <td>
-                            <a href="{{ route('staff.media_languages.edit', ['id' => $media_language->id]) }}"
-                               class="btn btn-warning">
-                                {{ __('common.edit') }}
-                            </a>
+                            <div class="data-table__actions">
+                                <a href="{{ route('staff.media_languages.edit', ['id' => $media_language->id]) }}">
+                                    <i class="{{ config('other.font-awesome') }} fa-pencil"></i>
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
+            </tbody>
+        </table>
+    </x-panel>
 @endsection
