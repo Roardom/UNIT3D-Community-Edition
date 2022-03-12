@@ -17,7 +17,7 @@ class TV
 {
     public \GuzzleHttp\Client $client;
 
-    public const API_BASE_URI = 'https://api.TheMovieDB.org/3';
+    public final const API_BASE_URI = 'https://api.TheMovieDB.org/3';
 
     public $data;
 
@@ -87,6 +87,11 @@ class TV
     public function get_id()
     {
         return $this->data['id'];
+    }
+
+    public function get_imdb_id()
+    {
+        return \preg_replace('/[[:^print:]]/', '', $this->data['imdb_id']);
     }
 
     public function get_in_production()

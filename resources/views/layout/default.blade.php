@@ -46,7 +46,7 @@
         <script src="{{ mix('js/virtual-select.js') }}" crossorigin="anonymous"></script>
 
         @if (config('other.freeleech') == true || config('other.invite-only') == false || config('other.doubleup') == true)
-            <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce('script') }}">
+            <script nonce="{{ HDVinnie\SecureHeaders\SecureHeaders::nonce('script') }}">
               function timer () {
                 return {
                   seconds: '00',
@@ -90,14 +90,14 @@
         @endif
 
         @if (Session::has('achievement'))
-            <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce('script') }}">
+            <script nonce="{{ HDVinnie\SecureHeaders\SecureHeaders::nonce('script') }}">
               $('#modal-achievement').modal('show')
             </script>
         @endif
 
         @foreach (['warning', 'success', 'info'] as $key)
             @if (Session::has($key))
-                <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce('script') }}">
+                <script nonce="{{ HDVinnie\SecureHeaders\SecureHeaders::nonce('script') }}">
                   const Toast = Swal.mixin({
                     toast: true,
                     position: 'top-end',
@@ -115,7 +115,7 @@
         @endforeach
 
         @if (Session::has('errors'))
-            <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce('script') }}">
+            <script nonce="{{ HDVinnie\SecureHeaders\SecureHeaders::nonce('script') }}">
               Swal.fire({
                 title: '<strong style=" color: rgb(17,17,17);">Error</strong>',
                 icon: 'error',
@@ -129,7 +129,7 @@
             </script>
         @endif
 
-        <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce('script') }}">
+        <script nonce="{{ HDVinnie\SecureHeaders\SecureHeaders::nonce('script') }}">
           window.addEventListener('success', event => {
             const Toast = Swal.mixin({
               toast: true,
@@ -145,7 +145,7 @@
           })
         </script>
 
-        <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce('script') }}">
+        <script nonce="{{ HDVinnie\SecureHeaders\SecureHeaders::nonce('script') }}">
           window.addEventListener('error', event => {
             Swal.fire({
               title: '<strong style=" color: rgb(17,17,17);">Error</strong>',
@@ -158,9 +158,9 @@
 
         @yield('javascripts')
         @yield('scripts')
-        @livewireScripts(['nonce' => Bepsvpt\SecureHeaders\SecureHeaders::nonce()])
+        @livewireScripts(['nonce' => HDVinnie\SecureHeaders\SecureHeaders::nonce()])
 
-        <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce('script') }}">
+        <script nonce="{{ HDVinnie\SecureHeaders\SecureHeaders::nonce('script') }}">
           Livewire.on('paginationChanged', () => {
             window.scrollTo({
               top: 15,

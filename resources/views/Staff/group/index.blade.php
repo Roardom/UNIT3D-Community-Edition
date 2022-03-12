@@ -28,6 +28,7 @@
                     <th>{{ __('common.name') }}</th>
                     <th>{{ __('common.position') }}</th>
                     <th>Level</th>
+                    <th>DL Slots</th>
                     <th>Color</th>
                     <th>Icon</th>
                     <th>Effect</th>
@@ -55,6 +56,7 @@
                         </td>
                         <td>{{ $group->position }}</td>
                         <td>{{ $group->level }}</td>
+                        <td>{{ $group->download_slots ?? 'Unlimited' }}</td>
                         <td>
                             <i
                                 class="{{ config('other.font-awesome') }} fa-circle"

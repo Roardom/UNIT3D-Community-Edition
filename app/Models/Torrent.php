@@ -23,28 +23,13 @@ use App\Traits\Auditable;
 use Hootlex\Moderation\Moderatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Kyslik\ColumnSortable\Sortable;
 use voku\helper\AntiXSS;
 
 class Torrent extends Model
 {
     use HasFactory;
     use Moderatable;
-    use Sortable;
     use Auditable;
-
-    /**
-     * The Columns That Are Sortable.
-     */
-    public array $sortable = [
-        'id',
-        'name',
-        'size',
-        'seeders',
-        'leechers',
-        'times_completed',
-        'created_at',
-    ];
 
     /**
      * Belongs To A User.
@@ -150,7 +135,7 @@ class Torrent extends Model
      */
     public function history(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(History::class, 'info_hash', 'info_hash');
+        return $this->hasMany(History::class);
     }
 
     /**
@@ -239,9 +224,8 @@ class Torrent extends Model
     public function getDescriptionHtml(): string
     {
         $bbcode = new Bbcode();
-        $linkify = new Linkify();
 
-        return $linkify->linky($bbcode->parse($this->description, true));
+        return (new Linkify())->linky($bbcode->parse($this->description, true));
     }
 
     /**
@@ -285,8 +269,8 @@ class Torrent extends Model
      */
     public function notifyUploader($type, $payload): bool
     {
+        $user = User::with('notification')->findOrFail($this->user_id);
         if ($type == 'thank') {
-            $user = User::with('notification')->findOrFail($this->user_id);
             if ($user->acceptsNotification(\auth()->user(), $user, 'torrent', 'show_torrent_thank')) {
                 $user->notify(new NewThank('torrent', $payload));
 
@@ -296,7 +280,6 @@ class Torrent extends Model
             return true;
         }
 
-        $user = User::with('notification')->findOrFail($this->user_id);
         if ($user->acceptsNotification(\auth()->user(), $user, 'torrent', 'show_torrent_comment')) {
             $user->notify(new NewComment('torrent', $payload));
 
@@ -311,7 +294,7 @@ class Torrent extends Model
      */
     public function isFreeleech($user = null): bool
     {
-        $pfree = $user ? $user->group->is_freeleech || PersonalFreeleech::where('user_id', '=', $user->id)->first() : false;
+        $pfree = $user && ($user->group->is_freeleech || PersonalFreeleech::where('user_id', '=', $user->id)->first());
 
         return $this->free || \config('other.freeleech') || $pfree;
     }

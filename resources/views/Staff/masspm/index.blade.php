@@ -30,17 +30,8 @@
         </label>
         <label>
             {{ __('pm.message') }}
-            <textarea id="message" name="message" cols="30" rows="10"></textarea>
+            <textarea id="message" name="editor" cols="30" rows="10"></textarea>
         </label>
         <button type="submit">{{ __('pm.send') }}</button>
     </form>
-@endsection
-
-@section('javascripts')
-    <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce('script') }}">
-      $(document).ready(function () {
-        $('#message').wysibb({})
-      })
-
-    </script>
 @endsection

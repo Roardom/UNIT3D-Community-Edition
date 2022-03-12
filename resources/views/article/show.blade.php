@@ -75,12 +75,3 @@
         }
     </style>
 @endsection
-
-@section('javascripts')
-    <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce('script') }}">
-      $(document).ready(function () {
-
-        $('#content').wysibb({})
-      })
-    </script>
-@endsection

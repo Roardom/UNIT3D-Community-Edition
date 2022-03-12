@@ -37,18 +37,9 @@
             </label>
             <label for="content">
                 {{ __('staff.article-content') }}
-                <textarea name="content" id="content" cols="30" rows="10"></textarea>
+                <textarea name="content" id="editor" cols="30" rows="10"></textarea>
             </label>
             <button type="submit">{{ __('common.submit') }}</button>
         </form>
     </x-panel>
-@endsection
-
-@section('javascripts')
-    <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce('script') }}">
-      $(document).ready(function () {
-        $('#content').wysibb({})
-      })
-
-    </script>
 @endsection

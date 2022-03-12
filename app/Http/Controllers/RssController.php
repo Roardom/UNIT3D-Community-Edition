@@ -36,7 +36,7 @@ class RssController extends Controller
     {
         $user = $request->user();
 
-        $publicRss = Rss::where('is_private', '=', 0)->orderBy('position')->get();
+        $publicRss = Rss::where('is_private', '=', 0)->oldest('position')->get();
         $privateRss = Rss::where('is_private', '=', 1)->where('user_id', '=', $user->id)->latest()->get();
 
         return \view('rss.index', [
@@ -128,11 +128,11 @@ class RssController extends Controller
                 $error = $v->errors();
             }
 
-            return \redirect()->route('rss.create')
+            return \to_route('rss.create')
                 ->withErrors($error);
         }
 
-        return \redirect()->route('rss.index', ['hash' => 'private'])
+        return \to_route('rss.index', ['hash' => 'private'])
             ->withSuccess($success);
     }
 
@@ -185,19 +185,19 @@ class RssController extends Controller
         $dying = $rss->object_torrent->dying;
         $dead = $rss->object_torrent->dead;
 
-        $terms = \explode(' ', $search);
+        $terms = \explode(' ', (string) $search);
         $search = '';
         foreach ($terms as $term) {
             $search .= '%'.$term.'%';
         }
 
-        $usernames = \explode(' ', $uploader);
+        $usernames = \explode(' ', (string) $uploader);
         $uploader = '';
         foreach ($usernames as $username) {
             $uploader .= '%'.$username.'%';
         }
 
-        $keywords = \explode(' ', $description);
+        $keywords = \explode(' ', (string) $description);
         $description = '';
         foreach ($keywords as $keyword) {
             $description .= '%'.$keyword.'%';
@@ -227,7 +227,7 @@ class RssController extends Controller
         }
 
         if ($rss->object_torrent->imdb && $rss->object_torrent->imdb != null) {
-            if (\preg_match('/tt0*?(?=(\d{7,8}))/', $imdb, $matches)) {
+            if (\preg_match('/tt0*?(?=(\d{7,8}))/', (string) $imdb, $matches)) {
                 $builder->where('imdb', '=', $matches[1]);
             } else {
                 $builder->where('imdb', '=', $imdb);
@@ -395,11 +395,11 @@ class RssController extends Controller
                 $error = $v->errors();
             }
 
-            return \redirect()->route('rss.edit', ['id' => $id])
+            return \to_route('rss.edit', ['id' => $id])
                 ->withErrors($error);
         }
 
-        return \redirect()->route('rss.index', ['hash' => 'private'])
+        return \to_route('rss.index', ['hash' => 'private'])
             ->withSuccess($success);
     }
 
@@ -408,12 +408,12 @@ class RssController extends Controller
      *
      * @throws \Exception
      */
-    public function destroy(int $id): \Illuminate\Http\Response
+    public function destroy(int $id): \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
     {
         $rss = Rss::where('is_private', '=', 1)->findOrFail($id);
         $rss->delete();
 
-        return \redirect()->route('rss.index', ['hash' => 'private'])
+        return \to_route('rss.index', ['hash' => 'private'])
             ->withSuccess(\trans('rss.deleted'));
     }
 }

@@ -109,11 +109,3 @@
         </x-forum.post>
     </x-panel>
 @endsection
-
-@section('javascripts')
-    <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce('script') }}">
-      $(document).ready(function () {
-        $('#about, #signature').wysibb({})
-      })
-    </script>
-@endsection

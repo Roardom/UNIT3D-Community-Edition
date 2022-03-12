@@ -84,7 +84,7 @@
                     @if (
                         $user->getSeeding() >= '150'
                         || $history->where('actual_downloaded', '>', 0)->count() >= '100'
-                        || $user->getSeedbonus() >= '50,000'
+                        || $user->seedbonus >= 50_000
                     )
                         @if ($user->getSeeding() >= '150')
                             <span class="chip" title="{{ __('user.certified-seeder-desc') }}">
@@ -98,7 +98,7 @@
                                 {{ __('user.certified-downloader') }}!
                             </span>
                         @endif
-                        @if ($user->getSeedbonus() >= '50,000')
+                        @if ($user->seedbonus >= 50_000)
                             <span class="chip" title="{{ __('user.certified-banker-desc') }}">
                                 <i class="{{ config('other.font-awesome') }} fa-coins"></i>
                                 {{ __('user.certified-banker') }}!

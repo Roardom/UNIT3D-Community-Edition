@@ -124,26 +124,49 @@
     </div>
 </x-panel>
 
-<script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce('script') }}">
-  document.addEventListener('livewire:load', function () {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000
-    })
-    @this.updateBackupStatuses()
-    @this.on('backupStatusesUpdated', function () {
-    @this.getFiles()
-    })
-    @this.on('showErrorToast', function (message) {
-      Toast.fire({
-        text: message,
-        duration: 10000,
-        gravity: 'bottom',
-        position: 'right',
-        backgroundColor: 'red',
-        className: 'toastify-custom',
+    <script nonce="{{ HDVinnie\SecureHeaders\SecureHeaders::nonce('script') }}">
+      document.addEventListener('livewire:load', function () {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000
+        })
+        @this.updateBackupStatuses()
+        @this.on('backupStatusesUpdated', function () {
+        @this.getFiles()
+        })
+        @this.on('showErrorToast', function (message) {
+          Toast.fire({
+            text: message,
+            duration: 10000,
+            gravity: 'bottom',
+            position: 'right',
+            backgroundColor: 'red',
+            className: 'toastify-custom',
+          })
+        })
+        const backupFun = function (option = '') {
+          Swal.fire({
+            title: '<strong style=" color: rgb(17,17,17);">Success</strong>',
+            icon: 'success',
+            html: 'Creating a new backup in the background...' + (option ? ' (' + option + ')' : ''),
+            showCloseButton: true,
+          })
+        @this.createBackup(option)
+        }
+        $('#create-backup').on('click', function () {
+          backupFun()
+        })
+        $('#create-backup-only-db').on('click', function () {
+          backupFun('only-db')
+        })
+        $('#create-backup-only-files').on('click', function () {
+          backupFun('only-files')
+        })
+        const deleteModal = $('#deleteModal')
+      @this.on('showDeleteModal', function () {
+        deleteModal.modal('show')
       })
     })
     const backupFun = function (option = '') {

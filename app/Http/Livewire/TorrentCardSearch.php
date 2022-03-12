@@ -334,12 +334,12 @@ class TorrentCardSearch extends Component
                 $query->where('seeders', '=', 0);
             })
             ->when($this->notDownloaded, function ($query) {
-                $history = History::where('user_id', '=', \auth()->user()->id)->pluck('info_hash')->toArray();
+                $history = History::where('user_id', '=', \auth()->user()->id)->pluck('torrent_id')->toArray();
                 if (! $history || ! \is_array($history)) {
                     $history = [];
                 }
 
-                $query->whereNotIn('info_hash', $history);
+                $query->whereIntergerNotIn('id', $history);
             })
             ->when($this->downloaded, function ($query) {
                 $query->whereHas('history', function ($query) {
@@ -361,14 +361,14 @@ class TorrentCardSearch extends Component
                     $q->where('user_id', '=', \auth()->user()->id)->where('active', '=', false)->where('seeder', '=', false)->where('seedtime', '=', '0');
                 });
             })
-            ->orderByDesc('sticky')
+            ->latest('sticky')
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
     }
 
     private static function parseKeywords($text): array
     {
-        $parts = \explode(', ', $text);
+        $parts = \explode(', ', (string) $text);
         $result = [];
         foreach ($parts as $part) {
             $part = \trim($part);
@@ -394,7 +394,7 @@ class TorrentCardSearch extends Component
     final public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         return \view('livewire.torrent-card-search', [
-            'user'              => User::with(['history:id,seeder,active,completed_at,info_hash', 'group'])->findOrFail(\auth()->user()->id),
+            'user'              => User::with(['history:id,seeder,active,completed_at,torrent_id,user_id', 'group'])->findOrFail(\auth()->user()->id),
             'torrents'          => $this->torrents,
             'torrentsStat'      => $this->torrentsStat,
             'personalFreeleech' => $this->personalFreeleech,

@@ -333,11 +333,11 @@
     </div>
     <br>
     <div class="table-responsive block">
-			<span class="badge-user torrent-listings-stats" style="float: right;">
-				<strong>Total:</strong> {{ number_format($torrentsStat->total) }} |
-				<strong>Alive:</strong> {{ number_format($torrentsStat->alive) }} |
-				<strong>Dead:</strong> {{ number_format($torrentsStat->dead) }} |
-			</span>
+        <span class="badge-user torrent-listings-stats" style="float: right;">
+            <strong>Total:</strong> {{ number_format($torrentsStat->total) }} |
+            <strong>Alive:</strong> {{ number_format($torrentsStat->alive) }} |
+            <strong>Dead:</strong> {{ number_format($torrentsStat->dead) }}
+        </span>
         <div class="dropdown torrent-listings-action-bar">
             <a class="dropdown btn btn-xs btn-success" data-toggle="dropdown" href="#" aria-expanded="true">
                 {{ __('common.publish') }} {{ __('torrent.torrent') }}
@@ -484,11 +484,11 @@
                                      class="show-poster" alt="{{ __('torrent.poster') }}">
                             @endif
 
-                            @if ($torrent->category->game_meta && isset($meta) && $meta->cover->image_id && $meta->name)
-                                <img src="https://images.igdb.com/igdb/image/upload/t_cover_big/{{ $meta->cover->image_id }}.jpg"
+                            @if ($torrent->category->game_meta && isset($meta) && $meta->cover['image_id'] && $meta->name)
+                                <img src="https://images.igdb.com/igdb/image/upload/t_cover_big/{{ $meta->cover['image_id'] }}.jpg"
                                      class="show-poster"
                                      data-name='<i style="color: #a5a5a5;">{{ $meta->name ?? 'N/A' }}</i>'
-                                     data-image='<img src="https://images.igdb.com/igdb/image/upload/t_original/{{ $meta->cover->image_id }}.jpg"
+                                     data-image='<img src="https://images.igdb.com/igdb/image/upload/t_original/{{ $meta->cover['image_id'] }}.jpg"
 									     alt="{{ __('torrent.poster') }}" style="height: 1000px;">'
                                      class="torrent-poster-img-small show-poster" alt="{{ __('torrent.poster') }}">
                             @endif
@@ -519,13 +519,22 @@
                                     {{ $torrent->name }}
                                 </a>
                             </h3>
-                            @if (isset($meta->genres) && $meta->genres->isNotEmpty())
+                            @if (isset($meta->genres) && ($torrent->category->movie_meta || $torrent->category->tv_meta))
                                 @foreach ($meta->genres as $genre)
                                     <span class="genre-label">
-                                            <a href="{{ route('mediahub.genres.show', ['id' => $genre->id]) }}">
-                                                <i class="{{ config('other.font-awesome') }} fa-theater-masks"></i> {{ $genre->name }}
-                                            </a>
-                                        </span>
+                                        <a href="{{ route('mediahub.genres.show', ['id' => $genre->id]) }}">
+                                            <i class="{{ config('other.font-awesome') }} fa-theater-masks"></i> {{ $genre->name }}
+                                        </a>
+                                    </span>
+                                @endforeach
+                            @endif
+                            @if (isset($meta->genres) && $torrent->category->game_meta)
+                                @foreach ($meta->genres as $genre)
+                                    <span class="genre-label">
+                                        <a href="{{ route('mediahub.genres.show', ['id' => $genre['id']]) }}">
+                                            <i class="{{ config('other.font-awesome') }} fa-theater-masks"></i> {{ $genre['name'] }}
+                                        </a>
+                                    </span>
                                 @endforeach
                             @endif
                             <p class="description_plot">
@@ -613,7 +622,7 @@
     </div>
 </div>
 
-<script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce('script') }}">
+<script nonce="{{ HDVinnie\SecureHeaders\SecureHeaders::nonce('script') }}">
   document.addEventListener('livewire:load', function () {
     let myOptions = [
             @foreach($regions as $region)

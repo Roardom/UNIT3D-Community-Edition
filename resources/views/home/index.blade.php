@@ -3,11 +3,12 @@
 @section('content')
     @include('blocks.news')
 
-    @if (!auth()->user()->chat_hidden)
-        <div id="vue">
-            @include('blocks.chat')
-        </div>
-    @endif
+        @if (!auth()->user()->chat_hidden)
+            <div id="vue">
+                <script src="{{ mix('js/chat.js') }}" crossorigin="anonymous"></script>
+                @include('blocks.chat')
+            </div>
+        @endif
 
     @include('blocks.featured')
     @include('blocks.poll')

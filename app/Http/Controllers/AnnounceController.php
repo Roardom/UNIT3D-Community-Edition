@@ -65,6 +65,8 @@ class AnnounceController extends Controller
      */
     public function index(Request $request, string $passkey): ?\Illuminate\Http\Response
     {
+        $repDict = null;
+
         try {
             /**
              * Check client.
@@ -99,7 +101,7 @@ class AnnounceController extends Controller
             /**
              * Lock Min Announce Interval.
              */
-            $this->checkMinInterval($queries, $user);
+            $this->checkMinInterval($torrent, $queries, $user);
 
             /**
              * Check User Max Connections Per Torrent.
@@ -109,7 +111,9 @@ class AnnounceController extends Controller
             /**
              * Check Download Slots.
              */
-            //$this->checkDownloadSlots($user);
+            if (\config('announce.slots_system.enabled')) {
+                $this->checkDownloadSlots($user);
+            }
 
             /**
              * Generate A Response For The Torrent Clent.
@@ -155,12 +159,12 @@ class AnnounceController extends Controller
         $userAgent = $request->header('User-Agent');
 
         // Should also block User-Agent strings that are to long. (For Database reasons)
-        if (\strlen($userAgent) > 64) {
+        if (\strlen((string) $userAgent) > 64) {
             throw new TrackerException(123);
         }
 
         // Block Browser by checking it's User-Agent
-        if (\preg_match('/(Mozilla|Browser|Chrome|Safari|AppleWebKit|Opera|Links|Lynx|Bot|Unknown)/i', $userAgent)) {
+        if (\preg_match('/(Mozilla|Browser|Chrome|Safari|AppleWebKit|Opera|Links|Lynx|Bot|Unknown)/i', (string) $userAgent)) {
             throw new TrackerException(121);
         }
 
@@ -183,7 +187,7 @@ class AnnounceController extends Controller
         }
 
         // If Passkey Lenght Is Wrong
-        if (\strlen($passkey) !== 32) {
+        if (\strlen((string) $passkey) !== 32) {
             throw new TrackerException(132, [':attribute' => 'passkey', ':rule' => 32]);
         }
 
@@ -213,7 +217,7 @@ class AnnounceController extends Controller
         }
 
         foreach (['info_hash', 'peer_id'] as $item) {
-            if (\strlen($queries[$item]) !== 20) {
+            if (\strlen((string) $queries[$item]) !== 20) {
                 throw new TrackerException(133, [':attribute' => $item, ':rule' => 20]);
             }
         }
@@ -321,7 +325,7 @@ class AnnounceController extends Controller
     protected function checkTorrent($infoHash): object
     {
         // Check Info Hash Against Torrents Table
-        $torrent = Torrent::select(['id', 'free', 'doubleup', 'seeders', 'leechers', 'times_completed'])
+        $torrent = Torrent::select(['id', 'free', 'doubleup', 'seeders', 'leechers', 'times_completed', 'status'])
             ->withAnyStatus()
             ->where('info_hash', '=', $infoHash)
             ->first();
@@ -354,10 +358,11 @@ class AnnounceController extends Controller
      */
     private function checkPeer($torrent, $queries, $user): void
     {
-        if (! Peer::where('torrent_id', '=', $torrent->id)
-            ->where('peer_id', $queries['peer_id'])
-            ->where('user_id', '=', $user->id)
-            ->exists() && \strtolower($queries['event']) === 'completed') {
+        if (\strtolower($queries['event']) === 'completed' &&
+            ! Peer::where('torrent_id', '=', $torrent->id)
+                ->where('peer_id', $queries['peer_id'])
+                ->where('user_id', '=', $user->id)
+                ->exists()) {
             throw new TrackerException(152);
         }
     }
@@ -365,9 +370,9 @@ class AnnounceController extends Controller
     /**
      * @throws \App\Exceptions\TrackerException
      */
-    private function checkMinInterval($queries, $user): void
+    private function checkMinInterval($torrent, $queries, $user): void
     {
-        $prevAnnounce = Peer::where('info_hash', '=', $queries['info_hash'])
+        $prevAnnounce = Peer::where('torrent_id', '=', $torrent->id)
             ->where('peer_id', '=', $queries['peer_id'])
             ->where('user_id', '=', $user->id)
             ->pluck('updated_at');
@@ -399,16 +404,14 @@ class AnnounceController extends Controller
      */
     private function checkDownloadSlots($user): void
     {
-        if (\config('announce.slots_system.enabled')) {
-            $max = $user->group->download_slots;
+        $max = $user->group->download_slots;
 
-            if ($max > 0) {
-                $count = Peer::where('user_id', '=', $user->id)
-                    ->where('seeder', '=', 0)
-                    ->count();
-                if ($count >= $max) {
-                    throw new TrackerException(164, [':max' => $max]);
-                }
+        if ($max !== null && $max >= 0) {
+            $count = Peer::where('user_id', '=', $user->id)
+                ->where('seeder', '=', 0)
+                ->count();
+            if ($count >= $max) {
+                throw new TrackerException(164, [':max' => $max]);
             }
         }
     }
@@ -420,7 +423,7 @@ class AnnounceController extends Controller
     {
         // Build Response For Bittorrent Client
         $repDict = [
-            'interval'     => \rand(self::MIN, self::MAX),
+            'interval'     => random_int(self::MIN, self::MAX),
             'min interval' => self::MIN,
             'complete'     => (int) $torrent->seeders,
             'incomplete'   => (int) $torrent->leechers,

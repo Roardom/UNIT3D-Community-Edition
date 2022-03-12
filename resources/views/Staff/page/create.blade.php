@@ -32,7 +32,7 @@
         </label>
         <label for="content">
             {{ __('common.content') }}
-            <textarea name="content" cols="30" rows="10"></textarea>
+            <textarea name="content" id="editor" cols="30" rows="10"></textarea>
         </label>
         <button type="submit">{{ __('common.submit') }}</button>
     </form>
@@ -41,7 +41,7 @@
 @section('javascripts')
     <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce('script') }}">
       $(document).ready(function () {
-        $('[name=content]').wysibb({})
+        $('#content').wysibb({})
       })
 
     </script>

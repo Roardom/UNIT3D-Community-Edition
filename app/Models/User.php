@@ -490,7 +490,7 @@ class User extends Authenticatable
     /**
      * Get the Users accepts notification as bool.
      */
-    public function acceptsNotification(self $sender, self $target, string $group = 'follower', bool $type = false): bool
+    public function acceptsNotification(self $sender, self $target, string $group = 'follower', $type = false): bool
     {
         $targetGroup = 'json_'.$group.'_groups';
         if ($sender->id === $target->id) {
@@ -523,7 +523,7 @@ class User extends Authenticatable
     /**
      * Get the Users allowed answer as bool.
      */
-    public function isVisible(self $target, string $group = 'profile', bool $type = false): bool
+    public function isVisible(self $target, string $group = 'profile', $type = false): bool
     {
         $targetGroup = 'json_'.$group.'_groups';
         $sender = \auth()->user();
@@ -557,7 +557,7 @@ class User extends Authenticatable
     /**
      * Get the Users allowed answer as bool.
      */
-    public function isAllowed(self $target, string $group = 'profile', bool $type = false): bool
+    public function isAllowed(self $target, string $group = 'profile', $type = false): bool
     {
         $targetGroup = 'json_'.$group.'_groups';
         $sender = \auth()->user();
@@ -691,7 +691,7 @@ class User extends Authenticatable
      * Return the size (pretty formated) which can be safely downloaded
      * without falling under the minimum ratio.
      */
-    public function untilRatio($ratio)
+    public function untilRatio($ratio): string
     {
         if ($ratio == 0.0) {
             return '∞';
@@ -716,9 +716,8 @@ class User extends Authenticatable
     public function getSignature(): string
     {
         $bbcode = new Bbcode();
-        $linkify = new Linkify();
 
-        return $linkify->linky($bbcode->parse($this->signature, true));
+        return (new Linkify())->linky($bbcode->parse($this->signature, true));
     }
 
     /**
@@ -739,9 +738,8 @@ class User extends Authenticatable
         }
 
         $bbcode = new Bbcode();
-        $linkify = new Linkify();
 
-        return $linkify->linky($bbcode->parse($this->about, true));
+        return (new Linkify())->linky($bbcode->parse($this->about, true));
     }
 
     /**
@@ -763,7 +761,7 @@ class User extends Authenticatable
     {
         return Peer::where('user_id', '=', $this->id)
             ->where('seeder', '=', '1')
-            ->distinct('info_hash')
+            ->distinct('torrent_id')
             ->count();
     }
 
@@ -803,7 +801,7 @@ class User extends Authenticatable
     {
         return Peer::where('user_id', '=', $this->id)
             ->where('left', '>', '0')
-            ->distinct('info_hash')
+            ->distinct('torrent_id')
             ->count();
     }
 
@@ -861,8 +859,13 @@ class User extends Authenticatable
     public function getSpecialSeedingSize(): int
     {
         $current = Carbon::now();
-        $seeding = History::where('user_id', '=', $this->id)->where('completed_at', '<=', $current->copy()->subDays(30)->toDateTimeString())->where('active', '=', 1)->where('seeder', '=', 1)->where('seedtime', '>=', 1296000)->pluck('info_hash');
+        $seeding = History::where('user_id', '=', $this->id)
+            ->where('completed_at', '<=', $current->copy()->subDays(30)->toDateTimeString())
+            ->where('active', '=', 1)
+            ->where('seeder', '=', 1)
+            ->where('seedtime', '>=', 1_296_000)
+            ->pluck('torrent_id');
 
-        return Torrent::whereIn('info_hash', $seeding)->sum('size');
+        return Torrent::whereIntergerIn('id', $seeding)->sum('size');
     }
 }

@@ -36,7 +36,7 @@ class NotificationController extends Controller
      *
      * @throws \Throwable
      */
-    public function faceted(Request $request): string
+    public function faceted(Request $request)
     {
         $user = $request->user();
 
@@ -129,7 +129,7 @@ class NotificationController extends Controller
     /**
      * Show A Notification And Mark As Read.
      */
-    public function show(Request $request, int $id): \Illuminate\Http\RedirectResponse
+    public function show(Request $request, string $id): \Illuminate\Http\RedirectResponse
     {
         $notification = $request->user()->notifications()->findOrFail($id);
         $notification->markAsRead();
@@ -141,23 +141,23 @@ class NotificationController extends Controller
     /**
      * Set A Notification To Read.
      */
-    public function update(Request $request, int $id): \Illuminate\Http\RedirectResponse
+    public function update(Request $request, string $id): \Illuminate\Http\RedirectResponse
     {
         $notification = $request->user()->notifications()->where('id', '=', $id)->first();
 
         if (! $notification) {
-            return \redirect()->route('notifications.index')
+            return \to_route('notifications.index')
                 ->withErrors(\trans('notification.not-existent'));
         }
 
         if ($notification->read_at != null) {
-            return \redirect()->route('notifications.index')
+            return \to_route('notifications.index')
                 ->withErrors(\trans('notification.already-marked-read'));
         }
 
         $notification->markAsRead();
 
-        return \redirect()->route('notifications.index')
+        return \to_route('notifications.index')
             ->withSuccess(\trans('notification.marked-read'));
     }
 
@@ -171,18 +171,18 @@ class NotificationController extends Controller
         $carbon = new Carbon();
         $request->user()->unreadNotifications()->update(['read_at' => $carbon]);
 
-        return \redirect()->route('notifications.index')
+        return \to_route('notifications.index')
             ->withSuccess(\trans('notification.all-marked-read'));
     }
 
     /**
      * Delete A Notification.
      */
-    public function destroy(Request $request, int $id): \Illuminate\Http\RedirectResponse
+    public function destroy(Request $request, string $id): \Illuminate\Http\RedirectResponse
     {
         $request->user()->notifications()->findOrFail($id)->delete();
 
-        return \redirect()->route('notifications.index')
+        return \to_route('notifications.index')
             ->withSuccess(\trans('notification.deleted'));
     }
 
@@ -193,7 +193,7 @@ class NotificationController extends Controller
     {
         $request->user()->notifications()->delete();
 
-        return \redirect()->route('notifications.index')
+        return \to_route('notifications.index')
             ->withSuccess(\trans('notification.all-deleted'));
     }
 }

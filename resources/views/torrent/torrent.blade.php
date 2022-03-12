@@ -107,14 +107,8 @@
 @endsection
 
 @section('javascripts')
-    <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce() }}">
-      $(document).ready(function () {
-        $('#content').wysibb({})
-      })
-    </script>
-
     @if (isset($trailer))
-        <script nonce="{{ Bepsvpt\SecureHeaders\SecureHeaders::nonce() }}">
+        <script nonce="{{ HDVinnie\SecureHeaders\SecureHeaders::nonce() }}">
           $('.show-trailer').each(function () {
             $(this).off('click')
             $(this).on('click', function (e) {
@@ -132,4 +126,22 @@
           })
         </script>
     @endif
+
+    <script nonce="{{ HDVinnie\SecureHeaders\SecureHeaders::nonce() }}">
+      $('.torrent-freeleech-token').on('click', function (event) {
+        event.preventDefault();
+        let form = $(this).parents('form');
+        Swal.fire({
+          title: 'Are you sure?',
+          text: 'This will use one of your Freeleech Tokens!',
+          icon: 'warning',
+          showConfirmButton: true,
+          showCloseButton: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            form.submit();
+          }
+        });
+      });
+    </script>
 @endsection

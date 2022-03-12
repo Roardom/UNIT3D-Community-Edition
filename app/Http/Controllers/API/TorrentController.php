@@ -48,7 +48,7 @@ class TorrentController extends BaseController
     /**
      * TorrentController Constructor.
      */
-    public function __construct(private ChatRepository $chatRepository)
+    public function __construct(private readonly ChatRepository $chatRepository)
     {
     }
 
@@ -58,8 +58,8 @@ class TorrentController extends BaseController
     public function index(): TorrentsResource
     {
         return new TorrentsResource(Torrent::with(['category', 'type', 'resolution'])
-            ->orderByDesc('sticky')
-            ->orderByDesc('bumped_at')
+            ->latest('sticky')
+            ->latest('bumped_at')
             ->paginate(25));
     }
 
@@ -135,7 +135,15 @@ class TorrentController extends BaseController
         $torrent->internal = $user->group->is_modo || $user->group->is_internal ? $request->input('internal') : 0;
         $torrent->featured = $user->group->is_modo || $user->group->is_internal ? $request->input('featured') : 0;
         $torrent->doubleup = $user->group->is_modo || $user->group->is_internal ? $request->input('doubleup') : 0;
+        $du_until = $request->input('du_until');
+        if (($user->group->is_modo || $user->group->is_internal) && isset($du_until)) {
+            $torrent->du_until = Carbon::now()->addDays($request->input('du_until'));
+        }
         $torrent->free = $user->group->is_modo || $user->group->is_internal ? $request->input('free') : 0;
+        $fl_until = $request->input('fl_until');
+        if (($user->group->is_modo || $user->group->is_internal) && isset($fl_until)) {
+            $torrent->fl_until = Carbon::now()->addDays($request->input('fl_until'));
+        }
         $torrent->sticky = $user->group->is_modo || $user->group->is_internal ? $request->input('sticky') : 0;
         $torrent->moderated_at = Carbon::now();
         $torrent->moderated_by = User::where('username', 'System')->first()->id; //System ID
@@ -275,19 +283,34 @@ class TorrentController extends BaseController
             }
 
             if ($free >= 1 && $featured == 0) {
-                $this->chatRepository->systemMessage(
-                    \sprintf('Ladies and Gents, [url=%s/torrents/', $appurl).$torrent->id.']'.$torrent->name.'[/url] has been granted '.$free.'% FreeLeech! Grab It While You Can! :fire:'
-                );
+                if ($torrent->fl_until === null) {
+                    $this->chatRepository->systemMessage(
+                        \sprintf('Ladies and Gents, [url=%s/torrents/',
+                            $appurl).$torrent->id.']'.$torrent->name.'[/url] has been granted '.$free.'% FreeLeech! Grab It While You Can! :fire:'
+                    );
+                } else {
+                    $this->chatRepository->systemMessage(
+                        \sprintf('Ladies and Gents, [url=%s/torrents/',
+                            $appurl).$torrent->id.']'.$torrent->name.'[/url] has been granted '.$free.'% FreeLeech for '.$request->input('fl_until').' days. :stopwatch:'
+                    );
+                }
             }
 
             if ($doubleup == 1 && $featured == 0) {
-                $this->chatRepository->systemMessage(
-                    \sprintf('Ladies and Gents, [url=%s/torrents/', $appurl).$torrent->id.']'.$torrent->name.'[/url] has been granted Double Upload! Grab It While You Can! :fire:'
-                );
+                if ($torrent->du_until === null) {
+                    $this->chatRepository->systemMessage(
+                        \sprintf('Ladies and Gents, [url=%s/torrents/',
+                            $appurl).$torrent->id.']'.$torrent->name.'[/url] has been granted Double Upload! Grab It While You Can! :fire:'
+                    );
+                } else {
+                    $this->chatRepository->systemMessage(
+                        \sprintf('Ladies and Gents, [url=%s/torrents/',
+                            $appurl).$torrent->id.']'.$torrent->name.'[/url] has been granted Double Upload for '.$request->input('du_until').' days. :stopwatch:'
+                    );
+                }
             }
 
             TorrentHelper::approveHelper($torrent->id);
-            \info('New API Upload', [\sprintf('User %s has uploaded %s', $user->username, $torrent->name)]);
         }
 
         return $this->sendResponse(\route('torrent.download.rsskey', ['id' => $torrent->id, 'rsskey' => \auth('api')->user()->rsskey]), 'Torrent uploaded successfully.');
@@ -313,7 +336,7 @@ class TorrentController extends BaseController
         $torrents = Torrent::with(['user:id,username,group_id', 'category', 'type', 'resolution'])
             ->withCount(['thanks', 'comments'])
             ->when($request->has('name'), function ($query) use ($request) {
-                $terms = \explode(' ', $request->input('name'));
+                $terms = \explode(' ', (string) $request->input('name'));
                 $search = '';
                 foreach ($terms as $term) {
                     $search .= '%'.$term.'%';
@@ -333,7 +356,7 @@ class TorrentController extends BaseController
                 });
             })
             ->when($request->has('uploader'), function ($query) use ($request) {
-                $match = User::where('username', 'LIKE', '%'.$request->input('uploader').'%')->orderBy('username')->first();
+                $match = User::where('username', 'LIKE', '%'.$request->input('uploader').'%')->oldest('username')->first();
                 if ($match) {
                     $query->where('user_id', '=', $match->id)->where('anon', '=', 0);
                 }
@@ -422,7 +445,7 @@ class TorrentController extends BaseController
             ->when($request->has('dead'), function ($query) {
                 $query->orWhere('seeders', '=', 0);
             })
-            ->orderByDesc('sticky')
+            ->latest('sticky')
             ->orderBy($request->input('sortField') ?? $this->sortField, $request->input('sortDirection') ?? $this->sortDirection)
             ->paginate($request->input('perPage') ?? $this->perPage);
 
@@ -463,7 +486,7 @@ class TorrentController extends BaseController
      */
     private static function parseKeywords(?string $text): array
     {
-        $parts = \explode(', ', $text);
+        $parts = \explode(', ', (string) $text);
         $result = [];
         foreach ($parts as $part) {
             $part = \trim($part);

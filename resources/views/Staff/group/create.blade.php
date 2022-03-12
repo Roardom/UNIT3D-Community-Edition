@@ -34,6 +34,10 @@
             <input type="number" name="level" value="" placeholder="Level" />
         </label>
         <label>
+            DL Slots
+            <input type="number" name="download_slots" value="" placeholder="Download Slots" />
+        </label>
+        <label>
             Color
             <input type="text" name="color" value="" placeholder="HEX Color ID" />
         </label>

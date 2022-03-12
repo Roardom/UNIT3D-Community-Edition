@@ -135,7 +135,8 @@ Use this command to generate demo users and torrents for testing purposes:
 ## <a name="versions"></a> 🚨 Version Support Information
  Version     | Status                   | PHP Version Required
 :------------|:-------------------------|:------------
- 5.x.x       |  Active Support :rocket: | >= 8.0
+ 6.x.x       |  Active Support :rocket: | >= 8.1
+ 5.x.x       |  End Of Life :skull: | >= 8.0
  4.x.x       |  End Of Life :skull: | >= 7.4
  3.x.x       |  End Of Life :skull: | >= 7.4
  2.3.0 to 2.7.0|  End Of Life :skull: | >= 7.4
@@ -212,8 +213,16 @@ Bitcoin (BTC) - 3HUVkv3Q8b5nbxa9DtXG1dm4RdTJaTFRfc
 Bitcoin Cash (BCH) - qp3wgpnwzpj4v9sq90wflsca8p5s75glrvga9tweu2
 
 Ether (ETH) - 0x5eFF42F65234aD9c6A0CA5B9495f3c6D205bBC27
+    
+ETC - 0xd644C7C7009eC3824f3305ff6C7E2Ee90497d56e    
 
 Litecoin (LTC) - MDLKyHzupt1mchuo8mrjW9mihkKp1LD4nG
+
+USDC - 0xB32102d9104d2bfd0D4E3E4069618ADD985a4e2E
+
+USDT (ERC-20) - 0x24c79c41EEAd9d81203ee567fE4bA3a6c81374DB
+
+DOGE - DJ78fQspiu879y3adLbTZVSFABKhKqHE7B
 
 
 ## <a name="thanks"></a> 🎉 Special Thanks

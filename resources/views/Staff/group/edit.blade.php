@@ -36,6 +36,10 @@
             <input type="text" name="level" value="{{ $group->level }}" />
         </label>
         <label>
+            DL Slots
+            <input type="text" name="download_slots" value="{{ $group->download_slots }}" />
+        </label>
+        <label>
             Color
             <input type="text" name="color" value="{{ $group->color }}" />
         </label>
