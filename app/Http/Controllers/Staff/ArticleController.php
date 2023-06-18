@@ -30,9 +30,9 @@ class ArticleController extends Controller
      */
     public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
-        $articles = Article::latest()->paginate(25);
-
-        return view('Staff.article.index', ['articles' => $articles]);
+        return view('Staff.article.index', [
+            'articles' => Article::latest()->paginate(25)
+        ]);
     }
 
     /**
@@ -66,9 +66,9 @@ class ArticleController extends Controller
      */
     public function edit(int $id): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
-        $article = Article::findOrFail($id);
-
-        return view('Staff.article.edit', ['article' => $article]);
+        return view('Staff.article.edit', [
+            'article' => Article::findOrFail($id)
+        ]);
     }
 
     /**
@@ -96,10 +96,8 @@ class ArticleController extends Controller
      */
     public function destroy(int $id): \Illuminate\Http\RedirectResponse
     {
-        $article = Article::with('comments')->findOrFail($id);
-        foreach ($article->comments as $comment) {
-            $comment->delete();
-        }
+        $article = Article::findOrFail($id);
+        $article->comments()->delete();
         $article->delete();
 
         return to_route('staff.articles.index')

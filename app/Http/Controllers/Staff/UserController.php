@@ -34,7 +34,6 @@ use App\Models\User;
 use App\Models\Warning;
 use App\Services\Unit3dAnnounce;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 
 /**
  * @see \Tests\Todo\Feature\Http\Controllers\UserControllerTest
@@ -54,14 +53,10 @@ class UserController extends Controller
      */
     public function settings(string $username): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
-        $user = User::withTrashed()->where('username', '=', $username)->firstOrFail();
-        $groups = Group::all();
-        $internals = Internal::all();
-
         return view('Staff.user.edit', [
-            'user'      => $user,
-            'groups'    => $groups,
-            'internals' => $internals,
+            'user'      => User::withTrashed()->where('username', '=', $username)->sole(),
+            'groups'    => Group::all(),
+            'internals' => Internal::all(),
         ]);
     }
 
@@ -70,7 +65,7 @@ class UserController extends Controller
      */
     public function edit(UpdateUserRequest $request, string $username): \Illuminate\Http\RedirectResponse
     {
-        $user = User::with('group')->where('username', '=', $username)->firstOrFail();
+        $user = User::with('group')->where('username', '=', $username)->sole();
         $staff = $request->user();
         $group = Group::findOrFail($request->group_id);
 
@@ -90,14 +85,16 @@ class UserController extends Controller
      */
     public function permissions(Request $request, string $username): \Illuminate\Http\RedirectResponse
     {
-        $user = User::where('username', '=', $username)->firstOrFail();
-        $user->can_upload = $request->input('can_upload');
-        $user->can_download = $request->input('can_download');
-        $user->can_comment = $request->input('can_comment');
-        $user->can_invite = $request->input('can_invite');
-        $user->can_request = $request->input('can_request');
-        $user->can_chat = $request->input('can_chat');
-        $user->save();
+        $user = User::where('username', '=', $username)->sole();
+
+        $user->update([
+            'can_upload'   => $request->boolean('can_upload'),
+            'can_download' => $request->boolean('can_download'),
+            'can_comment'  => $request->boolean('can_comment'),
+            'can_invite'   => $request->boolean('can_invite'),
+            'can_request'  => $request->boolean('can_request'),
+            'can_chat'     => $request->boolean('can_chat'),
+        ]);
 
         cache()->forget('user:'.$user->passkey);
         Unit3dAnnounce::addUser($user);
@@ -226,24 +223,23 @@ class UserController extends Controller
      */
     protected function warnUser(Request $request, string $username): \Illuminate\Http\RedirectResponse
     {
-        $user = User::where('username', '=', $username)->firstOrFail();
-        $carbon = new Carbon();
-        $warning = new Warning();
-        $warning->user_id = $user->id;
-        $warning->warned_by = $request->user()->id;
-        $warning->torrent = null;
-        $warning->reason = $request->input('message');
-        $warning->expires_on = $carbon->copy()->addDays(config('hitrun.expire'));
-        $warning->active = '1';
-        $warning->save();
+        $user = User::where('username', '=', $username)->sole();
 
-        // Send Private Message
-        $pm = new PrivateMessage();
-        $pm->sender_id = 1;
-        $pm->receiver_id = $user->id;
-        $pm->subject = 'Received warning';
-        $pm->message = 'You have received a [b]warning[/b]. Reason: '.$request->input('message');
-        $pm->save();
+        Warning::create([
+            'user_id'    => $user->id,
+            'warned_by'  => $request->user()->id,
+            'torrent'    => null,
+            'reason'     => $request->string('message'),
+            'expires_on' => now()->addDays(config('hitrun.expire')),
+            'active'     => true,
+        ]);
+
+        PrivateMessage::create([
+            'sender_id'   => 1,
+            'receiver_id' => $user->id,
+            'subject'     => 'Received warning',
+            'message'     => 'You have received a [b]warning[/b]. Reason: '.$request->input('message'),
+        ]);
 
         return to_route('users.show', ['username' => $user->username])
             ->withSuccess('Warning issued successfully!');

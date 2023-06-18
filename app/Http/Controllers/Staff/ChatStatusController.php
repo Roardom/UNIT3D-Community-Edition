@@ -37,10 +37,8 @@ class ChatStatusController extends Controller
      */
     public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
-        $chatstatuses = $this->chatRepository->statuses();
-
         return view('Staff.chat.status.index', [
-            'chatstatuses' => $chatstatuses,
+            'chatstatuses' => $this->chatRepository->statuses(),
         ]);
     }
 
@@ -68,9 +66,9 @@ class ChatStatusController extends Controller
      */
     public function edit(int $id): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
-        $chatstatus = ChatStatus::findOrFail($id);
-
-        return view('Staff.chat.status.edit', ['chatstatus' => $chatstatus]);
+        return view('Staff.chat.status.edit', [
+            'chatstatus' => ChatStatus::findOrFail($id)
+        ]);
     }
 
     /**
@@ -78,7 +76,7 @@ class ChatStatusController extends Controller
      */
     public function update(UpdateChatStatusRequest $request, int $id): \Illuminate\Http\RedirectResponse
     {
-        ChatStatus::where('id', '=', $id)->update($request->validated());
+        ChatStatus::findOrFail($id)->update($request->validated());
 
         return to_route('staff.statuses.index')
             ->withSuccess('Chat Status Successfully Modified');
@@ -91,8 +89,7 @@ class ChatStatusController extends Controller
      */
     public function destroy(int $id): \Illuminate\Http\RedirectResponse
     {
-        $chatstatus = ChatStatus::findOrFail($id);
-        $chatstatus->delete();
+        ChatStatus::findOrFail($id)->delete();
 
         return to_route('staff.statuses.index')
             ->withSuccess('Chat Status Successfully Deleted');

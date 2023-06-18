@@ -15,11 +15,11 @@ namespace App\Http\Controllers\Staff;
 
 use App\Helpers\TorrentHelper;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Staff\UpdateModerationRequest;
 use App\Models\PrivateMessage;
 use App\Models\Torrent;
 use App\Repositories\ChatRepository;
 use App\Services\Unit3dAnnounce;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Carbon;
 
 /**
@@ -39,33 +39,28 @@ class ModerationController extends Controller
      */
     public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
-        $current = Carbon::now();
-        $pending = Torrent::with(['user:id,username,group_id', 'user.group', 'category', 'type'])->pending()->get();
-        $postponed = Torrent::with(['user:id,username,group_id', 'user.group', 'category', 'type'])->postponed()->get();
-        $rejected = Torrent::with(['user:id,username,group_id', 'user.group', 'category', 'type'])->rejected()->get();
-
         return view('Staff.moderation.index', [
-            'current'   => $current,
-            'pending'   => $pending,
-            'postponed' => $postponed,
-            'rejected'  => $rejected,
+            'current'   => Carbon::now(),
+            'pending'   => Torrent::with(['user:id,username,group_id', 'user.group', 'category', 'type'])->pending()->get(),
+            'postponed' => Torrent::with(['user:id,username,group_id', 'user.group', 'category', 'type'])->postponed()->get(),
+            'rejected'  => Torrent::with(['user:id,username,group_id', 'user.group', 'category', 'type'])->rejected()->get(),
         ]);
     }
 
     /**
      * Update a torrent's moderation status.
      */
-    public function update(UpdateModerationRequest $request, int $id): \Illuminate\Http\RedirectResponse
+    public function update(Authenticatable $staff, $request, int $id): \Illuminate\Http\RedirectResponse
     {
         $torrent = Torrent::withAnyStatus()->with('user')->findOrFail($id);
 
-        if ((int) $request->old_status !== $torrent->status) {
+        if ($request->integer('old_status') !== $torrent->status) {
             return to_route('torrent', ['id' => $id])
                 ->withInput()
                 ->withErrors('Torrent has already been moderated since this page was loaded.');
         }
 
-        if ((int) $request->status === $torrent->status) {
+        if ($request->integer('status') === $torrent->status) {
             return to_route('torrent', ['id' => $id])
                 ->withInput()
                 ->withErrors(
@@ -78,8 +73,6 @@ class ModerationController extends Controller
                     }
                 );
         }
-
-        $staff = auth()->user();
 
         switch ($request->status) {
             case 1: // Approve

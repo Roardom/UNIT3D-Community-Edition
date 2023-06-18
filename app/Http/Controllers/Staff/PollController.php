@@ -37,9 +37,9 @@ class PollController extends Controller
      */
     public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
-        $polls = Poll::latest()->paginate(25);
-
-        return view('Staff.poll.index', ['polls' => $polls]);
+        return view('Staff.poll.index', [
+            'polls' => Poll::latest()->paginate(25),
+        ]);
     }
 
     /**
@@ -47,9 +47,9 @@ class PollController extends Controller
      */
     public function show(int $id): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
-        $poll = Poll::where('id', '=', $id)->firstOrFail();
-
-        return view('Staff.poll.show', ['poll' => $poll]);
+        return view('Staff.poll.show', [
+            'poll' => Poll::findOrFail($id),
+        ]);
     }
 
     /**
@@ -72,10 +72,8 @@ class PollController extends Controller
         $options = collect($storePoll->input('options'))->map(fn ($value) => new Option(['name' => $value]));
         $poll->options()->saveMany($options);
 
-        $pollUrl = href_poll($poll);
-
         $this->chatRepository->systemMessage(
-            sprintf('A new poll has been created [url=%s]%s[/url] vote on it now! :slight_smile:', $pollUrl, $poll->title)
+            sprintf('A new poll has been created [url=%s]%s[/url] vote on it now! :slight_smile:', href_poll($poll), $poll->title)
         );
 
         return to_route('staff.polls.index')
@@ -87,9 +85,9 @@ class PollController extends Controller
      */
     public function edit(int $id): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
-        $poll = Poll::findOrFail($id);
-
-        return view('Staff.poll.edit', ['poll' => $poll]);
+        return view('Staff.poll.edit', [
+            'poll' => Poll::findOrFail($id)
+        ]);
     }
 
     /**
@@ -132,11 +130,8 @@ class PollController extends Controller
 
         $poll->options()->saveMany($newOptions);
 
-        // Last work from store()
-        $pollUrl = href_poll($poll);
-
         $this->chatRepository->systemMessage(
-            sprintf('A poll has been updated [url=%s]%s[/url] vote on it now! :slight_smile:', $pollUrl, $poll->title)
+            sprintf('A poll has been updated [url=%s]%s[/url] vote on it now! :slight_smile:', href_poll($poll), $poll->title)
         );
 
         $poll->save();
@@ -153,9 +148,8 @@ class PollController extends Controller
     public function destroy(int $id): \Illuminate\Http\RedirectResponse
     {
         $poll = Poll::findOrFail($id);
+        $poll->options()->delete();
         $poll->delete();
-
-        Option::where('poll_id', '=', $id)->delete();
 
         return to_route('staff.polls.index')
             ->withSuccess('Poll has successfully been deleted');

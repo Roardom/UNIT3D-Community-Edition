@@ -35,9 +35,9 @@ class BanController extends Controller
      */
     public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
-        $bans = Ban::latest()->paginate(25);
-
-        return view('Staff.ban.index', ['bans' => $bans]);
+        return view('Staff.ban.index', [
+            'bans' => Ban::latest()->paginate(25),
+        ]);
     }
 
     /**
@@ -47,11 +47,9 @@ class BanController extends Controller
      */
     public function store(StoreBanRequest $request, string $username): \Illuminate\Http\RedirectResponse
     {
-        $user = User::where('username', '=', $username)->firstOrFail();
+        $user = User::where('username', '=', $username)->sole();
         $staff = $request->user();
         $bannedGroup = cache()->rememberForever('banned_group', fn () => Group::where('slug', '=', 'banned')->pluck('id'));
-
-        // \abort_if($user->group->is_modo || $request->user()->id == $user->id, 403);
 
         $user->update([
             'group_id'     => $bannedGroup[0],
@@ -84,7 +82,7 @@ class BanController extends Controller
      */
     public function update(UpdateBanRequest $request, string $username): \Illuminate\Http\RedirectResponse
     {
-        $user = User::where('username', '=', $username)->firstOrFail();
+        $user = User::where('username', '=', $username)->sole();
         $staff = $request->user();
 
         abort_if($user->group->is_modo || $request->user()->id == $user->id, 403);

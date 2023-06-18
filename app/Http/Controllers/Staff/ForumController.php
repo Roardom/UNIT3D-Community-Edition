@@ -32,9 +32,9 @@ class ForumController extends Controller
      */
     public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
-        $categories = Forum::where('parent_id', '=', 0)->get()->sortBy('position');
-
-        return view('Staff.forum.index', ['categories' => $categories]);
+        return view('Staff.forum.index', [
+            'categories' => Forum::where('parent_id', '=', 0)->orderBy('position')->get(),
+        ]);
     }
 
     /**
@@ -42,10 +42,10 @@ class ForumController extends Controller
      */
     public function create(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
-        $categories = Forum::where('parent_id', '=', 0)->get();
-        $groups = Group::all();
-
-        return view('Staff.forum.create', ['categories' => $categories, 'groups' => $groups]);
+        return view('Staff.forum.create', [
+            'categories' => Forum::where('parent_id', '=', 0)->get(),
+            'groups'     => Group::all()
+        ]);
     }
 
     /**
@@ -68,27 +68,29 @@ class ForumController extends Controller
         );
 
         // Permissions
-        foreach ($groups as $k => $group) {
-            $perm = Permission::where('forum_id', '=', $forum->id)->where('group_id', '=', $group->id)->first();
-            if ($perm == null) {
-                $perm = new Permission();
+        foreach ($groups as $group) {
+            $permission = Permission::where('forum_id', '=', $forum->id)->where('group_id', '=', $group->id)->first();
+
+            if ($permission == null) {
+                $permission = new Permission();
             }
 
-            $perm->forum_id = $forum->id;
-            $perm->group_id = $group->id;
+            $permission->forum_id = $forum->id;
+            $permission->group_id = $group->id;
+
             if (\array_key_exists($group->id, $request->input('permissions'))) {
-                $perm->show_forum = isset($request->input('permissions')[$group->id]['show_forum']);
-                $perm->read_topic = isset($request->input('permissions')[$group->id]['read_topic']);
-                $perm->reply_topic = isset($request->input('permissions')[$group->id]['reply_topic']);
-                $perm->start_topic = isset($request->input('permissions')[$group->id]['start_topic']);
+                $permission->show_forum = isset($request->input('permissions')[$group->id]['show_forum']);
+                $permission->read_topic = isset($request->input('permissions')[$group->id]['read_topic']);
+                $permission->reply_topic = isset($request->input('permissions')[$group->id]['reply_topic']);
+                $permission->start_topic = isset($request->input('permissions')[$group->id]['start_topic']);
             } else {
-                $perm->show_forum = false;
-                $perm->read_topic = false;
-                $perm->reply_topic = false;
-                $perm->start_topic = false;
+                $permission->show_forum = false;
+                $permission->read_topic = false;
+                $permission->reply_topic = false;
+                $permission->start_topic = false;
             }
 
-            $perm->save();
+            $permission->save();
         }
 
         return to_route('staff.forums.index')
@@ -100,14 +102,10 @@ class ForumController extends Controller
      */
     public function edit(int $id): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
-        $forum = Forum::findOrFail($id);
-        $categories = Forum::where('parent_id', '=', 0)->get();
-        $groups = Group::all();
-
         return view('Staff.forum.edit', [
-            'categories' => $categories,
-            'groups'     => $groups,
-            'forum'      => $forum,
+            'categories' => Forum::where('parent_id', '=', 0)->get(),
+            'groups'     => Group::all(),
+            'forum'      => Forum::findOrFail($id),
         ]);
     }
 
@@ -127,27 +125,29 @@ class ForumController extends Controller
         );
 
         // Permissions
-        foreach ($groups as $k => $group) {
-            $perm = Permission::where('forum_id', '=', $id)->where('group_id', '=', $group->id)->first();
-            if ($perm == null) {
-                $perm = new Permission();
+        foreach ($groups as $group) {
+            $permission = Permission::where('forum_id', '=', $id)->where('group_id', '=', $group->id)->first();
+
+            if ($permission === null) {
+                $permission = new Permission();
             }
 
-            $perm->forum_id = $id;
-            $perm->group_id = $group->id;
+            $permission->forum_id = $id;
+            $permission->group_id = $group->id;
+
             if (\array_key_exists($group->id, $request->input('permissions'))) {
-                $perm->show_forum = isset($request->input('permissions')[$group->id]['show_forum']);
-                $perm->read_topic = isset($request->input('permissions')[$group->id]['read_topic']);
-                $perm->reply_topic = isset($request->input('permissions')[$group->id]['reply_topic']);
-                $perm->start_topic = isset($request->input('permissions')[$group->id]['start_topic']);
+                $permission->show_forum = isset($request->input('permissions')[$group->id]['show_forum']);
+                $permission->read_topic = isset($request->input('permissions')[$group->id]['read_topic']);
+                $permission->reply_topic = isset($request->input('permissions')[$group->id]['reply_topic']);
+                $permission->start_topic = isset($request->input('permissions')[$group->id]['start_topic']);
             } else {
-                $perm->show_forum = false;
-                $perm->read_topic = false;
-                $perm->reply_topic = false;
-                $perm->start_topic = false;
+                $permission->show_forum = false;
+                $permission->read_topic = false;
+                $permission->reply_topic = false;
+                $permission->start_topic = false;
             }
 
-            $perm->save();
+            $permission->save();
         }
 
         return to_route('staff.forums.index')
@@ -164,8 +164,9 @@ class ForumController extends Controller
         $forum = Forum::findOrFail($id);
 
         $permissions = Permission::where('forum_id', '=', $forum->id)->get();
-        foreach ($permissions as $p) {
-            $p->delete();
+
+        foreach ($permissions as $permission) {
+            $permission->delete();
         }
 
         unset($permissions);
@@ -173,22 +174,24 @@ class ForumController extends Controller
         if ($forum->parent_id == 0) {
             $category = $forum;
             $permissions = Permission::where('forum_id', '=', $category->id)->get();
-            foreach ($permissions as $p) {
-                $p->delete();
+
+            foreach ($permissions as $post) {
+                $post->delete();
             }
 
             foreach ($category->getForumsInCategory() as $forum) {
                 $permissions = Permission::where('forum_id', '=', $forum->id)->get();
+
                 foreach ($permissions as $p) {
                     $p->delete();
                 }
 
-                foreach ($forum->topics as $t) {
-                    foreach ($t->posts as $p) {
-                        $p->delete();
+                foreach ($forum->topics as $topic) {
+                    foreach ($topic->posts as $post) {
+                        $post->delete();
                     }
 
-                    $t->delete();
+                    $topic->delete();
                 }
 
                 $forum->delete();
@@ -197,16 +200,17 @@ class ForumController extends Controller
             $category->delete();
         } else {
             $permissions = Permission::where('forum_id', '=', $forum->id)->get();
-            foreach ($permissions as $p) {
-                $p->delete();
+
+            foreach ($permissions as $permission) {
+                $permission->delete();
             }
 
-            foreach ($forum->topics as $t) {
-                foreach ($t->posts as $p) {
-                    $p->delete();
+            foreach ($forum->topics as $topic) {
+                foreach ($topic->posts as $post) {
+                    $post->delete();
                 }
 
-                $t->delete();
+                $topic->delete();
             }
 
             $forum->delete();

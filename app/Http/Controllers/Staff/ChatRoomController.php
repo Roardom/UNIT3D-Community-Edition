@@ -38,10 +38,8 @@ class ChatRoomController extends Controller
      */
     public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
-        $chatrooms = $this->chatRepository->rooms();
-
         return view('Staff.chat.room.index', [
-            'chatrooms' => $chatrooms,
+            'chatrooms' => $this->chatRepository->rooms(),
         ]);
     }
 
@@ -69,9 +67,9 @@ class ChatRoomController extends Controller
      */
     public function edit(int $id): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
-        $chatroom = Chatroom::findOrFail($id);
-
-        return view('Staff.chat.room.edit', ['chatroom' => $chatroom]);
+        return view('Staff.chat.room.edit', [
+            'chatroom' => Chatroom::findOrFail($id)
+        ]);
     }
 
     /**
@@ -79,7 +77,7 @@ class ChatRoomController extends Controller
      */
     public function update(UpdateChatRoomRequest $request, int $id): \Illuminate\Http\RedirectResponse
     {
-        Chatroom::where('id', '=', $id)->update($request->validated());
+        Chatroom::whereKey($id)->update($request->validated());
 
         return to_route('staff.rooms.index')
             ->withSuccess('Chatroom Successfully Modified');
@@ -92,15 +90,9 @@ class ChatRoomController extends Controller
      */
     public function destroy(int $id): \Illuminate\Http\RedirectResponse
     {
-        $chatroom = Chatroom::findOrFail($id);
-        $users = User::where('chatroom_id', '=', $id)->get();
         $default = Chatroom::where('name', '=', config('chat.system_chatroom'))->pluck('id');
-        foreach ($users as $user) {
-            $user->chatroom_id = $default[0];
-            $user->save();
-        }
-
-        $chatroom->delete();
+        User::where('chatroom_id', '=', $id)->update(['chatroom_id' => $default[0]]);
+        Chatroom::findOrFail($id)->delete();
 
         return to_route('staff.rooms.index')
             ->withSuccess('Chatroom Successfully Deleted');
