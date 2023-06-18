@@ -19,9 +19,7 @@ use App\Mail\InviteUser;
 use App\Models\Application;
 use App\Models\Invite;
 use App\Rules\EmailBlacklist;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Ramsey\Uuid\Uuid;
@@ -64,7 +62,7 @@ class ApplicationController extends Controller
     {
         $request->validate([
             'status' => 1,
-            'email' => [
+            'email'  => [
                 'required',
                 'string',
                 'email',
