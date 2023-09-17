@@ -58,7 +58,7 @@ class UserController extends Controller
 
         return view('Staff.user.edit', [
             'user'      => $user,
-            'groups'    => Group::when(! $group->is_owner, fn ($query) => $query->where('level', '<=', $group->level))->get(),
+            'groups'    => Group::when(! $group->is_owner, fn ($query) => $query->where('level', '<', $group->level))->get(),
             'internals' => Internal::all(),
         ]);
     }
@@ -68,11 +68,17 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): \Illuminate\Http\RedirectResponse
     {
-        $user->load('group');
-        $staff = $request->user();
-        $group = Group::findOrFail($request->group_id);
+        $staff = $request->user()->load('group');
 
-        abort_if(! $staff->group->is_owner && ($staff->group->level <= $user->group->level || $staff->group->level <= $group->level), 403);
+        if (! $staff->group->is_owner) {
+            $newGroup = Group::findOrFail($request->group_id);
+
+            if ($request->user()->is($user)) {
+                abort_if($newGroup->level > $user->group->level, 403);
+            } else {
+                abort_if($newGroup->level >= $staff->group->level || $user->group->level > $staff->group->level, 403);
+            }
+        }
 
         $user->update($request->validated());
 
