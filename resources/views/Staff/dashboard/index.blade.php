@@ -100,17 +100,9 @@
                         @csrf
                         <button
                             x-on:click.prevent="
-                                Swal.fire({
-                                    title: 'Are you sure?',
-                                    text: 'Are you sure you want to delete all chatbox messages in all chatrooms (including private chatbox messages)?',
-                                    icon: 'warning',
-                                    showConfirmButton: true,
-                                    showCancelButton: true,
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        $root.submit();
-                                    }
-                                })
+                                confirm(
+                                    'Are you sure you want to delete all chatbox messages in all chatrooms (including private chatbox messages)?'
+                                ) && $root.submit()
                             "
                             class="form__button form__button--text"
                         >
@@ -352,19 +344,7 @@
                     <form method="POST" action="{{ route('staff.flush.peers') }}" x-data>
                         @csrf
                         <button
-                            x-on:click.prevent="
-                                Swal.fire({
-                                    title: 'Are you sure?',
-                                    text: 'Are you sure you want to delete all ghost peers?',
-                                    icon: 'warning',
-                                    showConfirmButton: true,
-                                    showCancelButton: true,
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        $root.submit();
-                                    }
-                                })
-                            "
+                            x-on:click.prevent="confirm('Are you sure you want to delete all ghost peers?') && $root.submit()"
                             class="form__button form__button--text"
                         >
                             <i class="{{ config('other.font-awesome') }} fa-ghost"></i>
@@ -450,17 +430,11 @@
                     <form method="GET" action="{{ route('staff.mass-actions.validate') }}" x-data>
                         @csrf
                         <button
-                            x-on:click.prevent="Swal.fire({
-                                title: 'Are you sure?',
-                                text: 'Are you sure you want to automatically validate all users even if their email address isn\'t confirmed?',
-                                icon: 'warning',
-                                showConfirmButton: true,
-                                showCancelButton: true,
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    $root.submit();
-                                }
-                            })"
+                            x-on:click.prevent="
+                                confirm(
+                                    'Are you sure you want to automatically validate all users even if their email address isn\'t confirmed'
+                                ) && $root.submit()
+                            "
                             class="form__button form__button--text"
                         >
                             <i class="{{ config('other.font-awesome') }} fa-history"></i>

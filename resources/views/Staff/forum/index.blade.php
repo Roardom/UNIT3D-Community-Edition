@@ -69,19 +69,11 @@
                                             @method('DELETE')
                                             <button
                                                 x-on:click.prevent="
-                                                    Swal.fire({
-                                                        title: 'Are you sure?',
-                                                        text: `Are you sure you want to delete this forum category: ${atob(
+                                                    confirm(
+                                                        `Are you sure you want to delete this category: ${atob(
                                                             '{{ base64_encode($category->name) }}'
-                                                        )}?`,
-                                                        icon: 'warning',
-                                                        showConfirmButton: true,
-                                                        showCancelButton: true,
-                                                    }).then((result) => {
-                                                        if (result.isConfirmed) {
-                                                            $root.submit();
-                                                        }
-                                                    })
+                                                        )}?`
+                                                    ) && $root.submit()
                                                 "
                                                 class="form__button form__button--text"
                                             >
@@ -123,19 +115,9 @@
                                                 @method('DELETE')
                                                 <button
                                                     x-on:click.prevent="
-                                                        Swal.fire({
-                                                            title: 'Are you sure?',
-                                                            text: `Are you sure you want to delete this forum: ${atob(
-                                                                '{{ base64_encode($forum->name) }}'
-                                                            )}?`,
-                                                            icon: 'warning',
-                                                            showConfirmButton: true,
-                                                            showCancelButton: true,
-                                                        }).then((result) => {
-                                                            if (result.isConfirmed) {
-                                                                $root.submit();
-                                                            }
-                                                        })
+                                                        confirm(
+                                                            `Are you sure you want to delete this forum: ${atob('{{ base64_encode($forum->name) }}')}?`
+                                                        ) && $root.submit()
                                                     "
                                                     class="form__button form__button--text"
                                                 >

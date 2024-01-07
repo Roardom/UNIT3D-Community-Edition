@@ -140,19 +140,7 @@
                 @method('DELETE')
                 <p class="form__group form__group--horizontal">
                     <button
-                        x-on:click.prevent="
-                            Swal.fire({
-                                title: 'Are you sure?',
-                                text: 'Are you sure you want to delete all private messages?',
-                                icon: 'warning',
-                                showConfirmButton: true,
-                                showCancelButton: true,
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    $root.submit();
-                                }
-                            })
-                        "
+                        x-on:click.prevent="confirm('Are you sure you want to delete all private messages') && $root.submit()"
                         class="form__button form__button--filled form__button--centered"
                     >
                         <i class="{{ config('other.font-awesome') }} fa-trash"></i>

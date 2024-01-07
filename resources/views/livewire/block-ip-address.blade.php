@@ -114,17 +114,13 @@
                                 <li class="data-table__action">
                                     <form x-data>
                                         <button
-                                            x-on:click.prevent="Swal.fire({
-                                            title: 'Are you sure?',
-                                            text: `Are you sure you want to delete this ip: {{ $ipAddress->ip_address }}`,
-                                            icon: 'warning',
-                                            showConfirmButton: true,
-                                            showCancelButton: true,
-                                        }).then((result) => {
-                                            if (result.isConfirmed) {
-                                                @this.destroy({{ $ipAddress->id }})
-                                            }
-                                        })"
+                                            x-on:click.prevent="
+                                                confirm(
+                                                    `Are you sure you want to delete this client: ${atob(
+                                                        '{{ base64_encode($client->name) }}'
+                                                    )}?`
+                                                ) && @this.destroy({{ $ipAddress->id }})
+                                            "
                                             class="form__button form__button--text"
                                         >
                                             {{ __('common.delete') }}

@@ -43,29 +43,11 @@
                         class="form__button form__button--outlined form__button--centered"
                         title="{{ __('torrent.fl-tokens-left', ['tokens' => $user->fl_tokens]) }}!"
                         x-on:click.prevent="
-                            Swal.fire({
-                                title: 'Are you sure?',
-                                text: 'This will use one of your Freeleech Tokens!',
-                                icon: 'warning',
-                                showConfirmButton: true,
-                                showCloseButton: true,
-                            }).then((result) => {
-                                if (result.isConfirmed && {{ $torrent->seeders }} == 0) {
-                                    Swal.fire({
-                                        title: 'Are you sure?',
-                                        text: 'This torrent has 0 seeders!',
-                                        icon: 'warning',
-                                        showConfirmButton: true,
-                                        showCancelButton: true,
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            $root.submit();
-                                        }
-                                    });
-                                } else if (result.isConfirmed) {
-                                    $root.submit();
-                                }
-                            });
+                            confirm('Are you sure you want to use one of your freeleech tokens?') &&
+                                (({{ $torrent->seeders }} === 0 &&
+                                    confirm('Are you sure? This torrent has 0 seeders!') &&
+                                    $root.submit()) ||
+                                    ({{ $torrent->seeders > 0 }} && $root.submit()));
                         "
                     >
                         {{ __('torrent.use-fl-token') }}

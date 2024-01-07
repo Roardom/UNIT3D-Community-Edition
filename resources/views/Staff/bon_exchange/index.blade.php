@@ -74,17 +74,11 @@
                                     </a>
                                     <button
                                         x-on:click.prevent="
-                                            Swal.fire({
-                                                title: 'Delete?',
-                                                text: 'Are you sure you want to delete?',
-                                                icon: 'warning',
-                                                showConfirmButton: true,
-                                                showCancelButton: true,
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    $root.submit();
-                                                }
-                                            })
+                                            confirm(
+                                                `Are you sure you want to delete this bon exchange: ${atob(
+                                                    '{{ base64_encode($bonExchange->description) }}'
+                                                )}?`
+                                            ) && $root.submit()
                                         "
                                         class="form__button form__button--filled"
                                     >

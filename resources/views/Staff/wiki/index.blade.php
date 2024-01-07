@@ -64,19 +64,9 @@
                                             @method('DELETE')
                                             <button
                                                 x-on:click.prevent="
-                                                    Swal.fire({
-                                                        title: 'Are you sure?',
-                                                        text: `Are you sure you want to delete this wiki: ${atob(
-                                                            '{{ base64_encode($wiki->name) }}'
-                                                        )}?`,
-                                                        icon: 'warning',
-                                                        showConfirmButton: true,
-                                                        showCancelButton: true,
-                                                    }).then((result) => {
-                                                        if (result.isConfirmed) {
-                                                            $root.submit();
-                                                        }
-                                                    })
+                                                    confirm(
+                                                        `Are you sure you want to delete this wiki: ${atob('{{ base64_encode($wiki->name) }}')}?`
+                                                    ) && $root.submit()
                                                 "
                                                 class="form__button form__button--text"
                                             >

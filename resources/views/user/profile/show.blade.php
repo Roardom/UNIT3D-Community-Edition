@@ -57,19 +57,11 @@
                                 @method('DELETE')
                                 <button
                                     x-on:click.prevent="
-                                        Swal.fire({
-                                            title: 'Are you sure?',
-                                            text: `Are you sure you want to delete this user and all their associated records: ${atob(
+                                        confirm(
+                                            `Are you sure you want to delete this user and all their associated records: ${atob(
                                                 '{{ base64_encode($user->username) }}'
-                                            )}?`,
-                                            icon: 'warning',
-                                            showConfirmButton: true,
-                                            showCancelButton: true,
-                                        }).then((result) => {
-                                            if (result.isConfirmed) {
-                                                $root.submit();
-                                            }
-                                        })
+                                            )}?`
+                                        ) && $root.submit()
                                     "
                                     class="form__button form__button--text"
                                 >
@@ -589,17 +581,11 @@
                                                     @method('DELETE')
                                                     <button
                                                         x-on:click.prevent="
-                                                            Swal.fire({
-                                                                title: 'Are you sure?',
-                                                                text: 'Are you sure you want to unwatch this user: {{ $watch->user->username }}?',
-                                                                icon: 'warning',
-                                                                showConfirmButton: true,
-                                                                showCancelButton: true,
-                                                            }).then((result) => {
-                                                                if (result.isConfirmed) {
-                                                                    $root.submit();
-                                                                }
-                                                            })
+                                                            confirm(
+                                                                `Are you sure you want to unwatch this user: ${atob(
+                                                                    '{{ base64_encode($watch->user->username) }}'
+                                                                )}?`
+                                                            ) && $root.submit()
                                                         "
                                                         class="form__button form__button--text"
                                                     >

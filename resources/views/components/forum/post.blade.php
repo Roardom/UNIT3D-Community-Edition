@@ -130,19 +130,7 @@
                             class="post__delete-button"
                             type="submit"
                             title="{{ __('common.delete') }}"
-                            x-on:click.prevent="
-                                Swal.fire({
-                                    title: 'Are you sure?',
-                                    text: 'Are you sure you want to delete this post?',
-                                    icon: 'warning',
-                                    showConfirmButton: true,
-                                    showCancelButton: true,
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        $root.submit();
-                                    }
-                                })
-                            "
+                            x-on:click.prevent="confirm('Are you sure you want to delete this post') && $root.submit()"
                         >
                             <i class="{{ \config('other.font-awesome') }} fa-trash"></i>
                         </button>

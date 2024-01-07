@@ -36,17 +36,9 @@
                     @method('DELETE')
                     <button
                         x-on:click.prevent="
-                            Swal.fire({
-                                title: 'Are you sure?',
-                                text: 'Are you sure you want to reset all torrent balances? This will allow you to start tracking cheated torrents from scratch, but you will no longer have data for previous cheated torrents.',
-                                icon: 'warning',
-                                showConfirmButton: true,
-                                showCancelButton: true,
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    $root.submit();
-                                }
-                            })
+                            confirm(
+                                'Are you sure you want to reset all torrent balances? This will allow you to start tracking cheated torrents from scratch, but you will no longer have data for previous cheated torrents'
+                            ) && $root.submit()
                         "
                         class="form__button form__button--text"
                     >

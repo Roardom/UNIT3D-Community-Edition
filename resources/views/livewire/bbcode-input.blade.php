@@ -310,12 +310,9 @@
                 type="button"
                 class="form__standard-icon-button"
                 x-on:click="
-                    Swal.fire({
-                        title: 'Emoji Picker',
-                        html: 'If using MacOS, press Ctrl + Cmd + Space bar<br>If using Windows or Linux, press Windows logo key + .',
-                        icon: 'info',
-                        showConfirmButton: true,
-                    })
+                    confirm(
+                        'Emoji Picker: If using MacOS, press Ctrl + Cmd + Space bar. If using Windows or Linux, press Windows logo key + .'
+                    ) && $root.submit()
                 "
             >
                 <abbr

@@ -52,17 +52,7 @@
                 <form class="panel__action">
                     @csrf
                     <button
-                        x-on:click.prevent="Swal.fire({
-                            title: 'Are you sure?',
-                            text: 'Are you sure you want to delete all warnings?',
-                            icon: 'warning',
-                            showConfirmButton: true,
-                            showCancelButton: true,
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                @this.massDestroy()
-                            }
-                        })"
+                        x-on:click.prevent="confirm('Are you sure you want to delete all warnings') && @this.massDestroy()"
                         class="form__button form__button--text"
                     >
                         {{ __('user.delete-all') }}
@@ -71,17 +61,7 @@
                 <form class="panel__action">
                     @csrf
                     <button
-                        x-on:click.prevent="Swal.fire({
-                            title: 'Are you sure?',
-                            text: 'Are you sure you want to deactivate all warnings?',
-                            icon: 'warning',
-                            showConfirmButton: true,
-                            showCancelButton: true,
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                @this.massDeactivate()
-                            }
-                        })"
+                        x-on:click.prevent="confirm('Are you sure you want to deactivate all warnings?') && @this.massDeactivate()"
                         class="form__button form__button--text"
                     >
                         {{ __('user.deactivate-all') }}
@@ -207,17 +187,13 @@
                                                 @csrf
                                                 @method('PATCH')
                                                 <button
-                                                    x-on:click.prevent="Swal.fire({
-                                                    title: 'Are you sure?',
-                                                    text: `Are you sure you want to restore this warning: ${atob('{{ base64_encode($warning->reason) }}')}?`,
-                                                    icon: 'warning',
-                                                    showConfirmButton: true,
-                                                    showCancelButton: true,
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        @this.restore({{ $warning->id }})
-                                                    }
-                                                })"
+                                                    x-on:click.prevent="
+                                                        confirm(
+                                                            `Are you sure you want to restore this warning: ${atob(
+                                                                '{{ base64_encode($watching->reason) }}'
+                                                            )}?`
+                                                        ) && @this.restore({{ $warning->id }}
+                                                    "
                                                     class="form__button form__button--text"
                                                 >
                                                     {{ __('user.restore') }}
@@ -231,17 +207,13 @@
                                                     <form>
                                                         @csrf
                                                         <button
-                                                            x-on:click.prevent="Swal.fire({
-                                                            title: 'Are you sure?',
-                                                            text: `Are you sure you want to deactivate this warning: ${atob('{{ base64_encode($warning->reason) }}')}?`,
-                                                            icon: 'warning',
-                                                            showConfirmButton: true,
-                                                            showCancelButton: true,
-                                                        }).then((result) => {
-                                                            if (result.isConfirmed) {
-                                                                @this.deactivate({{ $warning->id }})
-                                                            }
-                                                        })"
+                                                            x-on:click.prevent="
+                                                                confirm(
+                                                                    `Are you sure you want to deactivate this warning: ${atob(
+                                                                        '{{ base64_encode($warning->reason) }}'
+                                                                    )}?`
+                                                                ) && @this.deactivate({{ $warning->id }}
+                                                            "
                                                             class="form__button form__button--text"
                                                         >
                                                             {{ __('user.deactivate') }}
@@ -253,17 +225,13 @@
                                                     <form>
                                                         @csrf
                                                         <button
-                                                            x-on:click.prevent="Swal.fire({
-                                                            title: 'Are you sure?',
-                                                            text: `Are you sure you want to reactivate this warning: ${atob('{{ base64_encode($warning->reason) }}')}?`,
-                                                            icon: 'warning',
-                                                            showConfirmButton: true,
-                                                            showCancelButton: true,
-                                                        }).then((result) => {
-                                                            if (result.isConfirmed) {
-                                                                @this.reactivate({{ $warning->id }})
-                                                            }
-                                                        })"
+                                                            x-on:click.prevent="
+                                                                confirm(
+                                                                    `Are you sure you want to reactivate this warning: ${atob(
+                                                                        '{{ base64_encode($warning->reason) }}'
+                                                                    )}?`
+                                                                ) && @this.reactivate({{ $warning->id }})
+                                                            "
                                                             class="form__button form__button--text"
                                                         >
                                                             {{ __('user.reactivate') }}
@@ -277,17 +245,13 @@
                                             <form>
                                                 @csrf
                                                 <button
-                                                    x-on:click.prevent="Swal.fire({
-                                                    title: 'Are you sure?',
-                                                    text: `Are you sure you want to delete this warning: ${atob('{{ base64_encode($warning->reason) }}')}?`,
-                                                    icon: 'warning',
-                                                    showConfirmButton: true,
-                                                    showCancelButton: true,
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        @this.destroy({{ $warning->id }})
-                                                    }
-                                                })"
+                                                    x-on:click.prevent="
+                                                        confirm(
+                                                            `Are you sure you want to delete this warning: ${atob(
+                                                                '{{ base64_encode($warning->reason) }}'
+                                                            )}?`
+                                                        ) && @this.destroy({{ $warning->id }}
+                                                    "
                                                     class="form__button form__button--text"
                                                 >
                                                     {{ __('common.delete') }}

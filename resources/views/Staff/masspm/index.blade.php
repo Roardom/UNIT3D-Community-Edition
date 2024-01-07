@@ -50,17 +50,8 @@
                 <p class="form__group">
                     <button
                         x-on:click.prevent="
-                            Swal.fire({
-                                title: 'Are you sure?',
-                                text: 'Are you sure you want to send this private message to every user on the site?',
-                                icon: 'warning',
-                                showConfirmButton: true,
-                                showCancelButton: true,
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    $root.submit();
-                                }
-                            })
+                            confirm('Are you sure you want to send this private message to every user on the site?') &&
+                                $root.submit()
                         "
                         class="form__button form__button--filled"
                     >
