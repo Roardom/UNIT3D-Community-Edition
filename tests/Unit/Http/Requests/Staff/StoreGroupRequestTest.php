@@ -97,10 +97,6 @@ test('rules', function (): void {
             'required',
             'boolean',
         ],
-        'can_upload' => [
-            'required',
-            'boolean',
-        ],
         'autogroup' => [
             'required',
             'boolean',

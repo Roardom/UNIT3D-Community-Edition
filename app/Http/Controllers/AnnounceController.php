@@ -20,6 +20,7 @@ use App\DTO\AnnounceGroupDTO;
 use App\DTO\AnnounceQueryDTO;
 use App\DTO\AnnounceTorrentDTO;
 use App\DTO\AnnounceUserDTO;
+use App\Enums\Permission;
 use App\Exceptions\TrackerException;
 use App\Jobs\ProcessAnnounce;
 use App\Models\BlacklistClient;
@@ -31,6 +32,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Random\RandomException;
 use Throwable;
 use Exception;
@@ -316,7 +318,7 @@ final class AnnounceController extends Controller
     {
         // Check Passkey Against Users Table
         $user = cache()->remember('user:'.$passkey, 8 * 3600, fn () => User::query()
-            ->select(['id', 'group_id', 'can_download'])
+            ->select(['id', 'group_id'])
             ->where('passkey', '=', $passkey)
             ->first());
 
@@ -326,7 +328,7 @@ final class AnnounceController extends Controller
         }
 
         // If User Download Rights Are Disabled Return Error to Client
-        if ($user->can_download === false && $queries->left !== 0) {
+        if (Gate::denies(Permission::ANNOUNCE_PEER_VIEW->gate()) && $queries->left !== 0) {
             throw new TrackerException(142);
         }
 

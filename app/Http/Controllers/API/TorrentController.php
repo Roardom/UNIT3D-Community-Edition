@@ -13,6 +13,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Enums\Permission;
 use App\Helpers\Bencode;
 use App\Helpers\TorrentHelper;
 use App\Helpers\TorrentTools;
@@ -33,6 +34,7 @@ use App\Traits\TorrentMeta;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use MarcReichel\IGDBLaravel\Models\Game;
@@ -97,7 +99,8 @@ class TorrentController extends BaseController
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        abort_if($user->can_upload === false || $user->group->can_upload == 0, 403, __('torrent.cant-upload').' '.__('torrent.cant-upload-desc'));
+
+        Gate::authorize(Permission::TORRENT_CREATE->gate());
 
         $requestFile = $request->file('torrent');
 

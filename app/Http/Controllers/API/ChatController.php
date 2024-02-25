@@ -15,6 +15,7 @@ namespace App\Http\Controllers\API;
 
 use App\Bots\NerdBot;
 use App\Bots\SystemBot;
+use App\Enums\Permission;
 use App\Events\Chatter;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BotResource;
@@ -30,6 +31,7 @@ use App\Models\UserEcho;
 use App\Repositories\ChatRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Gate;
 
 /**
  * @see \Tests\Feature\Http\Controllers\API\ChatControllerTest
@@ -139,7 +141,7 @@ class ChatController extends Controller
         $targeted = $request->input('targeted');
         $save = $request->get('save');
 
-        if ($user->can_chat === false) {
+        if (Gate::denies(Permission::MESSAGE_CREATE->gate())) {
             return response('error', 401);
         }
 

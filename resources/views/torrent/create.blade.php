@@ -574,7 +574,7 @@
     </section>
 @endsection
 
-@if ($user->can_upload == 1 && $user->group->can_upload == 1)
+@if (Gate::allows(\App\Enums\Permission::TORRENT_CREATE->gate()))
     @section('sidebar')
         <section class="panelV2">
             <h2 class="panel__heading">

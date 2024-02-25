@@ -37,7 +37,7 @@
                         id="name"
                         class="form__text"
                         type="text"
-                        name="name"
+                        name="group[name]"
                         placeholder=" "
                         value="{{ $group->name }}"
                     />
@@ -63,7 +63,7 @@
                         id="position"
                         class="form__text"
                         type="text"
-                        name="position"
+                        name="group[position]"
                         placeholder=" "
                         value="{{ $group->position }}"
                     />
@@ -76,7 +76,7 @@
                         id="level"
                         class="form__text"
                         type="text"
-                        name="level"
+                        name="group[level]"
                         placeholder=" "
                         value="{{ $group->level }}"
                     />
@@ -87,7 +87,7 @@
                         id="download_slots"
                         class="form__text"
                         type="text"
-                        name="download_slots"
+                        name="group[download_slots]"
                         placeholder=" "
                         value="{{ $group->download_slots }}"
                     />
@@ -100,7 +100,7 @@
                         id="color"
                         class="form__text"
                         type="text"
-                        name="color"
+                        name="group[color]"
                         placeholder=" "
                         value="{{ $group->color }}"
                     />
@@ -113,7 +113,7 @@
                         id="icon"
                         class="form__text"
                         type="text"
-                        name="icon"
+                        name="group[icon]"
                         placeholder=" "
                         value="{{ $group->icon }}"
                     />
@@ -126,7 +126,7 @@
                         id="effect"
                         class="form__text"
                         type="text"
-                        name="effect"
+                        name="group[effect]"
                         placeholder="GIF Effect"
                         value="{{ $group->effect }}"
                     />
@@ -135,11 +135,11 @@
                     </label>
                 </p>
                 <p class="form__group">
-                    <input name="is_internal" type="hidden" value="0" />
+                    <input name="group[is_internal]" type="hidden" value="0" />
                     <input
                         id="is_internal"
                         class="form__checkbox"
-                        name="is_internal"
+                        name="group[is_internal]"
                         type="checkbox"
                         value="1"
                         @checked($group->is_internal)
@@ -147,11 +147,11 @@
                     <label class="form__label" for="is_internal">Internal</label>
                 </p>
                 <p class="form__group">
-                    <input name="is_editor" type="hidden" value="0" />
+                    <input name="group[is_editor]" type="hidden" value="0" />
                     <input
                         id="is_editor"
                         class="form__checkbox"
-                        name="is_editor"
+                        name="group[is_editor]"
                         type="checkbox"
                         value="1"
                         @checked($group->is_editor)
@@ -159,11 +159,11 @@
                     <label class="form__label" for="is_editor">Editor</label>
                 </p>
                 <p class="form__group">
-                    <input name="is_modo" type="hidden" value="0" />
+                    <input name="group[is_modo]" type="hidden" value="0" />
                     <input
                         id="is_modo"
                         class="form__checkbox"
-                        name="is_modo"
+                        name="group[is_modo]"
                         type="checkbox"
                         value="1"
                         @checked($group->is_modo)
@@ -171,11 +171,11 @@
                     <label class="form__label" for="is_modo">Modo</label>
                 </p>
                 <p class="form__group">
-                    <input name="is_admin" type="hidden" value="0" />
+                    <input name="group[is_admin]" type="hidden" value="0" />
                     <input
                         id="is_admin"
                         class="form__checkbox"
-                        name="is_admin"
+                        name="group[is_admin]"
                         type="checkbox"
                         value="1"
                         @checked($group->is_admin)
@@ -183,11 +183,11 @@
                     <label class="form__label" for="is_admin">Admin</label>
                 </p>
                 <p class="form__group">
-                    <input name="is_owner" type="hidden" value="0" />
+                    <input name="group[is_owner]" type="hidden" value="0" />
                     <input
                         id="is_owner"
                         class="form__checkbox"
-                        name="is_owner"
+                        name="group[is_owner]"
                         type="checkbox"
                         value="1"
                         @checked($group->is_owner)
@@ -195,11 +195,11 @@
                     <label class="form__label" for="is_owner">Owner</label>
                 </p>
                 <p class="form__group">
-                    <input name="is_trusted" type="hidden" value="0" />
+                    <input name="group[is_trusted]" type="hidden" value="0" />
                     <input
                         id="is_trusted"
                         class="form__checkbox"
-                        name="is_trusted"
+                        name="group[is_trusted]"
                         type="checkbox"
                         value="1"
                         @checked($group->is_trusted)
@@ -207,11 +207,11 @@
                     <label class="form__label" for="is_trusted">Trusted</label>
                 </p>
                 <p class="form__group">
-                    <input name="is_immune" type="hidden" value="0" />
+                    <input name="group[is_immune]" type="hidden" value="0" />
                     <input
                         id="is_immune"
                         class="form__checkbox"
-                        name="is_immune"
+                        name="group[is_immune]"
                         type="checkbox"
                         value="1"
                         @checked($group->is_immune)
@@ -219,11 +219,11 @@
                     <label class="form__label" for="is_immune">Immune</label>
                 </p>
                 <p class="form__group">
-                    <input name="is_freeleech" type="hidden" value="0" />
+                    <input name="group[is_freeleech]" type="hidden" value="0" />
                     <input
                         id="is_freeleech"
                         class="form__checkbox"
-                        name="is_freeleech"
+                        name="group[is_freeleech]"
                         type="checkbox"
                         value="1"
                         @checked($group->is_freeleech)
@@ -231,11 +231,11 @@
                     <label class="form__label" for="is_freeleech">Freeleech</label>
                 </p>
                 <p class="form__group">
-                    <input name="is_double_upload" type="hidden" value="0" />
+                    <input name="group[is_double_upload]" type="hidden" value="0" />
                     <input
                         id="is_double_upload"
                         class="form__checkbox"
-                        name="is_double_upload"
+                        name="group[is_double_upload]"
                         type="checkbox"
                         value="1"
                         @checked($group->is_double_upload)
@@ -243,11 +243,11 @@
                     <label class="form__label" for="is_double_upload">Double Upload</label>
                 </p>
                 <p class="form__group">
-                    <input name="is_refundable" type="hidden" value="0" />
+                    <input name="group[is_refundable]" type="hidden" value="0" />
                     <input
                         id="is_refundable"
                         class="form__checkbox"
-                        name="is_refundable"
+                        name="group[is_refundable]"
                         type="checkbox"
                         value="1"
                         @checked($group->is_refundable)
@@ -255,35 +255,45 @@
                     <label class="form__label" for="is_refundable">Refundable Download</label>
                 </p>
                 <p class="form__group">
-                    <input name="is_incognito" type="hidden" value="0" />
+                    <input name="group[is_incognito]" type="hidden" value="0" />
                     <input
                         id="is_incognito"
                         class="form__checkbox"
-                        name="is_incognito"
+                        name="group[is_incognito]"
                         type="checkbox"
                         value="1"
                         @checked($group->is_incognito)
                     />
                     <label class="form__label" for="is_incognito">Incognito</label>
                 </p>
+                <div class="form__group">
+                    <fieldset class="form__fieldset">
+                        <legend class="form__legend">{{ __('rbac.roles') }}</legend>
+                        <div class="form__fieldset-checkbox-container--expand">
+                            @foreach ($roles as $role)
+                                <p class="form__group">
+                                    <label class="form__label">
+                                        <input
+                                            id="{{ $role->name }}"
+                                            class="form__checkbox"
+                                            name="roles[]"
+                                            type="checkbox"
+                                            value="{{ $role->id }}"
+                                            @checked($group->roles->contains($role))
+                                        />
+                                        {{ $role->name }}
+                                    </label>
+                                </p>
+                            @endforeach
+                        </div>
+                    </fieldset>
+                </div>
                 <p class="form__group">
-                    <input name="can_upload" type="hidden" value="0" />
-                    <input
-                        id="can_upload"
-                        class="form__checkbox"
-                        name="can_upload"
-                        type="checkbox"
-                        value="1"
-                        @checked($group->can_upload)
-                    />
-                    <label class="form__label" for="can_upload">Upload</label>
-                </p>
-                <p class="form__group">
-                    <input name="autogroup" type="hidden" value="0" />
+                    <input name="group[autogroup]" type="hidden" value="0" />
                     <input
                         id="autogroup"
                         class="form__checkbox"
-                        name="autogroup"
+                        name="group[autogroup]"
                         type="checkbox"
                         value="1"
                         x-model="autogroup"
@@ -299,7 +309,7 @@
                                 id="min_uploaded"
                                 class="form__text"
                                 type="text"
-                                name="min_uploaded"
+                                name="group[min_uploaded]"
                                 placeholder=" "
                                 value="{{ $group->min_uploaded }}"
                             />
@@ -312,7 +322,7 @@
                                 id="min_ratio"
                                 class="form__text"
                                 type="text"
-                                name="min_ratio"
+                                name="group[min_ratio]"
                                 placeholder=" "
                                 value="{{ $group->min_ratio }}"
                             />
@@ -325,7 +335,7 @@
                                 id="min_age"
                                 class="form__text"
                                 type="text"
-                                name="min_age"
+                                name="group[min_age]"
                                 placeholder=" "
                                 value="{{ $group->min_age }}"
                             />
@@ -338,7 +348,7 @@
                                 id="min_avg_seedtime"
                                 class="form__text"
                                 type="text"
-                                name="min_avg_seedtime"
+                                name="group[min_avg_seedtime]"
                                 placeholder=" "
                                 value="{{ $group->min_avg_seedtime }}"
                             />
@@ -351,7 +361,7 @@
                                 id="min_seedsize"
                                 class="form__text"
                                 type="text"
-                                name="min_seedsize"
+                                name="group[min_seedsize]"
                                 placeholder=" "
                                 value="{{ $group->min_seedsize }}"
                             />
