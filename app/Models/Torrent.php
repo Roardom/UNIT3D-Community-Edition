@@ -23,8 +23,10 @@ use App\Notifications\NewThank;
 use App\Traits\Auditable;
 use App\Traits\GroupedLastScope;
 use App\Traits\TorrentFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 use voku\helper\AntiXSS;
 
 /**
@@ -85,6 +87,7 @@ class Torrent extends Model
     use Auditable;
     use GroupedLastScope;
     use HasFactory;
+    use Searchable;
     use TorrentFilter;
 
     protected $guarded = [];
@@ -458,4 +461,122 @@ class Torrent extends Model
 
         return $this->free || config('other.freeleech') || $pfree;
     }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array<string, mixed>
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id'              => (string) $this->id,
+            'name'            => $this->name,
+            'description'     => $this->description,
+            'mediainfo'       => $this->mediainfo,
+            'bdinfo'          => $this->bdinfo,
+            'folder'          => $this->folder,
+            'size'            => $this->size,
+            'leechers'        => $this->leechers,
+            'seeders'         => $this->seeders,
+            'times_completed' => $this->times_completed,
+            'created_at'      => $this->created_at?->timestamp,
+            'bumped_at'       => $this->bumped_at,
+            'fl_until'        => $this->fl_until?->timestamp,
+            'du_until'        => $this->du_until?->timestamp,
+            'category_id'     => $this->category_id,
+            'category_name'   => match (true) {
+                $this->category?->music_meta => 'music',
+                $this->category?->game_meta  => 'game',
+                $this->category?->movie_meta => 'movie',
+                $this->category?->tv_meta    => 'tv',
+                default                      => 'no',
+            },
+            'username'         => $this->user?->username,
+            'imdb'             => $this->imdb,
+            'tvdb'             => $this->tvdb,
+            'tmdb'             => $this->tmdb,
+            'mal'              => $this->mal,
+            'igdb'             => $this->igdb,
+            'season_number'    => $this->season_number,
+            'episode_number'   => $this->episode_number,
+            'stream'           => $this->stream,
+            'free'             => $this->free,
+            'doubleup'         => $this->doubleup,
+            'refundable'       => $this->refundable,
+            'highspeed'        => $this->highspeed,
+            'featured'         => $this->featured,
+            'status'           => $this->status,
+            'anon'             => $this->anon,
+            'sticky'           => $this->sticky,
+            'sd'               => $this->sd,
+            'internal'         => $this->internal,
+            'release_year'     => $this->release_year,
+            'type_id'          => $this->type_id,
+            'resolution_id'    => $this->resolution_id,
+            'distributor_id'   => $this->distributor_id,
+            'region_id'        => $this->region_id,
+            'personal_release' => $this->personal_release,
+            'info_hash'        => bin2hex($this->info_hash),
+            'history'          => $this->history->select('user_id', 'seeder', 'active')->toArray(),
+            'companies'        => match (true) {
+                $this->category?->movie_meta => $this->movie?->companies?->select('id')?->toArray(),
+                $this->category?->tv_meta    => $this->tv?->companies?->select('id')?->toArray(),
+                default                      => [],
+            },
+            'genres' => match (true) {
+                $this->category?->movie_meta => $this->movie?->genres?->select('id')?->toArray(),
+                $this->category?->tv_meta    => $this->tv?->genres?->select('id')?->toArray(),
+                default                      => [],
+            },
+            'networks' => match (true) {
+                $this->category?->tv_meta => $this->tv?->networks?->select('id')?->toArray(),
+                default                   => [],
+            },
+            'collection_id' => match (true) {
+                $this->category?->movie_meta => $this->movie?->collection?->value('id'),
+                default                      => null,
+            },
+            'playlists' => $this->playlists->select('id')->toArray(),
+            'bookmarks' => $this->bookmarks->select('user_id')->toArray(),
+            'files'     => $this->files->select('name', 'size')->toArray(),
+            'keywords'  => $this->keywords->select('name')->toArray(),
+        ];
+    }
+
+    /**
+     * Modify the query used to retrieve models when making all of the models searchable.
+     *
+     * @param  Builder<self> $query
+     * @return Builder<self>
+     */
+    protected function makeAllSearchableUsing(Builder $query): Builder
+    {
+        return $query->with([
+            'history:torrent_id,user_id,seeder,active,completed_at',
+            'user:id,username',
+            'category:id,no_meta,music_meta,game_meta,tv_meta,movie_meta',
+            'type:id,name',
+            'movie:id' => [
+                'collection:id',
+                'companies:id',
+            ],
+            'tv:id' => [
+                'networks:id',
+                'companies:id',
+            ],
+            'playlists:id',
+            'bookmarks:torrent_id,user_id',
+            'files:torrent_id,name,size',
+            'keywords:torrent_id,name',
+        ]);
+    }
+
+    //    /**
+    //     * Determine if the model should be searchable.
+    //     */
+    //    public function shouldBeSearchable(): bool
+    //    {
+    //        return $this->status === self::APPROVED;
+    //    }
 }

@@ -22,13 +22,16 @@
         "hdvinnie/laravel-html-purifier": "^2.0.0",
         "hdvinnie/laravel-joypixel-emojis": "^2.0.0",
         "hdvinnie/laravel-security-headers": "^2.0.0",
+        "http-interop/http-factory-guzzle": "^1.2",
         "intervention/image": "^2.7.2",
         "joypixels/assets": "^v7.0.1",
         "laravel/fortify": "1.20.0",
         "laravel/framework": "^10.46.0",
+        "laravel/scout": "^10.8",
         "laravel/tinker": "^2.9.0",
         "livewire/livewire": "^v3.4.4",
         "marcreichel/igdb-laravel": "^3.8.1",
+        "meilisearch/meilisearch-php": "^1.7",
         "paragonie/constant_time_encoding": "^2.6.3",
         "spatie/laravel-backup": "^8.6.0",
         "spatie/laravel-cookie-consent": "^3.2.4",
@@ -64,7 +67,8 @@
             "ext-mcrypt": "1.0"
         },
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": false
         }
     },
     "extra": {

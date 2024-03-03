@@ -13,6 +13,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Helpers\TorrentTools;
 use App\Models\Category;
 use App\Models\Movie;
 use App\Models\Torrent;
@@ -23,9 +24,10 @@ use App\Traits\LivewireSort;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Url;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Closure;
+use Meilisearch\Endpoints\Indexes;
 
 class TorrentSearch extends Component
 {
@@ -45,56 +47,69 @@ class TorrentSearch extends Component
     public string $mediainfo = '';
 
     #[Url(history: true)]
+    #[Validate('sometimes|exists:users,username|not_regex:/[()"\']/i')]
     public string $uploader = '';
 
     #[Url(history: true)]
+    #[Validate('sometimes|not_regex:/[()"\']/i')]
     public string $keywords = '';
 
     #[Url(history: true)]
+    #[Validate('sometimes|integer')]
     public ?int $startYear = null;
 
     #[Url(history: true)]
+    #[Validate('sometimes|integer')]
     public ?int $endYear = null;
 
     #[Url(history: true)]
+    #[Validate('sometimes|integer')]
     public ?int $minSize = null;
 
     #[Url(history: true)]
+    #[Validate('sometimes|integer')]
     public int $minSizeMultiplier = 1;
 
     #[Url(history: true)]
+    #[Validate('sometimes|integer')]
     public ?int $maxSize = null;
 
     #[Url(history: true)]
+    #[Validate('sometimes|integer')]
     public int $maxSizeMultiplier = 1;
 
     /**
      * @var string[]
      */
     #[Url(history: true)]
+    #[Validate(['categories.*' => 'sometimes|exists:categories,id'])]
     public array $categories = [];
 
     /**
      * @var string[]
      */
     #[Url(history: true)]
+    #[Validate(['types.*' => 'sometimes|exists:types,id'])]
     public array $types = [];
 
     /**
      * @var string[]
      */
     #[Url(history: true)]
+    #[Validate(['resolutions.*' => 'sometimes|exists:resolutions,id'])]
     public array $resolutions = [];
 
     /**
      * @var string[]
      */
     #[Url(history: true)]
+    #[Validate(['genres.*' => 'sometimes|exists:genres,id'])]
     public array $genres = [];
 
     /**
      * @var string[]
      */
+    #[Validate(['regions.*' => 'sometimes|exists:regions,id'])]
     #[Url(history: true)]
     public array $regions = [];
 
@@ -102,114 +117,150 @@ class TorrentSearch extends Component
      * @var string[]
      */
     #[Url(history: true)]
+    #[Validate(['distributors.*' => 'sometimes|exists:distributors,id'])]
     public array $distributors = [];
 
     #[Url(history: true)]
+    #[Validate('in:any,include,exclude')]
     public string $adult = 'any';
 
     #[Url(history: true)]
+    #[Validate('sometimes|integer')]
     public ?int $tmdbId = null;
 
     #[Url(history: true)]
+    #[Validate('sometimes|integer')]
     public string $imdbId = '';
 
     #[Url(history: true)]
+    #[Validate('sometimes|integer')]
     public ?int $tvdbId = null;
 
     #[Url(history: true)]
+    #[Validate('sometimes|integer')]
     public ?int $malId = null;
 
     #[Url(history: true)]
+    #[Validate('sometimes|in:playlists,id')]
     public ?int $playlistId = null;
 
     #[Url(history: true)]
+    #[Validate('sometimes|in:collections,id')]
     public ?int $collectionId = null;
 
     #[Url(history: true)]
+    #[Validate('sometimes|in:networks,id')]
     public ?int $networkId = null;
 
     #[Url(history: true)]
+    #[Validate('sometimes|in:companies,id')]
     public ?int $companyId = null;
 
     /**
      * @var string[]
      */
     #[Url(history: true)]
+    #[Validate('sometimes|regex:/[a-z]{2}/i')]
     public array $primaryLanguages = [];
 
     /**
      * @var string[]
      */
     #[Url(history: true)]
+    #[Validate('sometimes|integer|min:0|max:100')]
     public array $free = [];
 
     #[Url(history: true)]
+    #[Validate('sometimes|boolean')]
     public bool $doubleup = false;
 
     #[Url(history: true)]
+    #[Validate('sometimes|boolean')]
     public bool $featured = false;
 
     #[Url(history: true)]
+    #[Validate('sometimes|boolean')]
     public bool $refundable = false;
 
     #[Url(history: true)]
+    #[Validate('sometimes|boolean')]
     public bool $stream = false;
 
     #[Url(history: true)]
+    #[Validate('sometimes|boolean')]
     public bool $sd = false;
 
     #[Url(history: true)]
+    #[Validate('sometimes|boolean')]
     public bool $highspeed = false;
 
     #[Url(history: true)]
+    #[Validate('sometimes|boolean')]
     public bool $bookmarked = false;
 
     #[Url(history: true)]
+    #[Validate('sometimes|boolean')]
     public bool $wished = false;
 
     #[Url(history: true)]
+    #[Validate('sometimes|boolean')]
     public bool $internal = false;
 
     #[Url(history: true)]
+    #[Validate('sometimes|boolean')]
     public bool $personalRelease = false;
 
     #[Url(history: true)]
+    #[Validate('sometimes|boolean')]
     public bool $alive = false;
 
     #[Url(history: true)]
+    #[Validate('sometimes|boolean')]
     public bool $dying = false;
 
     #[Url(history: true)]
+    #[Validate('sometimes|boolean')]
     public bool $dead = false;
 
     #[Url(history: true)]
+    #[Validate('sometimes|boolean')]
     public bool $graveyard = false;
 
     #[Url(history: true)]
+    #[Validate('sometimes|boolean')]
     public bool $notDownloaded = false;
 
     #[Url(history: true)]
+    #[Validate('sometimes|boolean')]
     public bool $downloaded = false;
 
     #[Url(history: true)]
+    #[Validate('sometimes|boolean')]
     public bool $seeding = false;
 
     #[Url(history: true)]
+    #[Validate('sometimes|boolean')]
     public bool $leeching = false;
 
     #[Url(history: true)]
+    #[Validate('sometimes|boolean')]
     public bool $incomplete = false;
 
     #[Url(history: true)]
+    #[Validate('sometimes|integer|min:0,max:100')]
     public int $perPage = 25;
 
+    // TODO: Change fields validated per layout
     #[Url(history: true)]
+    #[Validate('in:name,size,seeders,leechers,times_completed,created_at,bumped_at')]
     public string $sortField = 'bumped_at';
 
     #[Url(history: true)]
+    #[Validate('sometimes|in:asc,desc')]
     public string $sortDirection = 'desc';
 
     #[Url(history: true)]
+    #[Validate('sometimes|in:group,poster,list')]
     public string $view = 'list';
 
     final public function updating(string $field, mixed &$value): void
@@ -233,66 +284,53 @@ class TorrentSearch extends Component
         return cache()->get('personal_freeleech:'.auth()->id()) ?? false;
     }
 
-    /**
-     * @return Closure(Builder<Torrent>): Builder<Torrent>
-     */
-    final public function filters(): Closure
+    final public function filters(): string
     {
-        $user = auth()->user();
-        $isRegexAllowed = $user->group->is_modo || $user->group->is_editor;
-        $isRegex = fn ($field) => $isRegexAllowed
-            && \strlen((string) $field) > 2
-            && $field[0] === '/'
-            && $field[-1] === '/'
-            && @preg_match($field, 'Validate regex') !== false;
-
-        return fn (Builder $query) => $query
-            ->when($this->name !== '', fn ($query) => $query->ofName($this->name, $isRegex($this->name)))
-            ->when($this->description !== '', fn ($query) => $query->ofDescription($this->description, $isRegex($this->description)))
-            ->when($this->mediainfo !== '', fn ($query) => $query->ofMediainfo($this->mediainfo, $isRegex($this->mediainfo)))
-            ->when($this->uploader !== '', fn ($query) => $query->ofUploader($this->uploader))
-            ->when($this->keywords !== '', fn ($query) => $query->ofKeyword(array_map('trim', explode(',', $this->keywords))))
-            ->when($this->startYear !== null, fn ($query) => $query->releasedAfterOrIn($this->startYear))
-            ->when($this->endYear !== null, fn ($query) => $query->releasedBeforeOrIn($this->endYear))
-            ->when($this->minSize !== null, fn ($query) => $query->ofSizeGreaterOrEqualto($this->minSize * $this->minSizeMultiplier))
-            ->when($this->maxSize !== null, fn ($query) => $query->ofSizeLesserOrEqualTo($this->maxSize * $this->maxSizeMultiplier))
-            ->when($this->categories !== [], fn ($query) => $query->ofCategory($this->categories))
-            ->when($this->types !== [], fn ($query) => $query->ofType($this->types))
-            ->when($this->resolutions !== [], fn ($query) => $query->ofResolution($this->resolutions))
-            ->when($this->genres !== [], fn ($query) => $query->ofGenre($this->genres))
-            ->when($this->regions !== [], fn ($query) => $query->ofRegion($this->regions))
-            ->when($this->distributors !== [], fn ($query) => $query->ofDistributor($this->distributors))
-            ->when($this->tmdbId !== null, fn ($query) => $query->ofTmdb($this->tmdbId))
-            ->when($this->imdbId !== '', fn ($query) => $query->ofImdb((int) (preg_match('/tt0*(?=(\d{7,}))/', $this->imdbId, $matches) ? $matches[1] : $this->imdbId)))
-            ->when($this->tvdbId !== null, fn ($query) => $query->ofTvdb($this->tvdbId))
-            ->when($this->malId !== null, fn ($query) => $query->ofMal($this->malId))
-            ->when($this->playlistId !== null, fn ($query) => $query->ofPlaylist($this->playlistId))
-            ->when($this->collectionId !== null, fn ($query) => $query->ofCollection($this->collectionId))
-            ->when($this->companyId !== null, fn ($query) => $query->ofCompany($this->companyId))
-            ->when($this->networkId !== null, fn ($query) => $query->ofNetwork($this->networkId))
-            ->when($this->primaryLanguages !== [], fn ($query) => $query->ofPrimaryLanguage($this->primaryLanguages))
-            ->when($this->free !== [], fn ($query) => $query->ofFreeleech($this->free))
-            ->when($this->adult === 'include', fn ($query) => $query->ofAdult(true))
-            ->when($this->adult === 'exclude', fn ($query) => $query->ofAdult(false))
-            ->when($this->doubleup, fn ($query) => $query->doubleup())
-            ->when($this->featured, fn ($query) => $query->featured())
-            ->when($this->refundable, fn ($query) => $query->refundable())
-            ->when($this->stream, fn ($query) => $query->streamOptimized())
-            ->when($this->sd, fn ($query) => $query->sd())
-            ->when($this->highspeed, fn ($query) => $query->highspeed())
-            ->when($this->bookmarked, fn ($query) => $query->bookmarkedBy($user))
-            ->when($this->wished, fn ($query) => $query->wishedBy($user))
-            ->when($this->internal, fn ($query) => $query->internal())
-            ->when($this->personalRelease, fn ($query) => $query->personalRelease())
-            ->when($this->alive, fn ($query) => $query->alive())
-            ->when($this->dying, fn ($query) => $query->dying())
-            ->when($this->dead, fn ($query) => $query->dead())
-            ->when($this->graveyard, fn ($query) => $query->graveyard())
-            ->when($this->notDownloaded, fn ($query) => $query->notDownloadedBy($user))
-            ->when($this->downloaded, fn ($query) => $query->downloadedBy($user))
-            ->when($this->seeding, fn ($query) => $query->seededBy($user))
-            ->when($this->leeching, fn ($query) => $query->leechedBy($user))
-            ->when($this->incomplete, fn ($query) => $query->uncompletedBy($user));
+        return implode(' AND ', array_keys([
+            'uploader = '.$this->uploader                                                          => $this->uploader !== '',
+            'startYear <= '.$this->startYear                                                       => $this->startYear !== null,
+            'endYear >= '.$this->endYear                                                           => $this->endYear !== null,
+            'minSize <= '.$this->minSize                                                           => $this->minSize !== null,
+            'maxSize >= '.$this->maxSize                                                           => $this->maxSize !== null,
+            'categories IN ['.implode(',', $this->categories).']'                                  => $this->categories !== [],
+            'categories IN ['.implode(',', $this->types).']'                                       => $this->types !== [],
+            'categories IN ['.implode(',', $this->resolutions).']'                                 => $this->resolutions !== [],
+            'genres IN ['.implode(',', $this->genres).']'                                          => $this->genres !== [],
+            'regions IN ['.implode(',', $this->regions).']'                                        => $this->regions !== [],
+            'distributors IN ['.implode(',', $this->distributors).']'                              => $this->distributors !== [],
+            'keywords IN [("'.implode('"),("', TorrentTools::parseKeywords($this->keywords)).'")]' => $this->keywords !== '',
+            'tmdb = '.$this->tmdbId                                                                => $this->tmdbId !== null,
+            'imdb = '.$this->imdbId                                                                => $this->imdbId !== '',
+            'tvdb = '.$this->tvdbId                                                                => $this->tvdbId !== null,
+            'mal = '.$this->malId                                                                  => $this->malId !== null,
+            'playlists = '.$this->playlistId                                                       => $this->playlistId !== null,
+            'collection_id = '.$this->collectionId                                                 => $this->collectionId !== null,
+            'companies = '.$this->companyId                                                        => $this->companyId !== null,
+            'networks = '.$this->networkId                                                         => $this->networkId !== null,
+            // TODO: 'primary_language IN ['.implode(',', $this->primaryLanguages).']' => $this->primaryLanguages !== [],
+            'free IN ['.implode(',', $this->free).']' => $this->free !== [],
+            // TODO: 'adult = true'                                                    => $this->adult === 'include',
+            // TODO: 'adult = false'                                                   => $this->adult === 'exclude',
+            'doubleup = true'           => $this->doubleup,
+            'featured = true'           => $this->featured,
+            'refundable = true'         => $this->refundable,
+            'stream = true'             => $this->stream,
+            'sd = true'                 => $this->sd,
+            'highspeed = true'          => $this->highspeed,
+            'bookmarks = '.auth()->id() => $this->bookmarked,
+            // TODO:  ' wishes = '.auth()->id() => $this->wished,
+            'internal = true'                                                                          => $this->internal,
+            'personal_release = true'                                                                  => $this->personalRelease,
+            'seeders > 0'                                                                              => $this->alive,
+            'seeders = 1 AND times_completed > 3'                                                      => $this->dying,
+            'seeders = 0'                                                                              => $this->dead,
+            'seeders = 0 AND created_at < '.now()->subDays(30)->timestamp                              => $this->graveyard,
+            'history.user_id = '.auth()->id()                                                          => $this->downloaded,
+            'history.user_id != '.auth()->id()                                                         => $this->notDownloaded,
+            'history.user_id = '.auth()->id().' AND history.active = true'                             => $this->seeding,
+            'history.user_id = '.auth()->id().' AND history.active = false'                            => $this->leeching,
+            'history.user_id = '.auth()->id().' AND history.active = false AND history.seeder = false' => $this->incomplete,
+        ], true));
     }
 
     /**
@@ -301,63 +339,72 @@ class TorrentSearch extends Component
     #[Computed]
     final public function torrents(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
+        start_measure('torrents');
         $user = auth()->user();
 
-        // Whitelist which columns are allowed to be ordered by
-        if (!\in_array($this->sortField, [
-            'name',
-            'size',
-            'seeders',
-            'leechers',
-            'times_completed',
-            'created_at',
-            'bumped_at'
-        ])) {
-            $this->reset('sortField');
-        }
+        //        $this->validate();
 
-        $torrents = Torrent::with(['user:id,username,group_id', 'user.group', 'category', 'type', 'resolution'])
-            ->withCount([
-                'thanks',
-                'comments',
-                'seeds'   => fn ($query) => $query->where('active', '=', true)->where('visible', '=', true),
-                'leeches' => fn ($query) => $query->where('active', '=', true)->where('visible', '=', true),
-            ])
-            ->withExists([
-                'bookmarks'          => fn ($query) => $query->where('user_id', '=', $user->id),
-                'freeleechTokens'    => fn ($query) => $query->where('user_id', '=', $user->id),
-                'history as seeding' => fn ($query) => $query->where('user_id', '=', $user->id)
-                    ->where('active', '=', 1)
-                    ->where('seeder', '=', 1),
-                'history as leeching' => fn ($query) => $query->where('user_id', '=', $user->id)
-                    ->where('active', '=', 1)
-                    ->where('seeder', '=', 0),
-                'history as not_completed' => fn ($query) => $query->where('user_id', '=', $user->id)
-                    ->where('active', '=', 0)
-                    ->where('seeder', '=', 0)
-                    ->whereNull('completed_at'),
-                'history as not_seeding' => fn ($query) => $query->where('user_id', '=', $user->id)
-                    ->where('active', '=', 0)
-                    ->where(
-                        fn ($query) => $query
-                            ->where('seeder', '=', 1)
-                            ->orWhereNotNull('completed_at')
-                    ),
-            ])
-            ->selectRaw("
-                CASE
-                    WHEN category_id IN (SELECT `id` from `categories` where `movie_meta` = 1) THEN 'movie'
-                    WHEN category_id IN (SELECT `id` from `categories` where `tv_meta` = 1) THEN 'tv'
-                    WHEN category_id IN (SELECT `id` from `categories` where `game_meta` = 1) THEN 'game'
-                    WHEN category_id IN (SELECT `id` from `categories` where `music_meta` = 1) THEN 'music'
-                    WHEN category_id IN (SELECT `id` from `categories` where `no_meta` = 1) THEN 'no'
-                END as meta
-            ")
-            ->where($this->filters())
-            ->latest('sticky')
-            ->orderBy($this->sortField, $this->sortDirection)
+        $torrents = Torrent::search(
+            $this->name,
+            function (Indexes $meilisearch, string $query, array $options) {
+                $options['sort'] = [
+                    'sticky:desc',
+                    $this->sortField.':'.$this->sortDirection,
+                ];
+                $options['filter'] = $this->filters();
+
+                start_measure('search');
+                $results = $meilisearch->search($query, $options);
+                stop_measure('search');
+
+                return $results;
+            }
+        )
+            ->query(
+                fn (Builder $query) => $query
+                    ->with(['user:id,username,group_id', 'user.group', 'category', 'type', 'resolution'])
+                    ->withCount([
+                        'thanks',
+                        'comments',
+                        'seeds'   => fn ($query) => $query->where('active', '=', true)->where('visible', '=', true),
+                        'leeches' => fn ($query) => $query->where('active', '=', true)->where('visible', '=', true),
+                    ])
+                    ->withExists([
+                        'bookmarks'          => fn ($query) => $query->where('user_id', '=', $user->id),
+                        'freeleechTokens'    => fn ($query) => $query->where('user_id', '=', $user->id),
+                        'history as seeding' => fn ($query) => $query->where('user_id', '=', $user->id)
+                            ->where('active', '=', 1)
+                            ->where('seeder', '=', 1),
+                        'history as leeching' => fn ($query) => $query->where('user_id', '=', $user->id)
+                            ->where('active', '=', 1)
+                            ->where('seeder', '=', 0),
+                        'history as not_completed' => fn ($query) => $query->where('user_id', '=', $user->id)
+                            ->where('active', '=', 0)
+                            ->where('seeder', '=', 0)
+                            ->whereNull('completed_at'),
+                        'history as not_seeding' => fn ($query) => $query->where('user_id', '=', $user->id)
+                            ->where('active', '=', 0)
+                            ->where(
+                                fn ($query) => $query
+                                    ->where('seeder', '=', 1)
+                                    ->orWhereNotNull('completed_at')
+                            ),
+                    ])
+                    ->selectRaw("
+                        CASE
+                            WHEN category_id IN (SELECT `id` from `categories` where `movie_meta` = 1) THEN 'movie'
+                            WHEN category_id IN (SELECT `id` from `categories` where `tv_meta` = 1) THEN 'tv'
+                            WHEN category_id IN (SELECT `id` from `categories` where `game_meta` = 1) THEN 'game'
+                            WHEN category_id IN (SELECT `id` from `categories` where `music_meta` = 1) THEN 'music'
+                            WHEN category_id IN (SELECT `id` from `categories` where `no_meta` = 1) THEN 'no'
+                        END as meta
+                    ")
+            )
             ->paginate(min($this->perPage, 100));
 
+        stop_measure('torrents');
+
+        start_measure('eager load');
         $movieIds = $torrents->getCollection()->where('meta', '=', 'movie')->pluck('tmdb');
         $tvIds = $torrents->getCollection()->where('meta', '=', 'tv')->pluck('tmdb');
         $gameIds = $torrents->getCollection()->where('meta', '=', 'game')->pluck('igdb');
@@ -380,6 +427,8 @@ class TorrentSearch extends Component
 
             return $torrent;
         });
+
+        stop_measure('eager load');
 
         return $torrents;
     }

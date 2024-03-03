@@ -108,7 +108,7 @@
                 @endif
 
                 <span class="torrent-search--list__type">
-                    {{ $torrent->type->name }}
+                    {{ $torrent->type?->name ?? 'No type' }}
                 </span>
             </div>
         </div>
