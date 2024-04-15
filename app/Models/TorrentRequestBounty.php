@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int                             $id
  * @property int                             $user_id
- * @property float                           $seedbonus
+ * @property string                          $seedbonus
  * @property int                             $requests_id
  * @property int                             $anon
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -49,6 +49,15 @@ class TorrentRequestBounty extends Model
      * @var string[]
      */
     protected $guarded = ['id', 'created_at', 'updated_at'];
+
+    /**
+     * The Attributes That Should Be Mutated To Dates.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'seedbonus' => 'decimal:2',
+    ];
 
     /**
      * Belongs To A User.

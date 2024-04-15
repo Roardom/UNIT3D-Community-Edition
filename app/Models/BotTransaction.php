@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int                             $id
  * @property string|null                     $type
- * @property float                           $cost
+ * @property string                          $cost
  * @property int                             $user_id
  * @property int                             $bot_id
  * @property int                             $to_user
@@ -45,6 +45,15 @@ class BotTransaction extends Model
      * @var bool
      */
     public $timestamps = true;
+
+    /**
+     * The Attributes That Should Be Mutated To Dates.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'cost' => 'decimal:2',
+    ];
 
     /**
      * Belongs To A User.
