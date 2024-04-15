@@ -21,9 +21,19 @@ parameters:
 			path: app/Actions/Fortify/UpdateUserPassword.php
 
 		-
+			message: "#^Property App\\\\Models\\\\BotTransaction\\:\\:\\$cost \\(string\\) does not accept float\\.$#"
+			count: 1
+			path: app/Bots/CasinoBot.php
+
+		-
 			message: "#^Property App\\\\Models\\\\BotTransaction\\:\\:\\$to_bot \\(int\\) does not accept true\\.$#"
 			count: 1
 			path: app/Bots/CasinoBot.php
+
+		-
+			message: "#^Property App\\\\Models\\\\BotTransaction\\:\\:\\$cost \\(string\\) does not accept float\\.$#"
+			count: 1
+			path: app/Bots/NerdBot.php
 
 		-
 			message: "#^Property App\\\\Models\\\\BotTransaction\\:\\:\\$to_bot \\(int\\) does not accept true\\.$#"
@@ -654,11 +664,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$torrentFile of static method App\\\\Helpers\\\\TorrentTools\\:\\:normalizeTorrent\\(\\) expects Illuminate\\\\Http\\\\UploadedFile, array\\<int, Illuminate\\\\Http\\\\UploadedFile\\>\\|Illuminate\\\\Http\\\\UploadedFile\\|null given\\.$#"
 			count: 1
 			path: app/Http/Controllers/API/TorrentController.php
-
-		-
-			message: "#^Parameter \\#1 \\$boolean of function abort_unless expects bool, int given\\.$#"
-			count: 1
-			path: app/Http/Controllers/ApprovedRequestFillController.php
 
 		-
 			message: "#^Cannot access property \\$alive on bool\\|stdClass\\.$#"
@@ -1331,16 +1336,6 @@ parameters:
 			path: app/Models/ApplicationUrlProof.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function htmlspecialchars expects string, array\\<string\\>\\|string given\\.$#"
-			count: 1
-			path: app/Models/Article.php
-
-		-
-			message: "#^Unable to resolve the template type TXssCleanInput in call to method voku\\\\helper\\\\AntiXSS\\:\\:xss_clean\\(\\)$#"
-			count: 1
-			path: app/Models/Article.php
-
-		-
 			message: "#^PHPDoc type array\\<string\\> of property App\\\\Models\\\\Audit\\:\\:\\$fillable is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
 			count: 1
 			path: app/Models/Audit.php
@@ -1369,56 +1364,6 @@ parameters:
 			message: "#^PHPDoc type array\\<string\\> of property App\\\\Models\\\\Option\\:\\:\\$fillable is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
 			count: 1
 			path: app/Models/Option.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function htmlspecialchars expects string, array\\<string\\>\\|string given\\.$#"
-			count: 1
-			path: app/Models/Playlist.php
-
-		-
-			message: "#^Unable to resolve the template type TXssCleanInput in call to method voku\\\\helper\\\\AntiXSS\\:\\:xss_clean\\(\\)$#"
-			count: 1
-			path: app/Models/Playlist.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function htmlspecialchars expects string, array\\<string\\>\\|string given\\.$#"
-			count: 1
-			path: app/Models/Post.php
-
-		-
-			message: "#^Unable to resolve the template type TXssCleanInput in call to method voku\\\\helper\\\\AntiXSS\\:\\:xss_clean\\(\\)$#"
-			count: 1
-			path: app/Models/Post.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function htmlspecialchars expects string, array\\<string\\>\\|string given\\.$#"
-			count: 1
-			path: app/Models/Torrent.php
-
-		-
-			message: "#^Unable to resolve the template type TXssCleanInput in call to method voku\\\\helper\\\\AntiXSS\\:\\:xss_clean\\(\\)$#"
-			count: 1
-			path: app/Models/Torrent.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function htmlspecialchars expects string, array\\<string\\>\\|string given\\.$#"
-			count: 1
-			path: app/Models/TorrentRequest.php
-
-		-
-			message: "#^Unable to resolve the template type TXssCleanInput in call to method voku\\\\helper\\\\AntiXSS\\:\\:xss_clean\\(\\)$#"
-			count: 1
-			path: app/Models/TorrentRequest.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function htmlspecialchars expects string, array\\<string\\>\\|string given\\.$#"
-			count: 2
-			path: app/Models/User.php
-
-		-
-			message: "#^Unable to resolve the template type TXssCleanInput in call to method voku\\\\helper\\\\AntiXSS\\:\\:xss_clean\\(\\)$#"
-			count: 2
-			path: app/Models/User.php
 
 		-
 			message: "#^Cannot access offset 'validator' on Illuminate\\\\Contracts\\\\Foundation\\\\Application\\.$#"

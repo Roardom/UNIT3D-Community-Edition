@@ -15,8 +15,5 @@ parameters:
     excludePaths:
         - app/Helpers/Markdown
         - app/Helpers/MarkdownExtra
-    level: 8
+    level: 7
     checkOctaneCompatibility: true
-    ignoreErrors:
-        - '#Cannot access property \$[a-z_]+ on App\\Models\\[a-zA-Z]+\|null#'
-        - '#Cannot call method [a-zA-Z]+\(\) on App\\Models\\[a-zA-Z]+\|null#'
