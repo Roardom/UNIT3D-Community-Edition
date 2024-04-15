@@ -56,6 +56,8 @@ class CasinoBot
      */
     public function replaceVars(?string $output): string
     {
+        $output ??= '';
+
         $output = str_replace(['{me}', '{command}'], [$this->bot->name, $this->bot->command], $output);
 
         if (str_contains((string) $output, '{bots}')) {
@@ -89,11 +91,8 @@ class CasinoBot
 
         if ($v->passes()) {
             $value = $amount;
-            $this->bot->seedbonus += $value;
-            $this->bot->save();
-
-            $this->target->seedbonus -= $value;
-            $this->target->save();
+            $this->bot->increment('seedbonus', $value);
+            $this->target->decrement('seedbonus', $value);
 
             $botTransaction = new BotTransaction();
             $botTransaction->type = 'bon';
@@ -119,7 +118,7 @@ class CasinoBot
      *
      * @throws Exception
      */
-    public function getDonations(string $duration = 'default'): string
+    public function getDonations(): string
     {
         $donations = cache()->get('casinobot-donations');
 
@@ -185,11 +184,11 @@ class CasinoBot
 
         if (\array_key_exists($x, $command)) {
             if ($command[$x] === 'donations') {
-                $log = $this->getDonations($params);
+                $log = $this->getDonations();
             }
 
             if ($command[$x] === 'donate') {
-                $log = $this->putDonate((float) $params, $wildcard);
+                $log = $this->putDonate((float) $params, $wildcard ?? ['']);
             }
         }
 

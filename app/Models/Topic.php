@@ -196,6 +196,6 @@ class Topic extends Model
             return true;
         }
 
-        return $this->forum->getPermission()?->read_topic;
+        return $this->forum->getPermission()?->read_topic ?? false;
     }
 }

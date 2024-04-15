@@ -239,7 +239,7 @@ class ChatController extends Controller
         }
 
         if ($runbot !== null) {
-            return $runbot->process($which, $request->user(), $message, 0);
+            return $runbot->process($which ?? '', $request->user(), $message, 0);
         }
 
         $echo = false;

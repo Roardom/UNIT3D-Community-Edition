@@ -231,7 +231,7 @@ class NerdBot
 
     public function getHelp(): string
     {
-        return $this->replaceVars($this->bot->help);
+        return $this->replaceVars($this->bot->help ?? '');
     }
 
     public function getKing(): string
@@ -256,11 +256,9 @@ class NerdBot
 
         if ($v->passes()) {
             $value = $amount;
-            $this->bot->seedbonus += $value;
-            $this->bot->save();
+            $this->bot->increment('seedbonus', $value);
 
-            $this->target->seedbonus -= $value;
-            $this->target->save();
+            $this->target->decrement('seedbonus', $value);
 
             $botTransaction = new BotTransaction();
             $botTransaction->type = 'bon';
@@ -319,7 +317,7 @@ class NerdBot
                 'banker'        => $this->getBanker(),
                 'bans'          => $this->getBans(),
                 'donations'     => $this->getDonations(),
-                'donate'        => $this->putDonate((float) $params, $wildcard),
+                'donate'        => $this->putDonate((float) $params, $wildcard ?? []),
                 'doubleupload'  => $this->getDoubleUpload(),
                 'freeleech'     => $this->getFreeleech(),
                 'help'          => $this->getHelp(),

@@ -342,14 +342,14 @@ class TV
      */
     public function getTv(): ?array
     {
-        if (isset($this->data['id'])) {
+        if (isset($this->data['id'], $this->data['name'])) {
             return [
                 'backdrop'           => $this->tmdb->image('backdrop', $this->data),
                 'episode_run_time'   => $this->tmdb->ifHasItems('episode_run_time', $this->data),
                 'first_air_date'     => $this->tmdb->ifExists('first_air_date', $this->data),
                 'homepage'           => $this->data['homepage'] ?? null,
                 'imdb_id'            => substr($this->data['external_ids']['imdb_id'] ?? '', 2),
-                'tvdb_id'            => (string) $this->data['external_ids']['tvdb_id'],
+                'tvdb_id'            => (string) ($this->data['external_ids']['tvdb_id'] ?? 0),
                 'in_production'      => $this->data['in_production'] ?? null,
                 'last_air_date'      => $this->data['last_air_date'] ?? null,
                 'name'               => Str::limit($this->data['name'], 200),
@@ -382,7 +382,7 @@ class TV
     {
         $genres = [];
 
-        foreach ($this->data['genres'] as $genre) {
+        foreach ($this->data['genres'] ?? [] as $genre) {
             $genres[] = [
                 'id'   => $genre['id'],
                 'name' => $genre['name'],
@@ -409,7 +409,7 @@ class TV
         $credits = [];
 
         foreach ($this->data['aggregate_credits']['cast'] ?? [] as $person) {
-            foreach ($person['roles'] as $role) {
+            foreach ($person['roles'] ?? [] as $role) {
                 $credits[] = [
                     'tv_id'         => $this->data['id'],
                     'person_id'     => $person['id'],
@@ -421,7 +421,11 @@ class TV
         }
 
         foreach ($this->data['aggregate_credits']['crew'] ?? [] as $person) {
-            foreach ($person['jobs'] as $job) {
+            foreach ($person['jobs'] ?? [] as $job) {
+                if (!\array_key_exists('job', $job) || $job['job'] === null) {
+                    continue;
+                }
+
                 $occupation = Occupation::from_tmdb_job($job['job']);
 
                 if ($occupation !== null) {
@@ -462,7 +466,7 @@ class TV
     {
         $seasons = [];
 
-        foreach ($this->data['seasons'] as $season) {
+        foreach ($this->data['seasons'] ?? [] as $season) {
             if ($season['season_number'] !== null) {
                 $seasons[] = [
                     'id'            => $season['id'],
@@ -497,6 +501,10 @@ class TV
         $recommendations = [];
 
         foreach ($this->data['recommendations']['results'] ?? [] as $recommendation) {
+            if ($recommendation === null || $recommendation['id'] === null) {
+                continue;
+            }
+
             if ($tv_ids->contains($recommendation['id'])) {
                 $recommendations[] = [
                     'recommendation_tv_id' => $recommendation['id'],

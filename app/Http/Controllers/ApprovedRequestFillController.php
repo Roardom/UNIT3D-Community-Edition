@@ -47,14 +47,14 @@ class ApprovedRequestFillController extends Controller
         abort_unless(($request->user()->id === $torrentRequest->user_id || $request->user()->group->is_modo) && $torrentRequest->approved_by === null, 403);
 
         $approver = $request->user();
-        $filler = $torrentRequest->filler;
+        $filler = $torrentRequest->filler ?? abort(500);
 
         $torrentRequest->update([
             'approved_by'   => $approver->id,
             'approved_when' => Carbon::now(),
         ]);
 
-        $filler->increment('seedbonus', $torrentRequest->bounty);
+        $torrentRequest->filler()->incrementEach(['seedbonus' => $torrentRequest->bounty]);
 
         // Achievements
         if (!$torrentRequest->filled_anon) {
@@ -88,7 +88,7 @@ class ApprovedRequestFillController extends Controller
      */
     public function destroy(Request $request, TorrentRequest $torrentRequest): \Illuminate\Http\RedirectResponse
     {
-        abort_unless($request->user()->group->is_modo, 403);
+        abort_unless((bool) $request->user()->group->is_modo, 403);
 
         $filler = $torrentRequest->filler;
 
@@ -98,9 +98,9 @@ class ApprovedRequestFillController extends Controller
         ]);
 
         // TODO: Change database column to signed from unsigned to handle negative bon.
-        $refunded = min($torrentRequest->bounty, $filler->seedbonus);
+        $refunded = min($torrentRequest->bounty, (float) $filler->seedbonus);
 
-        $filler->decrement('seedbonus', $refunded);
+        $torrentRequest->filler()->decrementEach(['seedbonus' => $refunded]);
 
         return to_route('requests.show', ['torrentRequest' => $torrentRequest])
             ->withSuccess(trans('request.request-reset'));
