@@ -79,7 +79,7 @@ use voku\helper\AntiXSS;
  * @property string|null                     $api_token
  * @property \Illuminate\Support\Carbon|null $last_login
  * @property \Illuminate\Support\Carbon|null $last_action
- * @property string|null                     $disabled_at
+ * @property \Illuminate\Support\Carbon|null $disabled_at
  * @property int|null                        $deleted_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -121,6 +121,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<string, string>
      */
     protected $casts = [
+        'disabled_at'  => 'datetime',
         'last_login'   => 'datetime',
         'last_action'  => 'datetime',
         'hidden'       => 'boolean',

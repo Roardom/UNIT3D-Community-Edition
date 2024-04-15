@@ -71,7 +71,7 @@ use voku\helper\AntiXSS;
  * @property int                                                                        $internal
  * @property \Illuminate\Support\Carbon|null                                            $created_at
  * @property \Illuminate\Support\Carbon|null                                            $updated_at
- * @property string|null                                                                $bumped_at
+ * @property \Illuminate\Support\Carbon|null                                            $bumped_at
  * @property \Illuminate\Support\Carbon|null                                            $fl_until
  * @property \Illuminate\Support\Carbon|null                                            $du_until
  * @property string|null                                                                $release_year
@@ -101,6 +101,7 @@ class Torrent extends Model
         'igdb'         => 'integer',
         'fl_until'     => 'datetime',
         'du_until'     => 'datetime',
+        'bumped_at'    => 'datetime',
         'doubleup'     => 'boolean',
         'refundable'   => 'boolean',
         'featured'     => 'boolean',

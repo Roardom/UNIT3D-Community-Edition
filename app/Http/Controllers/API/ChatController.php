@@ -421,6 +421,10 @@ class ChatController extends Controller
         cache()->put('user-echoes'.$user->id, $senderEchoes, $expiresAt);
         event(new Chatter('echo', $user->id, UserEchoResource::collection($senderEchoes)));
 
+        /**
+         * @phpstan-ignore-next-line Laravel automatically converts models to json
+         * @see https://github.com/laravel/framework/blob/48246da2320c95a17bfae922d36264105a917906/src/Illuminate/Http/Response.php#L56
+         */
         return response($user);
     }
 
@@ -436,6 +440,10 @@ class ChatController extends Controller
         cache()->put('user-echoes'.$user->id, $senderEchoes, $expiresAt);
         event(new Chatter('echo', $user->id, UserEchoResource::collection($senderEchoes)));
 
+        /**
+         * @phpstan-ignore-next-line Laravel automatically converts models to json
+         * @see https://github.com/laravel/framework/blob/48246da2320c95a17bfae922d36264105a917906/src/Illuminate/Http/Response.php#L56
+         */
         return response($user);
     }
 
@@ -451,6 +459,10 @@ class ChatController extends Controller
         cache()->put('user-echoes'.$user->id, $senderEchoes, $expiresAt);
         event(new Chatter('echo', $user->id, UserEchoResource::collection($senderEchoes)));
 
+        /**
+         * @phpstan-ignore-next-line Laravel automatically converts models to json
+         * @see https://github.com/laravel/framework/blob/48246da2320c95a17bfae922d36264105a917906/src/Illuminate/Http/Response.php#L56
+         */
         return response($user);
     }
 
@@ -468,6 +480,10 @@ class ChatController extends Controller
         cache()->put('user-audibles'.$user->id, $senderAudibles, $expiresAt);
         event(new Chatter('audible', $user->id, UserAudibleResource::collection($senderAudibles)));
 
+        /**
+         * @phpstan-ignore-next-line Laravel automatically converts models to json
+         * @see https://github.com/laravel/framework/blob/48246da2320c95a17bfae922d36264105a917906/src/Illuminate/Http/Response.php#L56
+         */
         return response($user);
     }
 
@@ -485,6 +501,10 @@ class ChatController extends Controller
         cache()->put('user-audibles'.$user->id, $senderAudibles, $expiresAt);
         event(new Chatter('audible', $user->id, UserAudibleResource::collection($senderAudibles)));
 
+        /**
+         * @phpstan-ignore-next-line Laravel automatically converts models to json
+         * @see https://github.com/laravel/framework/blob/48246da2320c95a17bfae922d36264105a917906/src/Illuminate/Http/Response.php#L56
+         */
         return response($user);
     }
 
@@ -502,6 +522,10 @@ class ChatController extends Controller
         cache()->put('user-audibles'.$user->id, $senderAudibles, $expiresAt);
         event(new Chatter('audible', $user->id, UserAudibleResource::collection($senderAudibles)));
 
+        /**
+         * @phpstan-ignore-next-line Laravel automatically converts models to json
+         * @see https://github.com/laravel/framework/blob/48246da2320c95a17bfae922d36264105a917906/src/Illuminate/Http/Response.php#L56
+         */
         return response($user);
     }
 
@@ -520,6 +544,10 @@ class ChatController extends Controller
         $user->chatStatus()->associate($status);
         $user->save();
 
+        /**
+         * @phpstan-ignore-next-line Laravel automatically converts models to json
+         * @see https://github.com/laravel/framework/blob/48246da2320c95a17bfae922d36264105a917906/src/Illuminate/Http/Response.php#L56
+         */
         return response($user);
     }
 
@@ -564,6 +592,10 @@ class ChatController extends Controller
             event(new Chatter('echo', $user->id, UserEchoResource::collection($senderEchoes)));
         }
 
+        /**
+         * @phpstan-ignore-next-line Laravel automatically converts models to json
+         * @see https://github.com/laravel/framework/blob/48246da2320c95a17bfae922d36264105a917906/src/Illuminate/Http/Response.php#L56
+         */
         return response($user);
     }
 
@@ -571,6 +603,10 @@ class ChatController extends Controller
     {
         $user = $request->user()->load(['chatStatus', 'chatroom', 'group', 'echoes']);
 
+        /**
+         * @phpstan-ignore-next-line Laravel automatically converts models to json
+         * @see https://github.com/laravel/framework/blob/48246da2320c95a17bfae922d36264105a917906/src/Illuminate/Http/Response.php#L56
+         */
         return response($user);
     }
 
@@ -578,6 +614,10 @@ class ChatController extends Controller
     {
         $user = $request->user()->load(['chatStatus', 'chatroom', 'group', 'echoes']);
 
+        /**
+         * @phpstan-ignore-next-line Laravel automatically converts models to json
+         * @see https://github.com/laravel/framework/blob/48246da2320c95a17bfae922d36264105a917906/src/Illuminate/Http/Response.php#L56
+         */
         return response($user);
     }
 }

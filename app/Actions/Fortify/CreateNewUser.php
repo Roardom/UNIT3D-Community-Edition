@@ -67,9 +67,11 @@ class CreateNewUser implements CreatesNewUsers
                 Rule::when(config('captcha.enabled') === true, 'hiddencaptcha'),
             ],
             'code' => [
-                Rule::when(config('other.invite-only') === true, 'required'),
-                Rule::when(config('other.invite-only') === true, Rule::exists('invites', 'code')->whereNull('accepted_by'))
-            ]
+                Rule::when(config('other.invite-only') === true, [
+                    'required',
+                    Rule::exists('invites', 'code')->whereNull('accepted_by'),
+                ]),
+            ],
         ])->validate();
 
         $validatingGroup = cache()->rememberForever('validating_group', fn () => Group::query()->where('slug', '=', 'validating')->pluck('id'));
