@@ -73,7 +73,7 @@ class TorrentHelper
 
         $torrent->save();
 
-        $uploader = $torrent->user;
+        $uploader = $torrent->user ?? abort(500, 'Uploader not found');
 
         $wishes = Wish::where('tmdb', '=', $torrent->tmdb)->whereNull('source')->get();
 
@@ -124,7 +124,7 @@ class TorrentHelper
             (new IRCAnnounceBot())
                 ->to(config('irc-bot.channel'))
                 ->say('['.config('app.name').'] '.($anon ? 'An anonymous user' : $username).' has uploaded '.$torrent->name.' grab it now!')
-                ->say('[Category: '.$torrent->category->name.'] [Type: '.$torrent->type->name.'] [Size: '.$torrent->getSize().']')
+                ->say('[Category: '.($torrent->category?->name ?? 'No Category').'] [Type: '.($torrent->type?->name ?? 'No Res').'] [Size: '.$torrent->getSize().']')
                 ->say(sprintf('[Link: %s/torrents/', $appurl).$id.']');
         }
 
