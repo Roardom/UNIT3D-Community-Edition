@@ -32,7 +32,7 @@ class CasinoBot
 {
     private Bot $bot;
 
-    private ?User $target = null;
+    private User $target;
 
     private string $type;
 
@@ -294,8 +294,8 @@ class CasinoBot
 
         if ($type === 'public') {
             if ($txt !== '') {
-                $this->chatRepository->message($target->id, $target->chatroom->id, $message, null, null);
-                $this->chatRepository->message(1, $target->chatroom->id, $txt, null, $this->bot->id);
+                $this->chatRepository->message($target->id, $target->chatroom_id, $message, null, null);
+                $this->chatRepository->message(1, $target->chatroom_id, $txt, null, $this->bot->id);
             }
 
             return response('success');
