@@ -141,7 +141,7 @@ trait Auditable
             return null;
         }
 
-        return auth()->user()->id;
+        return auth()->user()?->id;
     }
 
     /**
