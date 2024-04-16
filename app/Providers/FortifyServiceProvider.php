@@ -51,7 +51,7 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->instance(LoginResponse::class, new class () implements LoginResponse {
             public function toResponse($request): \Illuminate\Http\RedirectResponse
             {
-                $user = $request->user();
+                $user = $request->user() ?? abort(403);
 
                 // Check if user is disabled
                 $disabledGroup = cache()->rememberForever('disabled_group', fn () => Group::query()->where('slug', '=', 'disabled')->pluck('id'));
@@ -59,12 +59,12 @@ class FortifyServiceProvider extends ServiceProvider
 
                 if ($user->group_id == $disabledGroup[0]) {
                     $user->group_id = $memberGroup[0];
-                    $user->can_upload = 1;
-                    $user->can_download = 1;
-                    $user->can_comment = 1;
-                    $user->can_invite = 1;
-                    $user->can_request = 1;
-                    $user->can_chat = 1;
+                    $user->can_upload = true;
+                    $user->can_download = true;
+                    $user->can_comment = true;
+                    $user->can_invite = true;
+                    $user->can_request = true;
+                    $user->can_chat = true;
                     $user->disabled_at = null;
                     $user->save();
 
@@ -73,7 +73,7 @@ class FortifyServiceProvider extends ServiceProvider
                 }
 
                 // Check if user has read the rules
-                if ($request->user()->read_rules == 0) {
+                if (! $user->read_rules) {
                     return redirect()->to(config('other.rules_url'))
                         ->withWarning(trans('auth.require-rules'));
                 }
@@ -113,13 +113,13 @@ class FortifyServiceProvider extends ServiceProvider
 
                 $user = $request->user();
 
-                if ($user->group_id !== $bannedGroup[0]) {
+                if ($user !== null && $user->group_id !== $bannedGroup[0]) {
                     if ($user->group_id === $validatingGroup[0]) {
-                        $user->can_upload = 1;
-                        $user->can_download = 1;
-                        $user->can_request = 1;
-                        $user->can_comment = 1;
-                        $user->can_invite = 1;
+                        $user->can_upload = true;
+                        $user->can_download = true;
+                        $user->can_request = true;
+                        $user->can_comment = true;
+                        $user->can_invite = true;
                         $user->group_id = $memberGroup[0];
                         $user->active = 1;
                     }
