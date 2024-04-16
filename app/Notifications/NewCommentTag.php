@@ -52,95 +52,95 @@ class NewCommentTag extends Notification implements ShouldQueue
         if ($this->type === 'torrent') {
             if ($this->comment->anon == 0) {
                 return [
-                    'title' => $this->comment->user->username.' Has Tagged You',
-                    'body'  => $this->comment->user->username.' has tagged you in an comment on Torrent '.$this->comment->commentable->name,
-                    'url'   => '/torrents/'.$this->comment->commentable->id,
+                    'title' => $this->comment->user()->soleValue('username').' Has Tagged You',
+                    'body'  => $this->comment->user()->soleValue('username').' has tagged you in an comment on Torrent '.$this->comment->commentable()->soleValue('name'),
+                    'url'   => '/torrents/'.$this->comment->commentable_id,
                 ];
             }
 
             return [
                 'title' => 'You Have Been Tagged',
-                'body'  => 'Anonymous has tagged you in an comment on Torrent '.$this->comment->commentable->name,
-                'url'   => '/torrents/'.$this->comment->commentable->id,
+                'body'  => 'Anonymous has tagged you in an comment on Torrent '.$this->comment->commentable()->soleValue('name'),
+                'url'   => '/torrents/'.$this->comment->commentable_id,
             ];
         }
 
         if ($this->type === 'torrent request') {
             if ($this->comment->anon == 0) {
                 return [
-                    'title' => $this->comment->user->username.' Has Tagged You',
-                    'body'  => $this->comment->user->username.' has tagged you in an comment on Torrent Request '.$this->comment->commentable->name,
-                    'url'   => '/requests/'.$this->comment->commentable->id,
+                    'title' => $this->comment->user()->soleValue('username').' Has Tagged You',
+                    'body'  => $this->comment->user()->soleValue('username').' has tagged you in an comment on Torrent Request '.$this->comment->commentable()->soleValue('name'),
+                    'url'   => '/requests/'.$this->comment->commentable_id,
                 ];
             }
 
             return [
                 'title' => 'You Have Been Tagged',
-                'body'  => 'Anonymous has tagged you in an comment on Torrent Request '.$this->comment->commentable->name,
-                'url'   => '/requests/'.$this->comment->commentable->id,
+                'body'  => 'Anonymous has tagged you in an comment on Torrent Request '.$this->comment->commentable()->soleValue('name'),
+                'url'   => '/requests/'.$this->comment->commentable_id,
             ];
         }
 
         if ($this->type === 'ticket') {
             if ($this->comment->anon == 0) {
                 return [
-                    'title' => $this->comment->user->username.' Has Tagged You',
-                    'body'  => $this->comment->user->username.' has tagged you in an comment on Ticket '.$this->comment->commentable->subject,
-                    'url'   => '/tickets/'.$this->comment->commentable->id,
+                    'title' => $this->comment->user()->soleValue('username').' Has Tagged You',
+                    'body'  => $this->comment->user()->soleValue('username').' has tagged you in an comment on Ticket '.$this->comment->commentable()->soleValue('subject'),
+                    'url'   => '/tickets/'.$this->comment->commentable_id,
                 ];
             }
 
             return [
                 'title' => 'You Have Been Tagged',
-                'body'  => 'Anonymous has tagged you in an comment on Ticket '.$this->comment->commentable->subject,
-                'url'   => '/tickets/'.$this->comment->commentable->id,
+                'body'  => 'Anonymous has tagged you in an comment on Ticket '.$this->comment->commentable()->soleValue('subject'),
+                'url'   => '/tickets/'.$this->comment->commentable_id,
             ];
         }
 
         if ($this->type === 'playlist') {
             if ($this->comment->anon == 0) {
                 return [
-                    'title' => $this->comment->user->username.' Has Tagged You',
-                    'body'  => $this->comment->user->username.' has tagged you in an comment on Playlist '.$this->comment->commentable->name,
-                    'url'   => '/playlists/'.$this->comment->commentable->id,
+                    'title' => $this->comment->user()->soleValue('username').' Has Tagged You',
+                    'body'  => $this->comment->user()->soleValue('username').' has tagged you in an comment on Playlist '.$this->comment->commentable()->soleValue('name'),
+                    'url'   => '/playlists/'.$this->comment->commentable_id,
                 ];
             }
 
             return [
                 'title' => 'You Have Been Tagged',
-                'body'  => 'Anonymous has tagged you in an comment on Playlist '.$this->comment->commentable->name,
-                'url'   => '/playlists/'.$this->comment->commentable->id,
+                'body'  => 'Anonymous has tagged you in an comment on Playlist '.$this->comment->commentable()->soleValue('name'),
+                'url'   => '/playlists/'.$this->comment->commentable_id,
             ];
         }
 
         if ($this->type === 'collection') {
             if ($this->comment->anon == 0) {
                 return [
-                    'title' => $this->comment->user->username.' Has Tagged You',
-                    'body'  => $this->comment->user->username.' has tagged you in an comment on Collection '.$this->comment->commentable->name,
-                    'url'   => '/mediahub/collections/'.$this->comment->commentable->id,
+                    'title' => $this->comment->user()->soleValue('username').' Has Tagged You',
+                    'body'  => $this->comment->user()->soleValue('username').' has tagged you in an comment on Collection '.$this->comment->commentable()->soleValue('name'),
+                    'url'   => '/mediahub/collections/'.$this->comment->commentable_id,
                 ];
             }
 
             return [
                 'title' => 'You Have Been Tagged',
-                'body'  => 'Anonymous has tagged you in an comment on Collection '.$this->comment->commentable->name,
-                'url'   => '/mediahub/collections/'.$this->comment->commentable->id,
+                'body'  => 'Anonymous has tagged you in an comment on Collection '.$this->comment->commentable()->soleValue('name'),
+                'url'   => '/mediahub/collections/'.$this->comment->commentable_id,
             ];
         }
 
         if ($this->comment->anon == 0) {
             return [
-                'title' => $this->comment->user->username.' Has Tagged You',
-                'body'  => $this->comment->user->username.' has tagged you in an comment on Article '.$this->comment->commentable->title,
-                'url'   => '/articles/'.$this->comment->commentable->id,
+                'title' => $this->comment->user()->soleValue('username').' Has Tagged You',
+                'body'  => $this->comment->user()->soleValue('username').' has tagged you in an comment on Article '.$this->comment->commentable()->soleValue('title'),
+                'url'   => '/articles/'.$this->comment->commentable_id,
             ];
         }
 
         return [
             'title' => 'You Have Been Tagged',
-            'body'  => 'Anonymous has tagged you in an comment on Article '.$this->comment->commentable->title,
-            'url'   => '/articles/'.$this->comment->commentable->id,
+            'body'  => 'Anonymous has tagged you in an comment on Article '.$this->comment->commentable()->soleValue('title'),
+            'url'   => '/articles/'.$this->comment->commentable_id,
         ];
     }
 }

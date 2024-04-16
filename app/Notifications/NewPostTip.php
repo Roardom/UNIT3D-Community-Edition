@@ -49,12 +49,10 @@ class NewPostTip extends Notification implements ShouldQueue
      */
     public function toArray(object $notifiable): array
     {
-        $this->tip->load('sender');
-
         return [
-            'title' => $this->tip->sender->username.' Has Tipped You '.$this->tip->bon.' BON For A Forum Post',
-            'body'  => $this->tip->sender->username.' has tipped one of your Forum posts in '.$this->tip->post->topic->name,
-            'url'   => sprintf('/forums/topics/%s/posts/%s', $this->tip->post->topic_id, $this->tip->post_id),
+            'title' => $this->tip->sender()->soleValue('username').' Has Tipped You '.$this->tip->bon.' BON For A Forum Post',
+            'body'  => $this->tip->sender()->soleValue('username').' has tipped one of your Forum posts in '.$this->tip->post()->sole()->topic()->soleValue('name'),
+            'url'   => sprintf('/forums/topics/%s/posts/%s', $this->tip->post()->soleValue('topic_id'), $this->tip->post_id),
         ];
     }
 }

@@ -49,11 +49,9 @@ class NewUploadTip extends Notification implements ShouldQueue
      */
     public function toArray(object $notifiable): array
     {
-        $this->tip->load('sender');
-
         return [
-            'title' => $this->tip->sender->username.' Has Tipped You '.$this->tip->bon.' BON For An Uploaded Torrent',
-            'body'  => $this->tip->sender->username.' has tipped one of your Uploaded Torrents '.$this->tip->torrent->name,
+            'title' => $this->tip->sender()->soleValue('username').' Has Tipped You '.$this->tip->bon.' BON For An Uploaded Torrent',
+            'body'  => $this->tip->sender()->soleValue('username').' has tipped one of your Uploaded Torrents '.$this->tip->torrent()->soleValue('name'),
             'url'   => sprintf('/torrents/%s', $this->tip->torrent_id),
         ];
     }

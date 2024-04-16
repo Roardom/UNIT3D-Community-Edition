@@ -50,11 +50,9 @@ class NewRequestFillApprove extends Notification implements ShouldQueue
     public function toArray(object $notifiable): array
     {
         if ($this->torrentRequest->anon == 0) {
-            $this->torrentRequest->load('approver');
-
             return [
-                'title' => $this->torrentRequest->approver->username.' Has Approved Your Fill Of A Requested Torrent',
-                'body'  => $this->torrentRequest->approver->username.' has approved your fill of Requested Torrent '.$this->torrentRequest->name,
+                'title' => $this->torrentRequest->approver()->soleValue('username').' Has Approved Your Fill Of A Requested Torrent',
+                'body'  => $this->torrentRequest->approver()->soleValue('username').' has approved your fill of Requested Torrent '.$this->torrentRequest->name,
                 'url'   => sprintf('/requests/%s', $this->torrentRequest->id),
             ];
         }

@@ -49,7 +49,7 @@ class StaffTicketAssigned extends Notification
     {
         return (new MailMessage())
             ->subject('A ticket was assigned (Ticket # '.$this->ticket->id.')')
-            ->line('A ticket was assigned to '.$this->ticket->staff->username)
+            ->line('A ticket was assigned to '.$this->ticket->staff()->soleValue('username'))
             ->action('View Ticket', route('tickets.show', ['ticket' => $this->ticket]));
     }
 

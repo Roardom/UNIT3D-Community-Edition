@@ -49,12 +49,10 @@ class NewBon extends Notification implements ShouldQueue
      */
     public function toArray(object $notifiable): array
     {
-        $this->gift->load('sender');
-
         return [
-            'title' => $this->gift->sender->username.' Has Gifted You '.$this->gift->bon.' BON',
-            'body'  => $this->gift->sender->username.' has gifted you '.$this->gift->bon.' BON with the following note: '.$this->gift->message,
-            'url'   => sprintf('/users/%s', $this->gift->sender->username),
+            'title' => $this->gift->sender()->soleValue('username').' Has Gifted You '.$this->gift->bon.' BON',
+            'body'  => $this->gift->sender()->soleValue('username').' has gifted you '.$this->gift->bon.' BON with the following note: '.$this->gift->message,
+            'url'   => sprintf('/users/%s', $this->gift->sender()->soleValue('username')),
         ];
     }
 }
