@@ -64,7 +64,7 @@ class AutoPreWarning extends Command
             foreach ($prewarn as $pre) {
                 // Skip Prewarning if Torrent is NULL
                 // e.g. Torrent has been Rejected by a Moderator after it has been downloaded and not deleted
-                if (null === $pre->torrent) {
+                if (null === $pre->torrent || $pre->user === null) {
                     continue;
                 }
 

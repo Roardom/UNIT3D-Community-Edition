@@ -71,7 +71,7 @@ class AutoGroup extends Command
                     //short circuit when the values are 0 or null
                     ($group->min_uploaded ? $group->min_uploaded <= $user->uploaded : true)
                     && ($group->min_ratio ? $group->min_ratio <= $user->ratio : true)
-                    && ($group->min_age ? $user->created_at->addRealSeconds($group->min_age)->isBefore($current) : true)
+                    && ($group->min_age ? $user->created_at?->addRealSeconds($group->min_age)?->isBefore($current) : true)
                     && ($group->min_avg_seedtime ? $group->min_avg_seedtime <= ($seedtime ??= DB::table('history')->where('user_id', '=', $user->id)->avg('seedtime') ?? 0) : true)
                     && ($group->min_seedsize ? $group->min_seedsize <= ($seedsize ??= $user->seedingTorrents()->sum('size')) : true)
                 ) {

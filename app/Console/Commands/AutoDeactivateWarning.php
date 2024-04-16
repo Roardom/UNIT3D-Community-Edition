@@ -54,7 +54,7 @@ class AutoDeactivateWarning extends Command
             ->get();
 
         foreach ($warnings as $warning) {
-            if ($warning->expires_on <= $current || ($warning->torrenttitle && $warning->torrenttitle->history()->where('user_id', '=', $warning->warneduser->id)->first()->seedtime >= config('hitrun.seedtime'))) {
+            if ($warning->warneduser && ($warning->expires_on <= $current || ($warning->torrenttitle && $warning->torrenttitle->history()->where('user_id', '=', $warning->user_id)->first()?->seedtime >= config('hitrun.seedtime')))) {
                 // Set Records Active To 0 in warnings table
                 $warning->active = false;
                 $warning->save();
@@ -76,8 +76,8 @@ class AutoDeactivateWarning extends Command
             ->get();
 
         foreach ($warnings as $warning) {
-            if ($warning->warneduser->can_download === false) {
-                $warning->warneduser->can_download = 1;
+            if ($warning->warneduser && $warning->warneduser->can_download === false) {
+                $warning->warneduser->can_download = true;
                 $warning->warneduser->save();
 
                 cache()->forget('user:'.$warning->warneduser->passkey);

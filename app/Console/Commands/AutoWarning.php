@@ -65,7 +65,7 @@ class AutoWarning extends Command
                 ->get();
 
             foreach ($hitrun as $hr) {
-                if (!$hr->user->group->is_immune && $hr->actual_downloaded > ($hr->torrent->size * (config('hitrun.buffer') / 100))) {
+                if ($hr->user && $hr->torrent && ! $hr->user->group->is_immune && $hr->actual_downloaded > ($hr->torrent->size * (config('hitrun.buffer') / 100))) {
                     $exsist = Warning::withTrashed()
                         ->where('torrent', '=', $hr->torrent->id)
                         ->where('user_id', '=', $hr->user->id)
@@ -100,8 +100,8 @@ class AutoWarning extends Command
             $warnings = Warning::with('warneduser')->select(DB::raw('user_id, count(*) as value'))->where('active', '=', 1)->groupBy('user_id')->having('value', '>=', config('hitrun.max_warnings'))->get();
 
             foreach ($warnings as $warning) {
-                if ($warning->warneduser->can_download) {
-                    $warning->warneduser->can_download = 0;
+                if ($warning->warneduser?->can_download) {
+                    $warning->warneduser->can_download = false;
                     $warning->warneduser->save();
 
                     cache()->forget('user:'.$warning->warneduser->passkey);
