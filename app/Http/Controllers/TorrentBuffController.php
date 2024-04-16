@@ -63,7 +63,7 @@ class TorrentBuffController extends Controller
             (new IRCAnnounceBot())
                 ->to(config('irc-bot.channel'))
                 ->say('['.config('app.name').'] User '.$user->username.' has bumped '.$torrent->name.' , it could use more seeds!')
-                ->say('[Category: '.$torrent->category->name.'] [Type: '.$torrent->type->name.'] [Size:'.$torrent->getSize().']')
+                ->say('[Category: '.($torrent->category?->name ?? 'No Category').'] [Type: '.($torrent->type->name ?? 'No Type').'] [Size:'.$torrent->getSize().']')
                 ->say(sprintf('[Link: %s]', $torrentUrl));
         }
 

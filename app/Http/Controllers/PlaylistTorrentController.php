@@ -64,7 +64,7 @@ class PlaylistTorrentController extends Controller
         Validator::make($playlistTorrents, [
             '*.torrent_id' => Rule::exists('torrents', 'id'),
         ], [
-            '*.torrent_id.exists' => 'The torrent ID/URL ":input" entered was not found on site.'
+            '*.torrent_id.exists' => 'The torrent ID/URL ":input" entered was not found on site.',
         ])->validate();
 
         PlaylistTorrent::upsert($playlistTorrents, ['playlist_id', 'torrent_id', 'tmdb_id']);
@@ -80,7 +80,7 @@ class PlaylistTorrentController extends Controller
      */
     public function destroy(Request $request, PlaylistTorrent $playlistTorrent): \Illuminate\Http\RedirectResponse
     {
-        abort_unless($request->user()->group->is_modo || $request->user()->id === $playlistTorrent->playlist->user_id, 403);
+        abort_unless($request->user()->group->is_modo || $request->user()->id === $playlistTorrent->playlist?->user_id, 403);
 
         $playlistTorrent->delete();
 

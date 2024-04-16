@@ -20,6 +20,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Staff\StoreArticleRequest;
 use App\Http\Requests\Staff\UpdateArticleRequest;
 use App\Models\Article;
+use Illuminate\Http\UploadedFile;
 use Intervention\Image\Facades\Image;
 use Exception;
 
@@ -57,7 +58,7 @@ class ArticleController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
 
-            abort_if(\is_array($image), 400);
+            abort_unless($image instanceof UploadedFile, 400);
 
             $filename = 'article-'.uniqid('', true).'.'.$image->getClientOriginalExtension();
             $path = public_path('/files/img/'.$filename);
@@ -88,14 +89,14 @@ class ArticleController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
 
-            abort_if(\is_array($image), 400);
+            abort_unless($image instanceof UploadedFile, 400);
 
             $filename = 'article-'.uniqid('', true).'.'.$image->getClientOriginalExtension();
             $path = public_path('/files/img/'.$filename);
             Image::make($image->getRealPath())->fit(75, 75)->encode('png', 100)->save($path);
         }
 
-        $article->update(['image' => $filename ?? null,] + $request->validated());
+        $article->update(['image' => $filename ?? null] + $request->validated());
 
         return to_route('staff.articles.index')
             ->withSuccess('Your article changes have successfully published!');

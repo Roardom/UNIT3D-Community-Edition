@@ -46,7 +46,7 @@ class PlaylistController extends Controller
         return view('playlist.index', [
             'playlists' => Playlist::with([
                 'user:id,username,group_id,image',
-                'user.group'
+                'user.group',
             ])
                 ->withCount('torrents')
                 ->where(function ($query): void {
@@ -76,7 +76,7 @@ class PlaylistController extends Controller
         if ($request->hasFile('cover_image')) {
             abort_if(\is_array($request->file('cover_image')), 400);
 
-            abort_unless($request->file('cover_image')->getError() === UPLOAD_ERR_OK, 500);
+            abort_unless($request->file('cover_image')?->getError() === UPLOAD_ERR_OK, 500);
 
             $image = $request->file('cover_image');
             $filename = 'playlist-cover_'.uniqid('', true).'.'.$image->getClientOriginalExtension();
@@ -86,11 +86,11 @@ class PlaylistController extends Controller
 
         $playlist = Playlist::create([
             'user_id'     => $request->user()->id,
-            'cover_image' => $filename ?? null
+            'cover_image' => $filename ?? null,
         ] + $request->validated());
 
         // Announce To Shoutbox
-        if (!$playlist->is_private) {
+        if (! $playlist->is_private) {
             $this->chatRepository->systemMessage(
                 sprintf('User [url=%s/', config('app.url')).$request->user()->username.'.'.$request->user()->id.']'.$request->user()->username.sprintf('[/url] has created a new playlist [url=%s/playlists/', config('app.url')).$playlist->id.']'.$playlist->name.'[/url] check it out now!'
             );
@@ -111,7 +111,7 @@ class PlaylistController extends Controller
 
         return view('playlist.show', [
             'playlist' => $playlist,
-            'meta'     => match(true) {
+            'meta'     => match (true) {
                 $randomTorrent?->category?->tv_meta    => Tv::with('genres', 'networks', 'seasons')->find($randomTorrent->tmdb),
                 $randomTorrent?->category?->movie_meta => Movie::with('genres', 'companies', 'collection')->find($randomTorrent->tmdb),
                 default                                => null,
@@ -138,14 +138,14 @@ class PlaylistController extends Controller
      */
     public function update(UpdatePlaylistRequest $request, Playlist $playlist): \Illuminate\Http\RedirectResponse
     {
-        abort_unless($request->user()->id == $playlist->user_id || $request->user()->group->is_modo, 403);
+        abort_unless($request->user()->id === $playlist->user_id || $request->user()->group->is_modo, 403);
 
         if ($request->hasFile('cover_image')) {
             $image = $request->file('cover_image');
 
             abort_if(\is_array($image), 400);
 
-            abort_unless($image->getError() === UPLOAD_ERR_OK, 500);
+            abort_unless($image?->getError() === UPLOAD_ERR_OK, 500);
 
             $filename = 'playlist-cover_'.uniqid('', true).'.'.$image->getClientOriginalExtension();
             $path = public_path('/files/img/'.$filename);
@@ -165,7 +165,7 @@ class PlaylistController extends Controller
      */
     public function destroy(Request $request, Playlist $playlist): \Illuminate\Http\RedirectResponse
     {
-        abort_unless($request->user()->id == $playlist->user_id || $request->user()->group->is_modo, 403);
+        abort_unless($request->user()->id === $playlist->user_id || $request->user()->group->is_modo, 403);
 
         $playlist->torrents()->detach();
         $playlist->delete();

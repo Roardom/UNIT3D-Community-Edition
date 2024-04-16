@@ -41,7 +41,7 @@ class TorrentTipController extends Controller
             'tips' => TorrentTip::with([
                 'sender'    => fn ($query) => $query->withTrashed()->with('group'),
                 'recipient' => fn ($query) => $query->withTrashed()->with('group'),
-                'torrent'
+                'torrent',
             ])
                 ->where('sender_id', '=', $user->id)
                 ->orWhere('recipient_id', '=', $user->id)
@@ -68,7 +68,7 @@ class TorrentTipController extends Controller
             User::whereKey($tip->sender_id)->decrement('seedbonus', (float) $tip->bon);
             User::whereKey($tip->recipient_id)->increment('seedbonus', (float) $tip->bon);
 
-            $recipient = $tip->recipient;
+            $recipient = $tip->recipient()->sole();
 
             if ($recipient->acceptsNotification($user, $recipient, 'torrent', 'show_torrent_tip')) {
                 $recipient->notify((new NewUploadTip($tip))->afterCommit());

@@ -18,6 +18,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Bencode;
 use App\Models\Playlist;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use ZipArchive;
 
@@ -29,7 +30,7 @@ class PlaylistZipController extends Controller
     /**
      * Download All Playlist Torrents.
      */
-    public function show(Playlist $playlist): \Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
+    public function show(Request $request, Playlist $playlist): \Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
     {
         //  Extend The Maximum Execution Time
         set_time_limit(300);
@@ -38,7 +39,7 @@ class PlaylistZipController extends Controller
         $playlist->load('torrents');
 
         // Authorized User
-        $user = auth()->user();
+        $user = $request->user();
 
         // Define Dir Folder
         $path = getcwd().'/files/tmp_zip/';

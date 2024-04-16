@@ -20,6 +20,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Staff\StoreCategoryRequest;
 use App\Http\Requests\Staff\UpdateCategoryRequest;
 use App\Models\Category;
+use Illuminate\Http\UploadedFile;
 use Intervention\Image\Facades\Image;
 use Exception;
 
@@ -54,7 +55,7 @@ class CategoryController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
 
-            abort_if(\is_array($image), 400);
+            abort_unless($image instanceof UploadedFile, 400);
 
             $filename = 'category-'.uniqid('', true).'.'.$image->getClientOriginalExtension();
             $path = public_path('/files/img/'.$filename);
@@ -92,7 +93,7 @@ class CategoryController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
 
-            abort_if(\is_array($image), 400);
+            abort_unless($image instanceof UploadedFile, 400);
 
             $filename = 'category-'.uniqid('', true).'.'.$image->getClientOriginalExtension();
             $path = public_path('/files/img/'.$filename);

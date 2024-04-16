@@ -40,7 +40,7 @@ class ContactController extends Controller
     public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         // Fetch owner account
-        $user = User::where('username', config('unit3d.owner-username'))->first();
+        $user = User::where('username', config('unit3d.owner-username'))->sole();
 
         Mail::to($user->email)->send(new Contact($request->string('email')));
 

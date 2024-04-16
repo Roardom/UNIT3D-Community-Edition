@@ -67,21 +67,21 @@ class RequestController extends Controller
                 ->whereKey($torrentRequest)
                 ->exists(),
             'meta' => match (true) {
-                ($torrentRequest->category->tv_meta && $torrentRequest->tmdb) => Tv::with([
+                ($torrentRequest->category?->tv_meta && $torrentRequest->tmdb) => Tv::with([
                     'genres',
                     'credits' => ['person', 'occupation'],
                     'networks',
-                    'seasons'
+                    'seasons',
                 ])
                     ->find($torrentRequest->tmdb),
-                ($torrentRequest->category->movie_meta && $torrentRequest->tmdb) => Movie::with([
+                ($torrentRequest->category?->movie_meta && $torrentRequest->tmdb) => Movie::with([
                     'genres',
                     'credits' => ['person', 'occupation'],
                     'companies',
-                    'collection'
+                    'collection',
                 ])
                     ->find($torrentRequest->tmdb),
-                ($torrentRequest->category->game_meta && $torrentRequest->igdb) => Game::with([
+                ($torrentRequest->category?->game_meta && $torrentRequest->igdb) => Game::with([
                     'cover'    => ['url', 'image_id'],
                     'artworks' => ['url', 'image_id'],
                     'genres'   => ['name'],
@@ -119,7 +119,7 @@ class RequestController extends Controller
             'types'       => Type::orderBy('position')->get(),
             'resolutions' => Resolution::orderBy('position')->get(),
             'user'        => $request->user(),
-            'category_id' => $request->category_id ?? Category::first('id')->id,
+            'category_id' => $request->category_id ?? Category::first('id')?->id,
             'title'       => urldecode((string) $request->title),
             'imdb'        => $request->imdb,
             'tmdb'        => $request->tmdb,
@@ -160,7 +160,7 @@ class RequestController extends Controller
 
         $category = $torrentRequest->category;
 
-        if ($torrentRequest->tmdb > 0) {
+        if ($category && $torrentRequest->tmdb > 0) {
             switch (true) {
                 case $category->tv_meta:
                     (new TMDBScraper())->tv($torrentRequest->tmdb);
@@ -218,11 +218,11 @@ class RequestController extends Controller
 
         if ($torrentRequest->tmdb > 0) {
             switch (true) {
-                case $torrentRequest->category->tv_meta:
+                case $torrentRequest->category?->tv_meta:
                     (new TMDBScraper())->tv($torrentRequest->tmdb);
 
                     break;
-                case $torrentRequest->category->movie_meta:
+                case $torrentRequest->category?->movie_meta:
                     (new TMDBScraper())->movie($torrentRequest->tmdb);
 
                     break;

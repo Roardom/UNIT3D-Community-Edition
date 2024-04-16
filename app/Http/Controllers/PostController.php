@@ -72,7 +72,7 @@ class PostController extends Controller
 
         $topic = Topic::authorized(canReplyTopic: true)->findOrFail($request->integer('topic_id'));
 
-        $forum = $topic->forum;
+        $forum = $topic->forum()->sole();
 
         $post = Post::create([
             'content'  => $request->input('content'),
@@ -173,12 +173,14 @@ class PostController extends Controller
         $user = $request->user();
 
         $post = Post::find($id);
-        $topic = Topic::whereKey($post->topic_id)->authorized(canReadTopic: true, canReplyTopic: true)->sole();
+        $topic = Topic::whereKey($post?->topic_id)->authorized(canReadTopic: true, canReplyTopic: true)->sole();
+
+        abort_if($post === null, 404);
 
         abort_unless($user->group->is_modo || $user->id === $post->user_id, 403);
 
-        $forum = $topic->forum;
-        $category = $forum->category;
+        $forum = $topic->forum()->sole();
+        $category = $forum->category()->sole();
 
         return view('forum.post.edit', [
             'topic'    => $topic,
@@ -240,24 +242,24 @@ class PostController extends Controller
             $latestPoster = $latestPost->user;
             $topic->update([
                 'last_post_id'         => $latestPost->id,
-                'last_post_user_id'    => $latestPoster->id,
+                'last_post_user_id'    => $latestPoster?->id,
                 'num_post'             => $topic->posts()->count(),
                 'last_post_created_at' => $latestPost->created_at,
             ]);
         }
 
-        $forum = $topic->forum;
+        $forum = $topic->forum()->sole();
         $lastRepliedTopic = $forum->lastRepliedTopicSlow;
-        $latestPost = $lastRepliedTopic->latestPostSlow;
-        $latestPoster = $latestPost->user;
+        $latestPost = $lastRepliedTopic?->latestPostSlow;
+        $latestPoster = $latestPost?->user;
 
         $forum->update([
             'num_post'             => $forum->posts()->count(),
             'num_topic'            => $forum->topics()->count(),
-            'last_post_id'         => $latestPost->id,
-            'last_post_user_id'    => $latestPoster->id,
-            'last_topic_id'        => $lastRepliedTopic->id,
-            'last_post_created_at' => $latestPost->created_at,
+            'last_post_id'         => $latestPost?->id,
+            'last_post_user_id'    => $latestPoster?->id,
+            'last_topic_id'        => $lastRepliedTopic?->id,
+            'last_post_created_at' => $latestPost?->created_at,
         ]);
 
         if ($isTopicDeleted === true) {
@@ -265,7 +267,7 @@ class PostController extends Controller
                 ->withSuccess(trans('forum.delete-post-success'));
         }
 
-        return to_route('topics.show', ['id' => $post->topic->id])
+        return to_route('topics.show', ['id' => $post->topic_id])
             ->withSuccess(trans('forum.delete-post-success'));
     }
 }

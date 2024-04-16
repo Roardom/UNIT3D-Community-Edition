@@ -45,7 +45,7 @@ class ReseedController extends Controller
         if ($torrent->seeders <= 2) {
             // Send Notification
             foreach ($potentialReseeds as $potentialReseed) {
-                User::find($potentialReseed->user_id)->notify(new NewReseedRequest($torrent));
+                User::find($potentialReseed->user_id)?->notify(new NewReseedRequest($torrent));
             }
 
             $torrentUrl = href_torrent($torrent);

@@ -38,6 +38,7 @@ use App\Models\Torrent;
 use App\Models\User;
 use App\Repositories\ChatRepository;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Exception;
 
@@ -77,7 +78,7 @@ class SubtitleController extends Controller
         $user = $request->user();
         $subtitleFile = $request->file('subtitle_file');
 
-        abort_if(\is_array($subtitleFile), 400);
+        abort_unless($subtitleFile instanceof UploadedFile, 400);
 
         $filename = uniqid('', true).'.'.$subtitleFile->getClientOriginalExtension();
 
@@ -100,15 +101,15 @@ class SubtitleController extends Controller
         Storage::disk('subtitles')->putFileAs('', $subtitleFile, $filename);
 
         // Announce To Shoutbox
-        if (!$subtitle->anon) {
+        if (! $subtitle->anon) {
             $this->chatRepository->systemMessage(
                 sprintf(
                     '[url=%s]%s[/url] has uploaded a new %s subtitle for [url=%s]%s[/url]',
                     href_profile($user),
                     $user->username,
-                    $subtitle->language->name,
+                    $subtitle->language?->name ?? 'No Language',
                     href_torrent($torrent),
-                    $subtitle->torrent->name
+                    $torrent->name
                 )
             );
 
@@ -130,9 +131,9 @@ class SubtitleController extends Controller
             $this->chatRepository->systemMessage(
                 sprintf(
                     'An anonymous user has uploaded a new %s subtitle for [url=%s]%s[/url]',
-                    $subtitle->language->name,
+                    $subtitle->language?->name ?? 'No Language',
                     href_torrent($torrent),
-                    $subtitle->torrent->name
+                    $torrent->name
                 )
             );
         }
@@ -184,12 +185,12 @@ class SubtitleController extends Controller
 
         // User's download rights are revoked
         if ($user->can_download == 0 && $subtitle->user_id != $user->id) {
-            return to_route('torrents.show', ['id' => $subtitle->torrent->id])
+            return to_route('torrents.show', ['id' => $subtitle->torrent_id])
                 ->withErrors('Your Download Rights Have Been Revoked!');
         }
 
         // Define the filename for the download
-        $tempFilename = '['.$subtitle->language->name.' Subtitle]'.$subtitle->torrent->name.$subtitle->extension;
+        $tempFilename = '['.($subtitle->language?->name ?? 'No Language').' Subtitle]'.($subtitle->torrent?->name ?? 'No Torrent').$subtitle->extension;
 
         // Increment downloads count
         $subtitle->increment('downloads');

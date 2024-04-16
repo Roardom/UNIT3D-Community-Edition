@@ -41,7 +41,7 @@ class PostTipController extends Controller
             'tips' => PostTip::with([
                 'sender'    => fn ($query) => $query->withTrashed()->with('group'),
                 'recipient' => fn ($query) => $query->withTrashed()->with('group'),
-                'post.topic'
+                'post.topic',
             ])
                 ->where('sender_id', '=', $user->id)
                 ->orWhere('recipient_id', '=', $user->id)
@@ -68,7 +68,7 @@ class PostTipController extends Controller
             User::whereKey($tip->sender_id)->decrement('seedbonus', (float) $tip->bon);
             User::whereKey($tip->recipient_id)->increment('seedbonus', (float) $tip->bon);
 
-            $tip->recipient->notify((new NewPostTip($tip))->afterCommit());
+            $tip->recipient?->notify((new NewPostTip($tip))->afterCommit());
         });
 
         return redirect()->back()->withSuccess(trans('bon.success-tip'));

@@ -90,7 +90,7 @@ class ApprovedRequestFillController extends Controller
     {
         abort_unless((bool) $request->user()->group->is_modo, 403);
 
-        $filler = $torrentRequest->filler;
+        $filler = $torrentRequest->filler()->sole();
 
         $torrentRequest->update([
             'approved_by'   => null,

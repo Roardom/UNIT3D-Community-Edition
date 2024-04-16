@@ -78,7 +78,7 @@ class BountyController extends Controller
             );
         }
 
-        $requester = $torrentRequest->user;
+        $requester = $torrentRequest->user()->sole();
 
         if ($requester->acceptsNotification($request->user(), $requester, 'request', 'show_request_bounty')) {
             $requester->notify(new NewRequestBounty($bounty));

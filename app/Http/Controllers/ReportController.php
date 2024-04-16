@@ -34,7 +34,7 @@ class ReportController extends Controller
     {
         $torrentRequest = TorrentRequest::findOrFail($id);
         $reportedBy = $request->user();
-        $reportedUser = $torrentRequest->user;
+        $reportedUser = $torrentRequest->user()->sole();
 
         $request->validate([
             'message' => [
@@ -65,7 +65,7 @@ class ReportController extends Controller
     {
         $torrent = Torrent::findOrFail($id);
         $reportedBy = $request->user();
-        $reportedUser = $torrent->user;
+        $reportedUser = $torrent->user()->sole();
 
         $request->validate([
             'message' => [

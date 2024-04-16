@@ -54,7 +54,7 @@ class ResurrectionController extends Controller
                 ->withErrors('This torrent is not dead.');
         }
 
-        if ($torrent->created_at->gt(now()->subDays(30))) {
+        if ($torrent->created_at === null || $torrent->created_at->gt(now()->subDays(30))) {
             return to_route('torrents.show', ['id' => $torrent->id])
                 ->withErrors('This torrent is not older than 30 days.');
         }

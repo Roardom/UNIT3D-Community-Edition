@@ -50,7 +50,7 @@ class RequestFillController extends Controller
 
         // Send Private Message
         $sender = $request->boolean('filled_anon') ? 'Anonymous' : $request->user()->username;
-        $requester = $torrentRequest->user;
+        $requester = $torrentRequest->user()->sole();
 
         if ($requester->acceptsNotification($request->user(), $requester, 'request', 'show_request_fill')) {
             $requester->notify(new NewRequestFill($torrentRequest));
@@ -67,8 +67,8 @@ class RequestFillController extends Controller
     {
         abort_unless($request->user()->id === $torrentRequest->user_id || $request->user()->group->is_modo, 403);
 
-        $filler = $torrentRequest->filler;
-        $requester = $torrentRequest->user;
+        $filler = $torrentRequest->filler()->sole();
+        $requester = $torrentRequest->user()->sole();
         $approver = $request->user();
 
         $torrentRequest->update([

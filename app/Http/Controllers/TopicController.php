@@ -210,7 +210,7 @@ class TopicController extends Controller
 
         return view('forum.topic.edit', [
             'topic'      => $topic,
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
 
@@ -232,7 +232,7 @@ class TopicController extends Controller
 
         $newForum = Forum::authorized(canStartTopic: true)->whereKey($request->forum_id)->sole();
 
-        $oldForum = $topic->forum;
+        $oldForum = $topic->forum()->sole();
 
         $topic->update([
             'name'     => $request->name,
@@ -242,10 +242,10 @@ class TopicController extends Controller
         if ($oldForum->id === $newForum->id) {
             $lastRepliedTopic = $newForum->lastRepliedTopicSlow;
 
-            if ($lastRepliedTopic->id === $newForum->last_topic_id) {
-                $latestPost = $lastRepliedTopic->latestPostSlow;
+            if ($lastRepliedTopic?->id === $newForum->last_topic_id) {
+                $latestPost = $lastRepliedTopic?->latestPostSlow;
 
-                $newForum->updated_at = $latestPost->created_at;
+                $newForum->updated_at = $latestPost?->created_at;
                 $newForum->save();
             }
         } else {
@@ -263,16 +263,16 @@ class TopicController extends Controller
             ]);
 
             $lastRepliedTopic = $newForum->lastRepliedTopicSlow;
-            $latestPost = $lastRepliedTopic->latestPostSlow;
-            $latestPoster = $latestPost->user;
+            $latestPost = $lastRepliedTopic?->latestPostSlow;
+            $latestPoster = $latestPost?->user;
 
             $newForum->update([
                 'num_topic'            => $newForum->topics()->count(),
                 'num_post'             => $newForum->posts()->count(),
-                'last_topic_id'        => $lastRepliedTopic->id,
-                'last_post_id'         => $latestPost->id,
-                'last_post_user_id'    => $latestPoster->id,
-                'last_post_created_at' => $latestPost->created_at,
+                'last_topic_id'        => $lastRepliedTopic?->id,
+                'last_post_id'         => $latestPost?->id,
+                'last_post_user_id'    => $latestPoster?->id,
+                'last_post_created_at' => $latestPost?->created_at,
             ]);
         }
 
@@ -292,18 +292,18 @@ class TopicController extends Controller
         $topic->posts()->delete();
         $topic->delete();
 
-        $forum = $topic->forum;
+        $forum = $topic->forum()->sole();
         $lastRepliedTopic = $forum->lastRepliedTopicSlow;
-        $latestPost = $lastRepliedTopic->latestPostSlow;
-        $latestPoster = $latestPost->user;
+        $latestPost = $lastRepliedTopic?->latestPostSlow;
+        $latestPoster = $latestPost?->user;
 
         $topic->forum()->update([
             'num_topic'            => $forum->topics()->count(),
             'num_post'             => $forum->posts()->count(),
-            'last_topic_id'        => $lastRepliedTopic->id,
-            'last_post_id'         => $latestPost->id,
-            'last_post_user_id'    => $latestPoster->id,
-            'last_post_created_at' => $latestPost->created_at,
+            'last_topic_id'        => $lastRepliedTopic?->id,
+            'last_post_id'         => $latestPost?->id,
+            'last_post_user_id'    => $latestPoster?->id,
+            'last_post_created_at' => $latestPost?->created_at,
         ]);
 
         return to_route('forums.show', ['id' => $forum->id])
@@ -371,7 +371,7 @@ class TopicController extends Controller
 
         return to_route('topics.show', [
             'id'   => $topicId,
-            'page' => intdiv($index, 25) + 1
+            'page' => intdiv($index, 25) + 1,
         ])
             ->withFragment('post-'.$postId);
     }
@@ -389,7 +389,7 @@ class TopicController extends Controller
 
         return to_route('topics.show', [
             'id'   => $id,
-            'page' => intdiv($post?->post_count === null ? 0 : $post->post_count - 1, 25) + 1
+            'page' => intdiv($post?->post_count === null ? 0 : $post->post_count - 1, 25) + 1,
         ])
             ->withFragment('post-'.($post->id ?? 0));
     }

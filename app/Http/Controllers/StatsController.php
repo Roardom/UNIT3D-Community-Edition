@@ -24,6 +24,7 @@ use App\Models\Peer;
 use App\Models\Torrent;
 use App\Models\TorrentRequest;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Exception;
@@ -341,9 +342,9 @@ class StatsController extends Controller
     /**
      * Show Group Requirements.
      */
-    public function groupsRequirements(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+    public function groupsRequirements(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
-        $user = auth()->user();
+        $user = $request->user();
         $user_avg_seedtime = DB::table('history')->where('user_id', '=', $user->id)->avg('seedtime');
         $user_account_age = Carbon::now()->diffInSeconds($user->created_at);
         $user_seed_size = $user->seedingTorrents()->sum('size');
