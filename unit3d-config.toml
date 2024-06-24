@@ -1,0 +1,122 @@
+[other]
+
+# Title of Site
+title = 'UNIT3D'
+
+# Site SubTitle
+subTitle = 'Built On Laravel'
+
+# Email address to send emails
+email = 'unit3d@none.com'
+
+# Default meta description content
+meta_description = 'Built On Laravel'
+
+# Date Site Was Born
+birthdate = 2017-12-30
+
+# Is Global Freeleech Enabled
+freeleech = false
+freeleech_until = 2017-12-23T20:00:00Z
+
+# Is Global Double Upload Enabled
+doubleup = false
+
+# Is Global Refund Torrent Download Enabled
+'refundable' = false
+
+# Minimum Ratio To Download
+ratio = 0.4
+
+#*
+#--------------------------------------------------------------------------
+# Invite only
+#--------------------------------------------------------------------------
+#
+# Invite System On/Off (Open Reg / Closed)
+# Expire time in days
+#
+# Restricted mode for invites. If set to true, invites will be restricted
+# Exempt these groups from the invite restrictions
+#/
+
+# Enable invite system and disable open registration
+invite-only = true
+
+# Expirate of sent invites (in days)
+invite_expire = 14
+
+# If invite system is enabled, restrict it to certain groups
+invites_restriced = false
+
+# Exempt these groups from the invite restrictions
+invite_groups = ["Administrator", "Owner"]
+
+# Maximum amount of unused user invites users are allowed to have
+max_unused_user_invites = 1
+
+# Default upload given to new members (in bytes)
+default_upload = 53687091200 # 50 GiB
+# Default download given to new members (in bytes)
+default_download = 1073741824 # 1 GiB
+
+# Default Site Style
+#
+# 0 = Classic Light Theme
+# 1 = Galactic Theme
+# 2 = Dark Blue Theme
+# 3 = Dark Green Theme
+# 4 = Dark Pink Theme
+# 5 = Dark Purple Theme
+# 6 = Dark Red Theme
+# 7 = Dark Teal Theme
+# 8 = Dark Yellow Theme
+# 9 = Cosmic Void
+# 10 = Nord
+# 11 = Revel
+# 12 = Material Design v3 Light
+default_style = 12
+
+# Default Font Awesome Style
+#
+# "fas" = Solid
+# "far" = Regular
+# "fal" = Light
+font-awesome = "fas"
+
+# Enabled application signups
+application_signups = false
+
+# Rules Page URL
+rules_url = "/pages/1"
+
+# FAQ Page URL
+faq_url = "/pages/2"
+
+# Upload Guide Page URL For Upload Page
+upload-guide_url = "/pages/4"
+
+# Hide Staff Area Forum Posts From Chat
+# If enabled, Staff members get notifications instead of posting being announced in chat
+staff-forum-notify = false
+
+# Staff Forum Id
+# The ID value of staff forum area. Should be the main / parent ID.
+# staff-forum-id =
+
+[other.thanks-system]
+# Allows users to press a button to thank the uploader of a torrent.
+is-enabled = true
+
+# Configures outbound email rate limiting.
+[other.mail]
+# The number of outbound emails allowed every `mail.every` seconds.
+allow = 1
+# The number of seconds between every batch of `mail.allow` outbound emails.
+every = 5
+
+# Internal rust api server that current handles html generation
+# and will handle more in the future.
+[other.unit3d-rs]
+# Base url of UNIT3D-rs
+url = "http://0.0.0.0:3000"

@@ -24,6 +24,9 @@ laravel-echo-server.lock
 # Vite
 /public/build
 
+# Rust
+/target
+
 # OS X
 .DS_store
 

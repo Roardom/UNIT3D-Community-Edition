@@ -20,6 +20,7 @@ use App\Models\BlacklistClient;
 use App\Models\Group;
 use App\Models\Internal;
 use App\Models\Page;
+use Illuminate\Support\Facades\Http;
 
 /**
  * @see \Tests\Todo\Feature\Http\Controllers\PageControllerTest
@@ -39,8 +40,20 @@ class PageController extends Controller
     /**
      * Show A Page.
      */
-    public function show(Page $page): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+    public function show(int $page): \Illuminate\Http\Client\Response|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
+        // return Http::baseUrl(config('other.unit3d-rs.url'))->post('pages/show', [
+        //     'name'       => $page->name,
+        //     'content'    => $page->content,
+        //     'id'         => $page->id,
+        //     'created_at' => $page->created_at,
+        //     'updated_at' => $page->updated_at,
+        // ]);
+
+        return Http::baseUrl(config('other.unit3d-rs.url'))->get('pages/'.$page);
+
+        return Http::baseUrl(config('other.unit3d-rs.url'))->post('pages/show', $page->getAttributes());
+
         return view('page.page', [
             'page' => $page,
         ]);

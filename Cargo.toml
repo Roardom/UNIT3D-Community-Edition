@@ -1,0 +1,5 @@
+[workspace]
+members = [
+	"crates/unit3d-rs",
+]
+resolver = "2"
