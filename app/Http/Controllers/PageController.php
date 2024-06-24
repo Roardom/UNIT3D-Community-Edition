@@ -20,6 +20,7 @@ use App\Models\BlacklistClient;
 use App\Models\Group;
 use App\Models\Internal;
 use App\Models\Page;
+use FFI;
 
 /**
  * @see \Tests\Todo\Feature\Http\Controllers\PageControllerTest
@@ -39,8 +40,16 @@ class PageController extends Controller
     /**
      * Show A Page.
      */
-    public function show(Page $page): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+    public function show(Page $page): \Illuminate\Http\Response|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
     {
+        $ffi = FFI::cdef('const char* page(const char* content);', base_path('crates/unit3d-rs/target/release/libunit3d_rs.so'));
+
+        $text = $ffi->page($page->content);
+
+        return response($text);
+
+        return response($page->content);
+
         return view('page.page', [
             'page' => $page,
         ]);
