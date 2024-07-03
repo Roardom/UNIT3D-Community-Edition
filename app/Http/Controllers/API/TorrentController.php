@@ -36,6 +36,7 @@ use App\Traits\TorrentMeta;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use MarcReichel\IGDBLaravel\Models\Game;
@@ -341,7 +342,7 @@ class TorrentController extends BaseController
         // Backup the files contained in the torrent
         $files = TorrentTools::getTorrentFiles($decodedTorrent);
 
-        foreach($files as &$file) {
+        foreach ($files as &$file) {
             $file['torrent_id'] = $torrent->id;
         }
 
@@ -474,7 +475,7 @@ class TorrentController extends BaseController
         }
 
         if ($torrent->category->game_meta && $torrent->igdb) {
-            $torrent->setAttribute('meta', Game::with([ 'genres' => ['name']])->find($torrent->igdb));
+            $torrent->setAttribute('meta', Game::with(['genres' => ['name']])->find($torrent->igdb));
         }
 
         TorrentResource::withoutWrapping();
@@ -510,8 +511,8 @@ class TorrentController extends BaseController
         $queryString = http_build_query($queryParams);
         $cacheKey = $url.'?'.$queryString;
 
-        $torrents = cache()->remember($cacheKey, 300, function () use ($request, $isRegex) {
-            $torrents = Torrent::with(['user:id,username', 'category', 'type', 'resolution', 'distributor', 'region', 'files'])
+        $torrents = cache()->remember($cacheKey, 0, function () use ($request, $isRegex) {
+            $torrents = Torrent::with(['user:id,username', 'category', 'type', 'resolution', 'distributor', 'region'])
                 ->select('*')
                 ->selectRaw("
                     CASE
@@ -522,6 +523,11 @@ class TorrentController extends BaseController
                         WHEN category_id IN (SELECT `id` from `categories` where `no_meta` = 1) THEN 'no'
                     END as meta
                 ")
+                ->addSelect([
+                    'files' => TorrentFile::query()
+                        ->selectRaw("JSON_ARRAYAGG(JSON_OBJECT('id', id, 'name', name, 'size', size))")
+                        ->whereColumn('files.torrent_id', '=', 'torrents.id'),
+                ])
                 ->when($request->filled('name'), fn ($query) => $query->ofName($request->name, $isRegex($request->name)))
                 ->when($request->filled('description'), fn ($query) => $query->ofDescription($request->description, $isRegex($request->description)))
                 ->when($request->filled('mediainfo'), fn ($query) => $query->ofMediainfo($request->mediainfo, $isRegex($request->mediainfo)))
