@@ -145,6 +145,7 @@ class TorrentController extends BaseController
         $torrent->bdinfo = $request->input('bdinfo');
         $torrent->info_hash = $infohash;
         $torrent->file_name = $fileName;
+        $torrent->folder_name = $folder;
         $torrent->num_file = $meta['count'];
         $torrent->folder = Bencode::get_name($decodedTorrent);
         $torrent->size = $meta['size'];
@@ -287,6 +288,9 @@ class TorrentController extends BaseController
             ],
             'personal_release' => [
                 'nullable',
+            ],
+            'mod_queue_opt_in' => [
+                'required',
             ],
             'internal' => [
                 'required',
@@ -567,6 +571,7 @@ class TorrentController extends BaseController
                 dying: $request->filled('dying'),
                 dead: $request->filled('dead'),
                 filename: $request->filled('file_name') ? $request->string('file_name')->toString() : '',
+                folder: $request->('folder_name') ? $request->string('folder_name')->toString() : '',
                 seasonNumber: $request->filled('seasonNumber') ? $request->integer('seasonNumber') : null,
                 episodeNumber: $request->filled('episodeNumber') ? $request->integer('episodeNumber') : null,
             );
@@ -626,6 +631,7 @@ class TorrentController extends BaseController
                             'size'             => $hit['size'],
                             'num_file'         => $hit['num_file'],
                             'files'            => $hit['files'],
+                            'folder'           => $hit['folder'],
                             'freeleech'        => $hit['free'].'%',
                             'double_upload'    => $hit['doubleup'],
                             'refundable'       => $hit['refundable'],
