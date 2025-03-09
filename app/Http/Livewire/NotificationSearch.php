@@ -40,6 +40,9 @@ class NotificationSearch extends Component
     public bool $comment_tags = false;
 
     #[Url(history: true)]
+    public bool $ticket_replies = false;
+
+    #[Url(history: true)]
     public bool $followers = false;
 
     #[Url(history: true)]
@@ -114,6 +117,9 @@ class NotificationSearch extends Component
                     })
                     ->when($this->comment_tags, function ($query): void {
                         $query->orWhere('type', '=', \App\Notifications\NewCommentTag::class);
+                    })
+                    ->when($this->ticket_replies, function ($query): void {
+                        $query->orWhere('type', '=', \App\Notifications\NewTicketReply::class);
                     })
                     ->when($this->followers, function ($query): void {
                         $query->orWhere('type', '=', \App\Notifications\NewFollow::class);

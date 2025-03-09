@@ -775,6 +775,16 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Has Many Ticket Replies.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<TicketReply, $this>
+     */
+    public function ticketReplies(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(TicketReply::class);
+    }
+
+    /**
      * Has Many Personal Freeleeches.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany<PersonalFreeleech, $this>

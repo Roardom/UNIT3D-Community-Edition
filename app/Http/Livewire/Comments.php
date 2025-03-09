@@ -32,7 +32,6 @@ use App\Enums\ModerationStatus;
 use App\Models\Article;
 use App\Models\Collection;
 use App\Models\Playlist;
-use App\Models\Ticket;
 use App\Models\Torrent;
 use App\Models\TorrentRequest;
 use App\Models\User;
@@ -56,7 +55,7 @@ class Comments extends Component
 
     public ?User $user;
 
-    public null|Article|Collection|Playlist|Ticket|Torrent|TorrentRequest $model;
+    public null|Article|Collection|Playlist|Torrent|TorrentRequest $model;
 
     public bool $anon = false;
 
@@ -113,7 +112,7 @@ class Comments extends Component
     final public function postComment(): void
     {
         // Authorization
-        abort_unless($this->model instanceof Ticket || ($this->user->can_comment ?? $this->user->group->can_comment), 403, __('comment.rights-revoked'));
+        abort_unless($this->user->can_comment ?? $this->user->group->can_comment, 403, __('comment.rights-revoked'));
 
         abort_if($this->model instanceof Torrent && $this->model->status !== ModerationStatus::APPROVED, 403, __('comment.torrent-status'));
 
@@ -127,70 +126,52 @@ class Comments extends Component
         ]);
 
         // New Comment Notification
-        switch (true) {
-            case $this->model instanceof Ticket:
-                // Notify assigned staff if needed
-                User::find($this->model->staff_id)?->notify(new NewComment($this->model, $comment));
-
-                // Notify ticket creator if needed
-                User::find($this->model->user_id)?->notify(new NewComment($this->model, $comment));
-
-                break;
-            case $this->model instanceof Article:
-            case $this->model instanceof Playlist:
-            case $this->model instanceof TorrentRequest:
-            case $this->model instanceof Torrent:
-                User::find($this->model->user_id)?->notify(new NewComment($this->model, $comment));
-
-                break;
-        }
+        User::find($this->model->user_id)?->notify(new NewComment($this->model, $comment));
 
         // User Tagged Notification
         $users = User::whereIn('username', $this->taggedUsers())->get();
         Notification::sendNow($users, new NewCommentTag($this->model, $comment));
 
-        if (!$this->model instanceof Ticket) {
-            // Auto Shout
-            $username = $comment->anon ? 'An anonymous user' : '[url='.href_profile($this->user).']'.$this->user->username.'[/url]';
+        // Auto Shout
+        $username = $comment->anon ? 'An anonymous user' : '[url='.href_profile($this->user).']'.$this->user->username.'[/url]';
 
-            switch (true) {
-                case $this->model instanceof Article:
-                    $this->chatRepository->systemMessage($username.' has left a comment on Article [url='.href_article($this->model).']'.$this->model->title.'[/url]');
+        switch (true) {
+            case $this->model instanceof Article:
+                $this->chatRepository->systemMessage($username.' has left a comment on Article [url='.href_article($this->model).']'.$this->model->title.'[/url]');
 
-                    break;
-                case $this->model instanceof Collection:
-                    $this->chatRepository->systemMessage($username.' has left a comment on Collection [url='.href_collection($this->model).']'.$this->model->name.'[/url]');
+                break;
+            case $this->model instanceof Collection:
+                $this->chatRepository->systemMessage($username.' has left a comment on Collection [url='.href_collection($this->model).']'.$this->model->name.'[/url]');
 
-                    break;
-                case $this->model instanceof Playlist:
-                    $this->chatRepository->systemMessage($username.' has left a comment on Playlist [url='.href_playlist($this->model).']'.$this->model->name.'[/url]');
+                break;
+            case $this->model instanceof Playlist:
+                $this->chatRepository->systemMessage($username.' has left a comment on Playlist [url='.href_playlist($this->model).']'.$this->model->name.'[/url]');
 
-                    break;
-                case $this->model instanceof TorrentRequest:
-                    $this->chatRepository->systemMessage($username.' has left a comment on Torrent Request [url='.href_request($this->model).']'.$this->model->name.'[/url]');
+                break;
+            case $this->model instanceof TorrentRequest:
+                $this->chatRepository->systemMessage($username.' has left a comment on Torrent Request [url='.href_request($this->model).']'.$this->model->name.'[/url]');
 
-                    break;
-                case $this->model instanceof Torrent:
-                    $this->chatRepository->systemMessage($username.' has left a comment on Torrent [url='.href_torrent($this->model).']'.$this->model->name.'[/url]');
+                break;
+            case $this->model instanceof Torrent:
+                $this->chatRepository->systemMessage($username.' has left a comment on Torrent [url='.href_torrent($this->model).']'.$this->model->name.'[/url]');
 
-                    break;
-            }
+                break;
+        }
 
-            // Achievements
-            if (!$comment->anon) {
-                $this->user->unlock(new UserMadeComment());
-                $this->user->addProgress(new UserMadeTenComments(), 1);
-                $this->user->addProgress(new UserMade50Comments(), 1);
-                $this->user->addProgress(new UserMade100Comments(), 1);
-                $this->user->addProgress(new UserMade200Comments(), 1);
-                $this->user->addProgress(new UserMade300Comments(), 1);
-                $this->user->addProgress(new UserMade400Comments(), 1);
-                $this->user->addProgress(new UserMade500Comments(), 1);
-                $this->user->addProgress(new UserMade600Comments(), 1);
-                $this->user->addProgress(new UserMade700Comments(), 1);
-                $this->user->addProgress(new UserMade800Comments(), 1);
-                $this->user->addProgress(new UserMade900Comments(), 1);
-            }
+        // Achievements
+        if (!$comment->anon) {
+            $this->user->unlock(new UserMadeComment());
+            $this->user->addProgress(new UserMadeTenComments(), 1);
+            $this->user->addProgress(new UserMade50Comments(), 1);
+            $this->user->addProgress(new UserMade100Comments(), 1);
+            $this->user->addProgress(new UserMade200Comments(), 1);
+            $this->user->addProgress(new UserMade300Comments(), 1);
+            $this->user->addProgress(new UserMade400Comments(), 1);
+            $this->user->addProgress(new UserMade500Comments(), 1);
+            $this->user->addProgress(new UserMade600Comments(), 1);
+            $this->user->addProgress(new UserMade700Comments(), 1);
+            $this->user->addProgress(new UserMade800Comments(), 1);
+            $this->user->addProgress(new UserMade900Comments(), 1);
         }
 
         $this->reset('newCommentState');

@@ -367,6 +367,13 @@ Route::middleware('language')->group(function (): void {
                 Route::post('/{ticket}/close', [App\Http\Controllers\TicketController::class, 'close'])->name('close');
                 Route::post('/{ticket}/reopen', [App\Http\Controllers\TicketController::class, 'reopen'])->name('reopen');
                 Route::post('/{ticket}/attachments/{attachment}/download', [App\Http\Controllers\TicketAttachmentController::class, 'download'])->name('attachment.download');
+
+                Route::prefix('{ticket}/replies')->name('replies.')->group(function (): void {
+                    Route::post('/', [App\Http\Controllers\TicketReplyController::class, 'store'])->name('store');
+                    Route::get('/{ticketReply}/edit', [App\Http\Controllers\TicketReplyController::class, 'edit'])->name('edit');
+                    Route::patch('/{ticketReply}', [App\Http\Controllers\TicketReplyController::class, 'update'])->name('update');
+                    Route::delete('/{ticketReply}', [App\Http\Controllers\TicketReplyController::class, 'destroy'])->name('destroy');
+                })->scopeBindings();
             })->scopeBindings();
         });
 

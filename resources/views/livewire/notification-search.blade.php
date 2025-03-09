@@ -137,6 +137,20 @@
                                 <input
                                     class="form__checkbox"
                                     type="checkbox"
+                                    wire:model.live.prefetch="ticket_replies"
+                                    value="1"
+                                />
+                                <i
+                                    class="{{ config('other.font-awesome') }} fa-comments text-success"
+                                ></i>
+                                Ticket Replies
+                            </label>
+                        </p>
+                        <p class="form__group">
+                            <label class="form__label">
+                                <input
+                                    class="form__checkbox"
+                                    type="checkbox"
                                     wire:model.live.prefetch="followers"
                                     value="1"
                                 />

@@ -129,7 +129,78 @@
         </section>
     @endif
 
-    <livewire:comments :model="$ticket" />
+    @foreach ($ticket->replies as $ticketReply)
+        <section class="panelV2" id="ticket-reply-{{ $ticketReply->id }}">
+            <header class="panel__header">
+                <h2 class="panel__heading">
+                    <x-user_tag :user="$ticketReply->user" :anon="$ticketReply->anon" />
+                </h2>
+                <div class="panel__actions">
+                    <div class="panel__action">
+                        <time
+                            datetime="{{ $reply->created_at }}"
+                            title="{{ $reply->created_at }}"
+                        >
+                            {{ $reply->created_at?->diffForHumans() }}
+                        </time>
+                    </div>
+                    <div class="panel__action">
+                        <a
+                            class="form__button form__button--text"
+                            href="{{ route('tickets.replies.edit', ['ticket' => $ticket, 'ticketReply' => $ticketReply]) }}"
+                        >
+                            {{ __('common.edit') }}
+                        </a>
+                    </div>
+                    <div class="panel__action">
+                        <form
+                            action="{{ route('tickets.replies.destroy', ['ticket' => $ticket, 'ticketReply' => $ticketReply]) }}"
+                            method="POST"
+                            x-data="confirmation"
+                        >
+                            @csrf
+                            @method('DELETE')
+                            <button
+                                class="form__button form__button--text"
+                                x-on:click.prevent="confirmAction"
+                                data-b64-deletion-message="{{ base64_encode('Are you sure you want to delete this ticket reply?') }}"
+                            >
+                                {{ __('common.delete') }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </header>
+
+            <div class="panel__body bbcode-rendered">
+                @bbcode($reply->content)
+            </div>
+        </section>
+    @endforeach
+
+    <section class="panelV2">
+        <h2 class="panel__heading">{{ __('pm.reply') }}</h2>
+        <div class="panel__body">
+            <form
+                method="POST"
+                action="{{ route('tickets.replies.store', ['ticket' => $ticket]) }}"
+                class="form"
+            >
+                @csrf
+                @livewire('bbcode-input', ['name' => 'content', 'label' => __('pm.reply'), 'required' => true])
+                <p class="form__group">
+                    <input type="hidden" name="anon" value="0" />
+                    <input type="checkbox" id="anon" name="anon" class="form__checkbox" />
+                    <label for="anon" class="form__label">{{ __('common.anonymous') }}?</label>
+                </p>
+                <p class="form__group">
+                    <button class="form__button form__button--filled">
+                        {{ __('pm.reply') }}
+                    </button>
+                </p>
+            </form>
+        </div>
+    </section>
 @endsection
 
 @section('sidebar')

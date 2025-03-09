@@ -101,7 +101,7 @@ class Ticket extends Model
             ->get();
 
         foreach ($open_tickets as $open_ticket) {
-            Comment::checkForStale($open_ticket);
+            TicketReply::checkForStale($open_ticket);
         }
     }
 
@@ -159,11 +159,11 @@ class Ticket extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<Comment, $this>
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<TicketReply, $this>
      */
-    public function comments(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    public function replies(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->morphMany(Comment::class, 'commentable');
+        return $this->hasMany(TicketReply::class);
     }
 
     /**
