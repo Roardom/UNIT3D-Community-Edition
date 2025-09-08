@@ -92,11 +92,10 @@ class UserTorrents extends Component
      */
     final protected \Illuminate\Contracts\Pagination\LengthAwarePaginator $history {
         get => History::query()
-            ->join(
+            ->leftJoin(
                 'torrents',
                 fn ($join) => $join
                     ->on('history.torrent_id', '=', 'torrents.id')
-                    ->where('history.user_id', '=', $this->user->id)
             )
             ->select(
                 'history.torrent_id',
@@ -127,6 +126,7 @@ class UserTorrents extends Component
             ->selectRaw('TIMESTAMPDIFF(SECOND, history.created_at, history.completed_at) AS leechtime')
             ->selectRaw('CAST(history.uploaded AS float) / CAST((history.downloaded + 1) AS float) AS ratio')
             ->selectRaw('CAST(history.actual_uploaded AS float) / CAST((history.actual_downloaded + 1) AS float) AS actual_ratio')
+            ->where('history.user_id', '=', $this->user->id)
             ->when(
                 $this->name,
                 fn ($query) => $query
