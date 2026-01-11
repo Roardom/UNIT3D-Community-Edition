@@ -18,6 +18,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Announce.
@@ -36,7 +37,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $event
  * @property string $key
  */
-class Announce extends Model
+#[AllowDynamicProperties]
+final class Announce extends Model
 {
     /**
      * Indicates if the model should be timestamped.

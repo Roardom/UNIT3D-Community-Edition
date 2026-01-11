@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use AllowDynamicProperties;
 
 /**
  * App\Models\User.
@@ -80,7 +81,8 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property int                             $own_flushes
  * @property string|null                     $email_verified_at
  */
-class User extends Authenticatable implements MustVerifyEmail
+#[AllowDynamicProperties]
+final class User extends Authenticatable implements MustVerifyEmail
 {
     use Achiever;
 
@@ -655,7 +657,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function solvedReports(): HasMany
     {
-        return $this->hasMany(Report::class, 'staff_id');
+        return $this->hasMany(Report::class, 'solved_by');
     }
 
     /**
@@ -673,39 +675,9 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @return HasMany<Ban, $this>
      */
-    public function userban(): HasMany
+    public function bans(): HasMany
     {
         return $this->hasMany(Ban::class, 'owned_by');
-    }
-
-    /**
-     * Get the bans issued by the user.
-     *
-     * @return HasMany<Ban, $this>
-     */
-    public function staffban(): HasMany
-    {
-        return $this->hasMany(Ban::class, 'created_by');
-    }
-
-    /**
-     * Get the warnings issues by the user.
-     *
-     * @return HasMany<Warning, $this>
-     */
-    public function staffwarning(): HasMany
-    {
-        return $this->hasMany(Warning::class, 'warned_by');
-    }
-
-    /**
-     * Get the warnings deleted by the user.
-     *
-     * @return HasMany<Warning, $this>
-     */
-    public function staffdeletedwarning(): HasMany
-    {
-        return $this->hasMany(Warning::class, 'deleted_by');
     }
 
     /**
@@ -713,7 +685,7 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @return HasMany<Warning, $this>
      */
-    public function userwarning(): HasMany
+    public function warnings(): HasMany
     {
         return $this->hasMany(Warning::class, 'user_id');
     }
@@ -816,16 +788,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function freeleechTokens(): HasMany
     {
         return $this->hasMany(FreeleechToken::class);
-    }
-
-    /**
-     * Get the warnings for the user.
-     *
-     * @return HasMany<Warning, $this>
-     */
-    public function warnings(): HasMany
-    {
-        return $this->hasMany(Warning::class);
     }
 
     /**
@@ -1021,11 +983,11 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Get the prizes claimed by the user.
      *
-     * @return HasMany<ClaimedPrize, $this>
+     * @return HasMany<GiveawayClaimedPrize, $this>
      */
     public function claimedPrizes(): HasMany
     {
-        return $this->hasMany(ClaimedPrize::class);
+        return $this->hasMany(GiveawayClaimedPrize::class);
     }
 
     /**

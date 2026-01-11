@@ -53,7 +53,7 @@ return [
     'request' => 'Richiesta',
     'request-details' => 'Richiedi dettagli',
     'requested-by' => 'Richiesto da',
-    'requests' => 'richieste',
+    'requests' => 'Richieste UPLOAD',
     'required' => 'Necessario',
     'reset' => 'Reset',
     'reset-confirmation' => 'Sei sicuro di voler resettare questa richiesta',

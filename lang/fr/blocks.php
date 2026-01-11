@@ -15,7 +15,7 @@ return [
     'click' => 'Cliquez sur',
     'to-enable-editor' => 'activer l éditeur',
     'featured-by' => 'Présenté par',
-    'featured-torrents' => 'Torrents recommandé',
+    'featured-torrents' => 'Torrents recommandés',
     'featured-torrents-intro' => 'Obtenez-les pendant que vous le pouvez!',
     'featured-until' => 'Ceci est un torrent recommandé jusqu au',
     'top-torrents' => 'Top Torrents',

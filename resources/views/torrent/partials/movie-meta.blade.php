@@ -226,6 +226,19 @@
                 </a>
             </li>
         @endif
+
+        @foreach (array_unique(array_filter([(int) ($meta->imdb_id ?? 0), $torrent->imdb ?? 0])) as $imdbId)
+            <li class="meta__letterboxd">
+                <a
+                    class="meta-id-tag"
+                    href="https://www.letterboxd.com/imdb/tt{{ \str_pad((string) $imdbId, 7, '0', STR_PAD_LEFT) }}"
+                    title="Letterboxd"
+                    target="_blank"
+                >
+                    <img src="{{ url('/img/meta/letterboxd.svg') }}" />
+                </a>
+            </li>
+        @endforeach
     </ul>
     <p class="meta__description">{{ $meta?->overview }}</p>
     <div class="meta__chips">

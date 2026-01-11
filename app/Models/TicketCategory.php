@@ -19,6 +19,7 @@ namespace App\Models;
 use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use AllowDynamicProperties;
 
 /**
  * App\Models\TicketCategory.
@@ -29,7 +30,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class TicketCategory extends Model
+#[AllowDynamicProperties]
+final class TicketCategory extends Model
 {
     use Auditable;
 

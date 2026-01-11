@@ -22,7 +22,9 @@ enum GlobalRateLimit: string
     case API = 'api';
     case AUTHENTICATED_IMAGES = 'authenticated-images';
     case CHAT = 'chat';
+    case FORGOT_PASSWORD = 'forgot-password';
     case IGDB = 'igdb';
+    case RESET_PASSWORD = 'reset-password';
     case RSS = 'rss';
     case SEARCH = 'search';
     case TMDB = 'tmdb';

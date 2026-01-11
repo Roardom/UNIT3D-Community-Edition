@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use AllowDynamicProperties;
 
 /**
  * App\Models\TorrentRequest.
@@ -35,7 +36,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property int|null                        $tmdb_movie_id
  * @property int|null                        $tmdb_tv_id
  * @property int|null                        $mal
- * @property int                             $igdb
+ * @property int|null                        $igdb
  * @property string                          $description
  * @property int                             $user_id
  * @property string                          $bounty
@@ -53,7 +54,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property int|null                        $season_number
  * @property int|null                        $episode_number
  */
-class TorrentRequest extends Model
+#[AllowDynamicProperties]
+final class TorrentRequest extends Model
 {
     use Auditable;
 

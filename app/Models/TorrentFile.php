@@ -20,6 +20,7 @@ use App\Helpers\StringHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\TorrentFile.
@@ -29,7 +30,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int    $size
  * @property int    $torrent_id
  */
-class TorrentFile extends Model
+#[AllowDynamicProperties]
+final class TorrentFile extends Model
 {
     /** @use HasFactory<\Database\Factories\TorrentFileFactory> */
     use HasFactory;

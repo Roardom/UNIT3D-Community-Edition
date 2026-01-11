@@ -18,6 +18,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use AllowDynamicProperties;
 
 /**
  * App\Models\DonationGateway.
@@ -30,7 +31,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
  */
-class DonationGateway extends Model
+#[AllowDynamicProperties]
+final class DonationGateway extends Model
 {
     /** @use HasFactory<\Database\Factories\DonationGatewayFactory> */
     use HasFactory;

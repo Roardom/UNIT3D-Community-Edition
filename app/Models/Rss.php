@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use stdClass;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Rss.
@@ -37,7 +38,8 @@ use stdClass;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class Rss extends Model
+#[AllowDynamicProperties]
+final class Rss extends Model
 {
     use Auditable;
 

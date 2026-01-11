@@ -18,6 +18,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\TopicRead.
@@ -26,7 +27,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $topic_id
  * @property int $post_id
  */
-class TopicRead extends Model
+#[AllowDynamicProperties]
+final class TopicRead extends Model
 {
     protected $guarded = [];
 

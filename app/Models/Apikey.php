@@ -18,6 +18,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Apikey.
@@ -28,7 +29,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null                     $created_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  */
-class Apikey extends Model
+#[AllowDynamicProperties]
+final class Apikey extends Model
 {
     /**
      * @var bool

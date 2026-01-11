@@ -11,7 +11,7 @@ return [
  * @author     HDVinnie <hdinnovations@protonmail.com>
  * @license    https://www.gnu.org/licenses/agpl-3.0.en.html/ GNU Affero General Public License v3.0
  */
-    'chatbox' => 'Janela de chat',
+    'chatbox' => 'Chat',
     'click' => 'Clique',
     'to-enable-editor' => 'para habilitar o editor',
     'featured-by' => 'Caracterizado por',

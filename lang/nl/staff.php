@@ -55,4 +55,10 @@ return [
     'chat-tools' => 'Chat-hulpmiddelen',
     'flush-chat' => 'Chatbox spoelen',
     'seedboxes' => 'Geregistreerde zaaddozen',
+    'application' => 'Sollicitatie',
+    'application-type' => 'Type',
+    'application-image-proofs' => 'Foto bewijzen',
+    'application-referrer' => 'Verwijzer',
+    'article-content' => 'Content',
+    'blocked-ips' => 'Geblokkeerde IPs',
 ];

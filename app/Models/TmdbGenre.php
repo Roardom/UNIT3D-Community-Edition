@@ -19,6 +19,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use AllowDynamicProperties;
 
 /**
  * App\Models\TmdbGenre.
@@ -26,7 +27,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property int    $id
  * @property string $name
  */
-class TmdbGenre extends Model
+#[AllowDynamicProperties]
+final class TmdbGenre extends Model
 {
     /** @use HasFactory<\Database\Factories\TmdbGenreFactory> */
     use HasFactory;

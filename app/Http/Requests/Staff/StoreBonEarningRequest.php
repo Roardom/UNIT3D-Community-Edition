@@ -99,7 +99,7 @@ class StoreBonEarningRequest extends FormRequest
                     '<=',
                     '>=',
                     '=',
-                    '<>',
+                    '!=',
                 ]),
             ],
             'conditions.*.operand2' => [

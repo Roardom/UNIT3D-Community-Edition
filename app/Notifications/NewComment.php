@@ -69,8 +69,8 @@ class NewComment extends Notification
         }
 
         // Evaluate model based settings
-        switch (true) {
-            case $this->model instanceof Torrent:
+        switch ($this->model::class) {
+            case Torrent::class:
                 if ($notifiable->notification?->show_torrent_comment === 0) {
                     return false;
                 }
@@ -78,7 +78,7 @@ class NewComment extends Notification
                 // If the sender's group ID is found in the "Block all notifications from the selected groups" array,
                 // the expression will return false.
                 return ! \in_array($this->comment->user->group_id, $notifiable->notification?->json_torrent_groups ?? [], true);
-            case $this->model instanceof TorrentRequest:
+            case TorrentRequest::class:
                 if ($notifiable->notification?->show_request_comment === 0) {
                     return false;
                 }
@@ -86,12 +86,10 @@ class NewComment extends Notification
                 // If the sender's group ID is found in the "Block all notifications from the selected groups" array,
                 // the expression will return false.
                 return ! \in_array($this->comment->user->group_id, $notifiable->notification?->json_request_groups ?? [], true);
-            case $this->model instanceof Ticket:
-                return ! ($this->model->staff_id === $this->comment->id && $this->model->staff_id !== null)
-                ;
-
-            case $this->model instanceof Playlist:
-            case $this->model instanceof Article:
+            case Ticket::class:
+                return $notifiable->id !== $this->comment->user_id;
+            case Playlist::class:
+            case Article::class:
                 break;
         }
 
@@ -107,28 +105,28 @@ class NewComment extends Notification
     {
         $username = $this->comment->anon ? 'Anonymous' : $this->comment->user->username;
 
-        return match (true) {
-            $this->model instanceof Torrent => [
+        return match ($this->model::class) {
+            Torrent::class => [
                 'title' => 'New Torrent Comment Received',
                 'body'  => $username.' has left a comment on torrent '.$this->model->name,
                 'url'   => '/torrents/'.$this->model->id.'#comment-'.$this->comment->id,
             ],
-            $this->model instanceof TorrentRequest => [
+            TorrentRequest::class => [
                 'title' => 'New Request Comment Received',
                 'body'  => $username.' has left a comment on torrent request '.$this->model->name,
                 'url'   => '/requests/'.$this->model->id.'#comment-'.$this->comment->id,
             ],
-            $this->model instanceof Ticket => [
+            Ticket::class => [
                 'title' => 'New Ticket Comment Received',
                 'body'  => $username.' has left a comment on ticket '.$this->model->subject,
                 'url'   => '/tickets/'.$this->model->id.'#comment-'.$this->comment->id,
             ],
-            $this->model instanceof Playlist => [
+            Playlist::class => [
                 'title' => 'New Playlist Comment Received',
                 'body'  => $username.' has left a comment on playlist '.$this->model->name,
                 'url'   => '/playlists/'.$this->model->id.'#comment-'.$this->comment->id,
             ],
-            $this->model instanceof Article => [
+            Article::class => [
                 'title' => 'New Article Comment Received',
                 'body'  => $username.' has left a comment on article '.$this->model->title,
                 'url'   => '/articles/'.$this->model->id.'#comment-'.$this->comment->id,

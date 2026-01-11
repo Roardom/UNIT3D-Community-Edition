@@ -18,6 +18,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use AllowDynamicProperties;
 
 /**
  * App\Models\IgdbCompany.
@@ -25,7 +26,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property int    $id
  * @property string $name
  */
-class IgdbCompany extends Model
+#[AllowDynamicProperties]
+final class IgdbCompany extends Model
 {
     /**
      * The attributes that are mass assignable.

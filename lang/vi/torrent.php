@@ -14,7 +14,7 @@ return [
     'activity' => 'Hoạt động',
     'age' => 'Tuổi tác',
     'agent' => 'Đặc vụ',
-    'alive' => 'Sống sót',
+    'alive' => 'Đang hoạt động',
     'announce-url' => 'Thông báo URL',
     'announce-url-desc' => 'Vui lòng sử dụng URL thông báo ở trên khi tạo một torrent mới. Nếu bạn muốn sử dụng torrent của mình mà không cần tải xuống từ trang web, bạn cần đặt cờ riêng và nguồn thành: source',
     'announce-url-desc-url' => 'Gặp rắc rối? Xem hướng dẫn của chúng tôi <a href=":url">TẠI ĐÂY</a>',
@@ -202,4 +202,6 @@ return [
     'view-more' => 'Xem thêm',
     'view-trailer' => 'Xem trailer',
     'votes' => 'Phiếu bầu',
+    'resolution' => 'Độ phân giải',
+    'resolutions' => 'Độ phân giải',
 ];

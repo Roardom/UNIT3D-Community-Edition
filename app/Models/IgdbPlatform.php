@@ -18,6 +18,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use AllowDynamicProperties;
 
 /**
  * App\Models\IgdbPlatform.
@@ -26,7 +27,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string  $name
  * @property ?string $platform_logo_image_id
  */
-class IgdbPlatform extends Model
+#[AllowDynamicProperties]
+final class IgdbPlatform extends Model
 {
     /**
      * The attributes that are mass assignable.

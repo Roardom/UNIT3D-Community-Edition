@@ -36,4 +36,7 @@ return [
     'to' => 'Naar',
     'unread' => 'Ongelezen',
     'empty-inbox' => 'Lege brievenbus',
+    'all-marked-read' => 'Alle berichten zijn gemarkeerd als gelezen!',
+    'delete-success' => 'PM is succesvol verwijderd!',
+    'error' => 'Wat probeer je te doen!',
 ];

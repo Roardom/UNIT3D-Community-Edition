@@ -35,57 +35,54 @@ class TorrentZipController extends Controller
         //  Extend The Maximum Execution Time
         set_time_limit(1200);
 
-        // Extend The Maximum Memory Limit
-        ini_set('memory_limit', '2048M');
-
         // Authorized User
         abort_unless($request->user()->is($user), 403);
 
         // Get Users History Or Peers
         if ($request->boolean('type') === true) {
-            $torrents = Torrent::whereRelation('peers', 'user_id', '=', $user->id)
-                ->whereRelation('peers', 'active', '=', true)
-                ->whereRelation('peers', 'visible', '=', true)
-                ->get();
-
             $zipFileName = $user->username.'-peers'.'.zip';
         } else {
-            $torrents = Torrent::whereRelation('history', 'user_id', '=', $user->id)->get();
-
             $zipFileName = $user->username.'-history'.'.zip';
         }
 
-        if ($torrents->isEmpty()) {
-            return redirect()->back()->withErrors('No torrents found');
-        }
-
         return response()->streamDownload(
-            function () use ($zipFileName, $user, $torrents): void {
+            function () use ($zipFileName, $user, $request): void {
                 $zip = new ZipStream(outputName: sanitize_filename($zipFileName));
 
                 $announceUrl = route('announce', ['passkey' => $user->passkey]);
 
-                foreach ($torrents as $torrent) {
-                    if (Storage::disk('torrent-files')->exists($torrent->file_name)) {
-                        $dict = Bencode::bdecode(Storage::disk('torrent-files')->get($torrent->file_name));
+                Torrent::query()
+                    ->when(
+                        $request->boolean('type'),
+                        fn ($query) => $query
+                            ->whereRelation('peers', 'user_id', '=', $user->id)
+                            ->whereRelation('peers', 'active', '=', true)
+                            ->whereRelation('peers', 'visible', '=', true),
+                        fn ($query) => $query->whereRelation('history', 'user_id', '=', $user->id),
+                    )
+                    ->chunk(100, function ($torrents) use ($announceUrl, $zip): void {
+                        foreach ($torrents as $torrent) {
+                            if (Storage::disk('torrent-files')->exists($torrent->file_name)) {
+                                $dict = Bencode::bdecode(Storage::disk('torrent-files')->get($torrent->file_name));
 
-                        // Set the announce key and add the user passkey
-                        $dict['announce'] = $announceUrl;
+                                // Set the announce key and add the user passkey
+                                $dict['announce'] = $announceUrl;
 
-                        // Set link to torrent as the comment
-                        if (config('torrent.comment')) {
-                            $dict['comment'] = config('torrent.comment').'. '.route('torrents.show', ['id' => $torrent->id]);
-                        } else {
-                            $dict['comment'] = route('torrents.show', ['id' => $torrent->id]);
+                                // Set link to torrent as the comment
+                                if (config('torrent.comment')) {
+                                    $dict['comment'] = config('torrent.comment').'. '.route('torrents.show', ['id' => $torrent->id]);
+                                } else {
+                                    $dict['comment'] = route('torrents.show', ['id' => $torrent->id]);
+                                }
+
+                                $fileToDownload = Bencode::bencode($dict);
+
+                                $filename = sanitize_filename('['.config('torrent.source').']'.$torrent->name.'.torrent');
+
+                                $zip->addFile($filename, $fileToDownload);
+                            }
                         }
-
-                        $fileToDownload = Bencode::bencode($dict);
-
-                        $filename = sanitize_filename('['.config('torrent.source').']'.$torrent->name.'.torrent');
-
-                        $zip->addFile($filename, $fileToDownload);
-                    }
-                }
+                    });
 
                 $zip->finish();
             },

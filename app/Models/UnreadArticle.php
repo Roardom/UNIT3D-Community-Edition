@@ -18,6 +18,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\UnreadArticle.
@@ -26,7 +27,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $article_id
  * @property int $user_id
  */
-class UnreadArticle extends Model
+#[AllowDynamicProperties]
+final class UnreadArticle extends Model
 {
     /**
      * Indicates if the model should be timestamped.

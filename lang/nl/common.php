@@ -174,4 +174,11 @@ return [
     'yes' => 'Ja',
     'your' => 'Jouw',
     'your-comment' => 'Jouw commentaar',
+    'abbrev-days' => 'D ',
+    'abbrev-hours' => 'u ',
+    'abbrev-minutes' => 'm ',
+    'abbrev-months' => 'M ',
+    'abbrev-seconds' => 's',
+    'abbrev-weeks' => 'W ',
+    'abbrev-years' => 'Y ',
 ];

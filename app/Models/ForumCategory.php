@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Forum.
@@ -33,7 +34,8 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class ForumCategory extends Model
+#[AllowDynamicProperties]
+final class ForumCategory extends Model
 {
     use Auditable;
 

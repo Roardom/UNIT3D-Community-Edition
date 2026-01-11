@@ -162,17 +162,17 @@
                             {{ __('common.reporter') }}
                             @include('livewire.includes._sort-icon', ['field' => 'reporter_id'])
                         </th>
+                        <th wire:click="sortBy('assigned_to')" role="columnheader button">
+                            {{ __('ticket.assigned-staff') }}
+                            @include('livewire.includes._sort-icon', ['field' => 'assigned_to'])
+                        </th>
                         <th wire:click="sortBy('created_at')" role="columnheader button">
                             {{ __('user.created-on') }}
                             @include('livewire.includes._sort-icon', ['field' => 'created_at'])
                         </th>
-                        <th wire:click="sortBy('staff_id')" role="columnheader button">
+                        <th wire:click="sortBy('solved_by')" role="columnheader button">
                             {{ __('user.judge') }}
-                            @include('livewire.includes._sort-icon', ['field' => 'staff_id'])
-                        </th>
-                        <th wire:click="sortBy('solved')" role="columnheader button">
-                            {{ __('forum.solved') }}
-                            @include('livewire.includes._sort-icon', ['field' => 'solved'])
+                            @include('livewire.includes._sort-icon', ['field' => 'solved_by'])
                         </th>
                     </tr>
                 </thead>
@@ -193,6 +193,13 @@
                                 <x-user-tag :anon="false" :user="$report->reporter" />
                             </td>
                             <td>
+                                @if ($report->assignee)
+                                    <x-user-tag :anon="false" :user="$report->assignee" />
+                                @else
+                                        Unassigned
+                                @endif
+                            </td>
+                            <td>
                                 <time
                                     datetime="{{ $report->created_at }}"
                                     title="{{ $report->created_at }}"
@@ -201,21 +208,12 @@
                                 </time>
                             </td>
                             <td>
-                                @if ($report->staff_id !== null)
-                                    <x-user-tag :anon="false" :user="$report->staff" />
-                                @endif
-                            </td>
-                            <td>
-                                @if ($report->solved)
-                                    <i
-                                        class="{{ config('other.font-awesome') }} fa-check text-green"
-                                    ></i>
-                                    {{ __('common.yes') }}
+                                @if ($report->judge)
+                                    <x-user-tag :anon="false" :user="$report->judge" />
                                 @else
                                     <i
                                         class="{{ config('other.font-awesome') }} fa-times text-red"
                                     ></i>
-                                    {{ __('common.no') }}
                                 @endif
                             </td>
                         </tr>

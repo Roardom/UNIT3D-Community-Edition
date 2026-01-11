@@ -49,4 +49,6 @@ return [
     'users-per-group' => 'Lietotāji grupā',
     'active' => 'Aktīvs',
     'all' => 'Viss',
+    'all-time' => 'Visu laiku',
+    'banned' => 'Aizslēgts',
 ];

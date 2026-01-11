@@ -19,6 +19,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\TorrentDownload.
@@ -30,7 +31,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class TorrentDownload extends Model
+#[AllowDynamicProperties]
+final class TorrentDownload extends Model
 {
     /** @use HasFactory<\Database\Factories\TorrentDownloadFactory> */
     use HasFactory;

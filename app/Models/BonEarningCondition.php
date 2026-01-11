@@ -18,6 +18,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\BonEarning.
@@ -28,7 +29,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property '<'|'>'|'<='|'>='|'='|'!='                                                                                               $operator
  * @property float                                                                                                                    $operand2
  */
-class BonEarningCondition extends Model
+#[AllowDynamicProperties]
+final class BonEarningCondition extends Model
 {
     /**
      * Indicates if the model should be timestamped.

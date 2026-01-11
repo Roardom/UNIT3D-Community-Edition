@@ -1,7 +1,6 @@
 <?php
-
-declare(strict_types=1);
-/**
+return [
+    /**
  * NOTICE OF LICENSE.
  *
  * UNIT3D Community Edition is open-sourced software licensed under the GNU Affero General Public License v3.0
@@ -12,8 +11,6 @@ declare(strict_types=1);
  * @author     HDVinnie <hdinnovations@protonmail.com>
  * @license    https://www.gnu.org/licenses/agpl-3.0.en.html/ GNU Affero General Public License v3.0
  */
-
-return [
     /*
     |--------------------------------------------------------------------------
     | Языковые ресурсы аутентификации
@@ -25,7 +22,7 @@ return [
     | с требованиями вашего приложения.
     |
     */
-
-    'failed'   => 'Имя пользователя и пароль не совпадают.',
+    'failed' => 'Имя пользователя и пароль не совпадают.',
     'throttle' => 'Слишком много попыток входа. Пожалуйста, попробуйте еще раз через :seconds секунд.',
+    'activation-error' => 'Заблокированный или недействительный токен или аккаунт уже подтверждён!',
 ];

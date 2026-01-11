@@ -47,4 +47,10 @@ return [
     'total-upload' => 'Totale upload',
     'users-in-group' => 'Gebruikers in groep',
     'users-per-group' => 'Gebruikers per groep',
+    'active' => 'Actief',
+    'all' => 'Alle',
+    'all-time' => 'Aller tijden',
+    'banned' => 'Verbannen',
+    'credited' => 'Bijgeschreven',
+    'disabled' => 'Uitgeschakeld',
 ];

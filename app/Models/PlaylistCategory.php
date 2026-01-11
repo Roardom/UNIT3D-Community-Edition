@@ -20,6 +20,7 @@ use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use AllowDynamicProperties;
 
 /**
  * App\Models\PlaylistCategory.
@@ -29,7 +30,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int    $position
  * @property string $description
  */
-class PlaylistCategory extends Model
+#[AllowDynamicProperties]
+final class PlaylistCategory extends Model
 {
     use Auditable;
 

@@ -152,66 +152,66 @@ class Comment extends Component
         ]);
 
         // New Comment Notification
-        switch (true) {
-            case $this->model instanceof Ticket:
+        switch ($this->model::class) {
+            case Ticket::class:
                 $ticket = $this->model;
 
                 if ($this->user->id !== $ticket->staff_id && $ticket->staff_id !== null) {
-                    User::find($ticket->staff_id)->notify(new NewComment($this->model, $reply));
+                    User::query()->find($ticket->staff_id)->notify(new NewComment($this->model, $reply));
                     $this->model->update(['staff_read' => false]);
                 }
 
                 if ($this->user->id !== $ticket->user_id) {
-                    User::find($ticket->user_id)->notify(new NewComment($this->model, $reply));
+                    User::query()->find($ticket->user_id)->notify(new NewComment($this->model, $reply));
                     $this->model->update(['user_read' => false]);
                 }
 
                 if (!\in_array($this->comment->user_id, [$ticket->staff_id, $ticket->user_id, $this->user->id])) {
-                    User::find($this->comment->user_id)->notify(new NewComment($this->model, $reply));
+                    User::query()->find($this->comment->user_id)->notify(new NewComment($this->model, $reply));
                 }
 
                 break;
-            case $this->model instanceof Article:
-            case $this->model instanceof Playlist:
-            case $this->model instanceof TorrentRequest:
-            case $this->model instanceof Torrent:
+            case Article::class:
+            case Playlist::class:
+            case TorrentRequest::class:
+            case Torrent::class:
                 if ($this->user->id !== $this->model->user_id) {
-                    User::find($this->model->user_id)?->notify(new NewComment($this->model, $reply));
+                    User::query()->find($this->model->user_id)?->notify(new NewComment($this->model, $reply));
                 }
 
                 if ($this->user->id !== $this->comment->user_id && $this->comment->user_id !== $this->model->user_id) {
-                    User::find($this->comment->user_id)?->notify(new NewComment($this->model, $reply));
+                    User::query()->find($this->comment->user_id)?->notify(new NewComment($this->model, $reply));
                 }
 
                 break;
         }
 
         // User Tagged Notification
-        $users = User::whereIn('username', $this->taggedUsers())->get();
+        $users = User::query()->whereIn('username', $this->taggedUsers())->get();
         Notification::sendNow($users, new NewCommentTag($this->model, $reply));
 
         if (!$this->model instanceof Ticket) {
             // Auto Shout
             $username = $reply->anon ? 'An anonymous user' : '[url='.href_profile($this->user).']'.$this->user->username.'[/url]';
 
-            switch (true) {
-                case $this->model instanceof Article:
+            switch ($this->model::class) {
+                case Article::class:
                     $this->chatRepository->systemMessage($username.' has left a comment on Article [url='.href_article($this->model).']'.$this->model->title.'[/url]');
 
                     break;
-                case $this->model instanceof TmdbCollection:
+                case TmdbCollection::class:
                     $this->chatRepository->systemMessage($username.' has left a comment on Collection [url='.href_collection($this->model).']'.$this->model->name.'[/url]');
 
                     break;
-                case $this->model instanceof Playlist:
+                case Playlist::class:
                     $this->chatRepository->systemMessage($username.' has left a comment on Playlist [url='.href_playlist($this->model).']'.$this->model->name.'[/url]');
 
                     break;
-                case $this->model instanceof TorrentRequest:
+                case TorrentRequest::class:
                     $this->chatRepository->systemMessage($username.' has left a comment on Torrent Request [url='.href_request($this->model).']'.$this->model->name.'[/url]');
 
                     break;
-                case $this->model instanceof Torrent:
+                case Torrent::class:
                     $this->chatRepository->systemMessage($username.' has left a comment on Torrent [url='.href_torrent($this->model).']'.$this->model->name.'[/url]');
 
                     break;

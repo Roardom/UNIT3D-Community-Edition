@@ -35,7 +35,7 @@ return [
     'actions'                        => 'Actions',
     'download'                       => 'Download',
     'delete'                         => 'Delete',
-    'delete_confirm'                 => 'Are your sure you want to delete this backup file?',
+    'delete_confirm'                 => 'Are you sure you want to delete this backup file?',
     'delete_confirmation_title'      => 'Done',
     'delete_confirmation_message'    => 'The backup file was deleted.',
     'delete_error_title'             => 'Error',

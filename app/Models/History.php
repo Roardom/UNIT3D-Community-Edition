@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use AllowDynamicProperties;
 
 /**
  * App\Models\History.
@@ -42,7 +43,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property bool                            $hitrun
  * @property \Illuminate\Support\Carbon|null $prewarned_at
  */
-class History extends Model
+#[AllowDynamicProperties]
+final class History extends Model
 {
     /** @use HasFactory<\Database\Factories\HistoryFactory> */
     use HasFactory;

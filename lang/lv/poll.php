@@ -26,4 +26,6 @@ return [
     'vote-now' => 'Iegūstiet savu balsojumu tagad!',
     'votes' => 'Balsis',
     'already-voted-error' => 'Jūs jau esat balsojis šajā aptaujā. Jūsu balss nav ieskaitīta.',
+    'already-voted-result' => 'Tu jau balsoji šajā aptaujā. Šeit ir rezultāti.',
+    'expired-voted-result' => 'Aptauja ir beigusies. Šeit ir rezultāti.',
 ];

@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Ticket.
@@ -41,7 +42,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null                     $deleted_at
  */
-class Ticket extends Model
+#[AllowDynamicProperties]
+final class Ticket extends Model
 {
     use Auditable;
 

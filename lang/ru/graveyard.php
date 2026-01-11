@@ -11,7 +11,7 @@ return [
  * @author     HDVinnie <hdinnovations@protonmail.com>
  * @license    https://www.gnu.org/licenses/agpl-3.0.en.html/ GNU Affero General Public License v3.0
  */
-    'dead' => 'мертв',
+    'dead' => 'Мертв',
     'graveyard' => 'Кладбище',
     'guidelines' => 'Методические рекомендации',
     'guidelines-content' => '1) Вы не можете восстановить свои собственные загрузки. <br> 2) Не воскрешай то, что не можешь совершить тоже.',
@@ -20,6 +20,6 @@ return [
     'howto-desc2' => 'Вы будете вознаграждены',
     'howto-hits' => 'Хиты',
     'pending' => 'в ожидании',
-    'resurrect' => 'воскрешать',
+    'resurrect' => 'Воскрешать',
     'reward' => 'Freeleech жетоны',
 ];

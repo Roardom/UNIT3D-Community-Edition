@@ -42,4 +42,5 @@ return [
     'unassign' => 'Désassigner',
     'unassigned-success' => 'Le ticket du Helpdesk a été désassigné avec succès!',
     'updated-success' => 'Ton ticket Helpdesk a été actualisé avec succès!',
+    'attachment-limit' => '(max. 1MB par image)',
 ];

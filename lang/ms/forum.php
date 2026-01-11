@@ -70,4 +70,5 @@ return [
     'unpin' => 'Nyahpasang',
     'view-all' => 'Lihat Semua Topik',
     'views' => 'Pandangan',
+    'created-at' => 'Dicipta pada',
 ];

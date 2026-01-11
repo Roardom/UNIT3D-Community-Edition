@@ -20,6 +20,7 @@ use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Internal.
@@ -29,7 +30,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string $icon
  * @property string $effect
  */
-class Internal extends Model
+#[AllowDynamicProperties]
+final class Internal extends Model
 {
     use Auditable;
 

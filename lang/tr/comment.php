@@ -14,7 +14,7 @@ return [
     'added' => 'Yorumun eklendi!',
     'deleted' => 'Yorum silindi.',
     'edited' => 'Yorum düzenlendi.',
-    'rights-revoked' => 'Yorum yazma yetkin iptal edildi!',
-    'slow-down' => 'Yavaşla lütfen ;), çok fazla yorum yaptın!',
+    'rights-revoked' => 'Yorum yazma yetkin kaldırıldı!',
+    'slow-down' => 'Yavaşla - çok fazla yorum yaptın!',
     'torrent-status' => 'Yorum yapabilmen için torrentin moderatör onayından geçmesi lazım.',
 ];

@@ -43,7 +43,8 @@ Examples:
 ## Code Style
 
 **[PSR-2 Coding Standard](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)** 
-- Check the code style with ``$ composer check-style`` and fix it with ``$ composer fix-style``.
+- Check the code style with ``$ ./vendor/bin/pint . --test`` and fix it with ``$ ./vendor/bin/pint .``.
+- Prettier is also used to format Blade, SCSS, and JS: ``$ ./node_modules/.bin/prettier . --write``.
 
 **[Follow Laravel naming conventions](https://github.com/alexeymezenin/laravel-best-practices/blob/master/README.md)**
 

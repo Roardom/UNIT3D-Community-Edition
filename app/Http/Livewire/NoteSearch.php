@@ -44,8 +44,8 @@ class NoteSearch extends Component
     final protected \Illuminate\Pagination\LengthAwarePaginator $notes {
         get => Note::query()
             ->with([
-                'noteduser' => fn ($query) => $query->withTrashed()->with(['group']),
-                'staffuser' => fn ($query) => $query->withTrashed()->with(['group']),
+                'user'  => fn ($query) => $query->withTrashed()->with(['group']),
+                'staff' => fn ($query) => $query->withTrashed()->with(['group']),
             ])
             ->when($this->search, fn ($query) => $query->where('message', 'LIKE', '%'.$this->search.'%'))
             ->latest()

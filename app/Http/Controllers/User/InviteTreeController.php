@@ -63,7 +63,7 @@ class InviteTreeController extends Controller
             ->with('group')
             ->withCount([
                 'warnings' => function ($query): void {
-                    $query->whereNotNull('torrent')->where('active', '=', true);
+                    $query->whereNotNull('torrent_id')->where('active', '=', true);
                 },
             ])
             ->get();
@@ -107,7 +107,7 @@ class InviteTreeController extends Controller
                     ->withSum('seedingTorrents', 'size')
                     ->withCount([
                         'warnings' => function ($query): void {
-                            $query->whereNotNull('torrent')->where('active', '=', true);
+                            $query->whereNotNull('torrent_id')->where('active', '=', true);
                         },
                     ])
             ])

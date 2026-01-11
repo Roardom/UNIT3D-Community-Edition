@@ -14,7 +14,7 @@ return [
     'about' => 'Ici, tu trouveras des listes créées par les utilisateurs!',
     'attached-success' => 'Le torrent a été attaché avec succès à ta Playlist.',
     'add-to-playlist' => 'Ajouter Torrent à la Playlist',
-    'add-torrent' => 'Ajouter Torrent',
+    'add-torrent' => 'Ajouter torrent',
     'added-by' => 'Par:',
     'cover' => 'Sélectionnez une image de couverture',
     'create' => 'Créer une nouvelle Playlist',

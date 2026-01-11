@@ -71,8 +71,8 @@ class NewCommentTag extends Notification implements ShouldQueue
         }
 
         // Evaluate model based settings
-        switch (true) {
-            case $this->model instanceof Torrent:
+        switch ($this->model::class) {
+            case Torrent::class:
                 if ($notifiable->notification?->show_mention_torrent_comment === 0) {
                     return false;
                 }
@@ -80,7 +80,7 @@ class NewCommentTag extends Notification implements ShouldQueue
                 // If the sender's group ID is found in the "Block all notifications from the selected groups" array,
                 // the expression will return false.
                 return ! \in_array($this->comment->user->group_id, $notifiable->notification?->json_mention_groups ?? [], true);
-            case $this->model instanceof TorrentRequest:
+            case TorrentRequest::class:
                 if ($notifiable->notification?->show_mention_request_comment === 0) {
                     return false;
                 }
@@ -88,10 +88,10 @@ class NewCommentTag extends Notification implements ShouldQueue
                 // If the sender's group ID is found in the "Block all notifications from the selected groups" array,
                 // the expression will return false.
                 return ! \in_array($this->comment->user->group_id, $notifiable->notification?->json_mention_groups ?? [], true);
-            case $this->model instanceof Ticket:
+            case Ticket::class:
                 return ! ($this->model->staff_id === $this->comment->id);
-            case $this->model instanceof Playlist:
-            case $this->model instanceof Article:
+            case Playlist::class:
+            case Article::class:
                 if ($notifiable->notification?->show_mention_article_comment === 0) {
                     return false;
                 }
@@ -99,8 +99,6 @@ class NewCommentTag extends Notification implements ShouldQueue
                 // If the sender's group ID is found in the "Block all notifications from the selected groups" array,
                 // the expression will return false.
                 return ! \in_array($this->comment->user->group_id, $notifiable->notification?->json_mention_groups ?? [], true);
-            default:
-                break;
         }
 
         return true;
@@ -116,33 +114,33 @@ class NewCommentTag extends Notification implements ShouldQueue
         $username = $this->comment->anon ? 'Anonymous' : $this->comment->user->username;
         $title = $this->comment->anon ? 'You Have Been Tagged' : $username.' Has Tagged You';
 
-        return match (true) {
-            $this->model instanceof Torrent => [
+        return match ($this->model::class) {
+            Torrent::class => [
                 'title' => $title,
                 'body'  => $username.' has tagged you in an comment on Torrent '.$this->model->name,
                 'url'   => '/torrents/'.$this->model->id,
             ],
-            $this->model instanceof TorrentRequest => [
+            TorrentRequest::class => [
                 'title' => $title,
                 'body'  => $username.' has tagged you in an comment on Torrent Request '.$this->model->name,
                 'url'   => '/requests/'.$this->model->id,
             ],
-            $this->model instanceof Ticket => [
+            Ticket::class => [
                 'title' => $title,
                 'body'  => $username.' has tagged you in an comment on Ticket '.$this->model->subject,
                 'url'   => '/tickets/'.$this->model->id,
             ],
-            $this->model instanceof Playlist => [
+            Playlist::class => [
                 'title' => $title,
                 'body'  => $username.' has tagged you in an comment on Playlist '.$this->model->name,
                 'url'   => '/playlists/'.$this->model->id,
             ],
-            $this->model instanceof TmdbCollection => [
+            TmdbCollection::class => [
                 'title' => $title,
                 'body'  => $username.' has tagged you in an comment on Collection '.$this->model->name,
                 'url'   => '/mediahub/collections/'.$this->model->id,
             ],
-            $this->model instanceof Article => [
+            Article::class => [
                 'title' => $title,
                 'body'  => $username.' has tagged you in an comment on Article '.$this->model->title,
                 'url'   => '/articles/'.$this->model->id,

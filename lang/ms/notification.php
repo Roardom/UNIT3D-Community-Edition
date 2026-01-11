@@ -22,4 +22,11 @@ return [
     'read' => 'Baca',
     'title' => 'Tajuk',
     'already-marked-read' => 'Notifikasi Sudah Ditanda sebagai Sudah Dibaca!',
+    'all-deleted' => 'Semua notifikasi telah dibuang!',
+    'all-marked-read' => 'Semua notifikasi ditanda sebagai sudah dibaca!',
+    'bon-gifts' => 'Hadiah Bon',
+    'comment-tags' => 'Tag komen',
+    'deleted' => 'Notifikasi telah dibuang!',
+    'filter-by-type' => '\'Filter\' mengikut jenis notifikasi',
+    'marked-read' => 'Notifikasi ditandai sebagai sudah dibaca!',
 ];

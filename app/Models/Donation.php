@@ -20,6 +20,7 @@ use App\Enums\ModerationStatus;
 use App\Traits\Encryptable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Donation.
@@ -36,7 +37,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class Donation extends Model
+#[AllowDynamicProperties]
+final class Donation extends Model
 {
     use Encryptable;
 

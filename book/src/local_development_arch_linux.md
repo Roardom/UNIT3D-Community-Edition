@@ -1,6 +1,6 @@
 # UNIT3D development on Arch Linux with Laravel Sail
 
-<!-- cspell:ignore dockerized,pacman -->
+<!-- cspell:ignore dockerized,pacman,reqs -->
 
 _A guide by EkoNesLeg_
 
@@ -13,8 +13,9 @@ This guide outlines the steps to set up UNIT3D using Laravel Sail on Arch Linux.
 
 For local development, HTTP is commonly used instead of HTTPS. To prevent mixed content issues, adjust your `.env` file as follows:
 
-1. **Modify the `.env` Config:**
-    - Open your `.env` file in the root directory of your UNIT3D project.
+1. **Create the `.env` Config:**
+    - Create a `.env` file in the root directory of your UNIT3D project.
+    - Copy and paste the contents from `.env.example` into the `.env` file.
     - Add or modify the following environment variables:
 
         ```dotenv
@@ -51,7 +52,7 @@ Clone the UNIT3D repository to your local environment:
 2. Clone the repository:
 
     ```sh
-    git clone git@github.com:HDInnovations/UNIT3D-Community-Edition.git
+    git clone git@github.com:HDInnovations/UNIT3D.git
     ```
 
 ## Step 2: Composer dependency installation
@@ -59,7 +60,7 @@ Clone the UNIT3D repository to your local environment:
 1. **Change to the project’s root directory:**
 
     ```sh
-    cd ~/PhpstormProjects/UNIT3D-Community-Edition
+    cd ~/PhpstormProjects/UNIT3D
     ```
 
 2. **Install Composer dependencies:**
@@ -67,7 +68,7 @@ Clone the UNIT3D repository to your local environment:
     Run the following command to install the PHP dependencies:
 
     ```sh
-    composer install
+    composer install --ignore-platform-reqs
     ```
 
 ## Step 3: Docker environment initialization

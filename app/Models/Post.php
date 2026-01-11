@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Post.
@@ -33,7 +34,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int                             $user_id
  * @property int                             $topic_id
  */
-class Post extends Model
+#[AllowDynamicProperties]
+final class Post extends Model
 {
     use Auditable;
 

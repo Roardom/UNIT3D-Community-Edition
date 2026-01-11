@@ -16,7 +16,7 @@ return [
    | Default Authentication Language Lines
    |--------------------------------------------------------------------------
    */
-    'activation-error' => '¡Token inválido o prohibido o la cuenta ya está confirmada!',
+    'activation-error' => '¡Prohibido, token inválido o la cuenta ya está confirmada!',
     'activation-success' => '¡Cuenta confirmada! ¡Ahora puedes iniciar sesión!',
     'add-image' => 'Agregar otro enlace de imagen',
     'add-profile' => 'Agregar otro enlace de perfil',

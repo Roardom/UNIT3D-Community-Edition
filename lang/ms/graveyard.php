@@ -23,4 +23,10 @@ return [
     'resurrect' => 'Bangkit semula',
     'reward' => 'Token Freeleech',
     'current-seedtime' => '\'Seedtime\' Semasa',
+    'howto-desc' => 'Anda mesti \'seed\' torrent ini selama 30 hari untuk dianggap sebagai \'resurrection\' yang berjaya. Bila \'seedtime\' semasa :currentSeedtime mencapai :requiredSeedtime, anda akan diberi :tokens token \'freeleech\'.',
+    'not-rewarded' => 'Tidak dianugerahkan',
+    'resurrect-canceled' => '\'Resurrection\' berjaya dibatalkan!',
+    'resurrect-complete' => '\'Torrent resurrection\' siap! Anda akan diberikan ganjaran secara automatik apabila keperluan \'seedtime\' dipenuhi.',
+    'resurrect-date' => 'Tarikh \'resurrect\'',
+    'resurrect-failed-own' => 'Torrent \'resurrection\' gagal! Anda tidak boleh \'resurrect\' muat naik anda sendiri.',
 ];

@@ -19,6 +19,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\BonTransactions.
@@ -34,7 +35,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string   $comment
  * @property string   $created_at
  */
-class BonTransactions extends Model
+#[AllowDynamicProperties]
+final class BonTransactions extends Model
 {
     /** @use HasFactory<\Database\Factories\BonTransactionsFactory> */
     use HasFactory;

@@ -26,4 +26,5 @@ return [
     'check-news' => 'Berita (periksa setiap hari)',
     'new-news' => 'Berita baru',
     'new-torrents' => 'Torrents baru',
+    'latest-comments' => 'Komen terkini',
 ];

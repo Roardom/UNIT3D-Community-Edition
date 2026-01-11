@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use AllowDynamicProperties;
 
 /**
  * App\Models\TmdbCollection.
@@ -34,7 +35,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property string|null $created_at
  * @property string|null $updated_at
  */
-class TmdbCollection extends Model
+#[AllowDynamicProperties]
+final class TmdbCollection extends Model
 {
     /** @use HasFactory<\Database\Factories\TmdbCollectionFactory> */
     use HasFactory;

@@ -18,6 +18,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Gift.
@@ -29,7 +30,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string                     $bon
  * @property \Illuminate\Support\Carbon $created_at
  */
-class PostTip extends Model
+#[AllowDynamicProperties]
+final class PostTip extends Model
 {
     protected $guarded = [];
 

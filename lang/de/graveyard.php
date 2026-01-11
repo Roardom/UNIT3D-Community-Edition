@@ -20,7 +20,7 @@ return [
     'howto-desc1' => 'Du musst <span class="text-green"><em>:name</em></span> für <span class="text-red text-bold">30 Tage</span> seeden für eine erfolgreiche Wiederbelebung. Aktuell hast du',
     'howto-desc2' => 'erreichst, erhältst du',
     'howto-hits' => 'erreicht. Wenn du',
-    'not-rewarded' => 'Nicht Belohnt',
+    'not-rewarded' => 'Nicht belohnt',
     'pending' => 'Ausstehend',
     'resurrect' => 'Wiederbeleben',
     'resurrect-canceled' => 'Wiederbelebung erfolgreich abgebrochen!',
@@ -31,4 +31,5 @@ return [
     'reward' => 'Freeleech-Token',
     'rewarded' => 'Belohnt',
     'seedtime-goal' => 'Seedzeit Ziel',
+    'howto-desc' => 'Du musst diesen Torrent für mindestens 30 Tage seeden, um ihn wiederzubeleben. Wenn deine aktuelle Seedzeit von :currentSeedtime das Ziel von :requiredSeedtime erreicht, bekommst du :tokens Freeleech-Token als Belohnung.',
 ];

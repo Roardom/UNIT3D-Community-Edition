@@ -18,6 +18,7 @@ namespace App\Models;
 
 use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
+use AllowDynamicProperties;
 
 /**
  * App\Models\WhitelistedImageUrl.
@@ -25,7 +26,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int    $id
  * @property string $pattern
  */
-class WhitelistedImageUrl extends Model
+#[AllowDynamicProperties]
+final class WhitelistedImageUrl extends Model
 {
     use Auditable;
 

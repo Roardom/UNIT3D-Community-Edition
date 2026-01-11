@@ -26,4 +26,5 @@ return [
     'rss' => 'RSS',
     'rss-feed' => 'RSS plūsma',
     'type' => 'Tips',
+    'created' => 'Privātā RSS plūsma izveidota',
 ];

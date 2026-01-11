@@ -76,4 +76,8 @@ return [
     'mass-email' => 'Masse-email',
     'notes' => 'Noter',
     'passkeys' => 'Adgangsnøgler',
+    'ticket-categories' => 'Supportkategorier',
+    'ticket-category' => 'Supportkategori',
+    'ticket-priorities' => 'Supportprioriteter',
+    'ticket-priority' => 'Supportprioritet',
 ];

@@ -26,16 +26,6 @@
     },
     {
       "files": [
-        "*.vue"
-      ],
-      "options": {
-        "printWidth": 100,
-        "semi": true,
-        "singleQuote": true
-      }
-    },
-    {
-      "files": [
         "*.scss"
       ],
       "options": {

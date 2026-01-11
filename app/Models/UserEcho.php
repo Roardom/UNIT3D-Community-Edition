@@ -19,6 +19,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\UserEcho.
@@ -31,7 +32,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class UserEcho extends Model
+#[AllowDynamicProperties]
+final class UserEcho extends Model
 {
     /** @use HasFactory<\Database\Factories\UserEchoFactory> */
     use HasFactory;

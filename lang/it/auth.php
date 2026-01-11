@@ -33,7 +33,7 @@ return [
     'appl-reason' => 'Come hai conosciuto ":sitename" E perché vuoi farne parte? ',
     'application-submitted' => 'La tua domanda è stata presentata. Riceverai presto una mail!',
     'banned' => 'Questo account è bannato!',
-    'check-later' => 'Controlla più tardi!',
+    'check-later' => 'Ricontrolla più tardi!',
     'delete-image' => 'Elimina l ultimo collegamento immagine',
     'delete-profile' => 'Elimina l ultimo collegamento al profilo',
     'email' => 'E-mail',

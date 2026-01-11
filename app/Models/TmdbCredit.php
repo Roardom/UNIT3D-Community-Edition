@@ -19,6 +19,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\TmdbCredit.
@@ -31,7 +32,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null    $order
  * @property string|null $character
  */
-class TmdbCredit extends Model
+#[AllowDynamicProperties]
+final class TmdbCredit extends Model
 {
     /** @use HasFactory<\Database\Factories\TmdbCreditFactory> */
     use HasFactory;

@@ -19,6 +19,7 @@ namespace App\Models;
 use App\Models\Scopes\ApprovedScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\TorrentTrump.
@@ -30,7 +31,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
  */
-class TorrentTrump extends Model
+#[AllowDynamicProperties]
+final class TorrentTrump extends Model
 {
     /**
      * The attributes that aren't mass assignable.

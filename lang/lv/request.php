@@ -76,4 +76,5 @@ return [
     'yes' => 'Jā',
     'access-delete-error' => 'Jums nav piekļuves šī pieprasījuma dzēšanai.',
     'access-error' => 'Jums nav piekļuves, lai apstiprinātu šo pieprasījumu.',
+    'added-bonus' => 'Tavs bonuss veiksmīgi pievienots.',
 ];

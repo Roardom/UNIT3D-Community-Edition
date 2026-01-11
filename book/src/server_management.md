@@ -37,7 +37,7 @@ sudo rm -rf node_modules && sudo bun install && sudo bun run build
 If any PHP files are modified, run the following commands to clear the cache, restart the PHP-FPM service, and restart the Laravel queues:
 
 ```sh
-sudo php artisan set:all_cache && sudo systemctl restart php8.3-fpm && sudo php artisan queue:restart
+sudo php artisan set:all_cache && sudo systemctl restart php8.4-fpm && sudo php artisan queue:restart
 ```
 
 ### Static assets (SCSS, JS)
@@ -92,4 +92,4 @@ bun run build
 
 ## 5. Meilisearch maintenance
 
-Refer [Meilisearch setup for UNIT3D](https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Meilisearch-Setup-for-UNIT3D), specifically the [maintenance](https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Meilisearch-Setup-for-UNIT3D#3-maintenance) section, for managing upgrades and syncing indexes.
+Refer [Meilisearch setup for UNIT3D](https://github.com/HDInnovations/UNIT3D/wiki/Meilisearch-Setup-for-UNIT3D), specifically the [maintenance](https://github.com/HDInnovations/UNIT3D/wiki/Meilisearch-Setup-for-UNIT3D#3-maintenance) section, for managing upgrades and syncing indexes.

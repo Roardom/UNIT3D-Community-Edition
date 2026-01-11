@@ -19,6 +19,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use AllowDynamicProperties;
 
 /**
  * App\Models\DonationPackage.
@@ -28,15 +29,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string                     $name
  * @property string                     $description
  * @property float                      $cost
- * @property int                        $upload_value
- * @property int                        $invite_value
- * @property int                        $bonus_value
- * @property int                        $donor_value
+ * @property int|null                   $upload_value
+ * @property int|null                   $invite_value
+ * @property int|null                   $bonus_value
+ * @property int|null                   $donor_value
  * @property bool                       $is_active
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
  */
-class DonationPackage extends Model
+#[AllowDynamicProperties]
+final class DonationPackage extends Model
 {
     /** @use HasFactory<\Database\Factories\DonationPackageFactory> */
     use HasFactory;

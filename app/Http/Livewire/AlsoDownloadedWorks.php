@@ -37,8 +37,8 @@ class AlsoDownloadedWorks extends Component
      * @var Collection<int, TmdbMovie>|Collection<int, TmdbTv>|Collection<int, IgdbGame>
      */
     final protected Collection $alsoDownloadedWorks {
-        get => match (true) {
-            $this->work instanceof TmdbMovie => cache()->flexible(
+        get => match ($this->work::class) {
+            TmdbMovie::class => cache()->flexible(
                 'also-downloaded:by-tmdb-movie-id:'.$this->work->id,
                 [3600 * 12, 3600 * 24 * 14],
                 fn () => TmdbMovie::query()
@@ -69,7 +69,7 @@ class AlsoDownloadedWorks extends Component
                     ->orderByDesc('total')
                     ->get()
             ),
-            $this->work instanceof TmdbTv => cache()->flexible(
+            TmdbTv::class => cache()->flexible(
                 'also-downloaded:by-tmdb-tv-id:'.$this->work->id,
                 [3600 * 12, 3600 * 24 * 14],
                 fn () => TmdbTv::query()
@@ -100,7 +100,7 @@ class AlsoDownloadedWorks extends Component
                     ->orderByDesc('total')
                     ->get()
             ),
-            default => cache()->flexible(
+            IgdbGame::class => cache()->flexible(
                 'also-downloaded:by-igdb-game-id:'.$this->work->id,
                 [3600 * 12, 3600 * 24 * 14],
                 fn () => IgdbGame::query()

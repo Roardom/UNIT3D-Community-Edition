@@ -24,7 +24,7 @@ return [
     'achievement-privacy-list' => 'Autoriser les utilisateurs à afficher une liste de vos réalisations',
     'achievement-help' => 'Contrôlez le partage d informations spécifiques sur les réalisations avec les groupes autorisés à accéder à votre profil. Ces paramètres sont remplacés si vous n autorisez aucun groupe à accéder à vos réalisations ou si vous passez en mode <strong>privé.</strong>',
     'achievements' => 'Réalisations',
-    'active' => 'actif',
+    'active' => 'Actif',
     'active-table' => 'Ma table active',
     'active-torrents' => 'Torrents actifs',
     'active-warning' => 'Avertissement actif',

@@ -58,4 +58,6 @@ return [
     'flush-chat' => 'Vider la Chatbox',
     'seedboxes' => 'Seedboxs enregistrées',
     'application' => 'Application',
+    'application-type' => 'Type',
+    'application-image-proofs' => 'Images de preuve',
 ];

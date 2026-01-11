@@ -47,4 +47,5 @@ return [
     'no_disks_configured' => 'Geen backup locaties geconfigureerd in config/wbackup.php',
     'backup_doesnt_exist' => 'Het backup bestand bestaat niet.',
     'only_local_downloads_supported' => 'Enkel downloads van het lokale bestandssysteem worden ondersteund.',
+    'backup_process_started' => 'Nieuw backupproces gestart',
 ];

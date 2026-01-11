@@ -26,4 +26,5 @@ return [
     'check-news' => 'Nieuws (dagelijks controleren)',
     'new-news' => 'Nieuw nieuws',
     'new-torrents' => 'Nieuwe torrents',
+    'latest-comments' => 'Nieuwste commentaren',
 ];

@@ -75,4 +75,8 @@ return [
     'flush-chat' => 'Vaciar Chat',
     'seedboxes' => 'Seedboxes registrados',
     'bon-earnings' => 'Beneficios BON',
+    'ticket-categories' => 'Categorías de tickets',
+    'ticket-category' => 'Categoría de ticket',
+    'ticket-priorities' => 'Prioridades de tickets',
+    'ticket-priority' => 'Prioridad de ticket',
 ];

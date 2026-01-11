@@ -58,10 +58,10 @@ class WarningLogSearch extends Component
      */
     final protected \Illuminate\Pagination\LengthAwarePaginator $warnings {
         get => Warning::query()
-            ->with(['warneduser.group', 'staffuser.group', 'torrenttitle'])
-            ->when($this->sender, fn ($query) => $query->whereRelation('staffuser', 'username', '=', $this->sender))
-            ->when($this->receiver, fn ($query) => $query->whereRelation('warneduser', 'username', '=', $this->receiver))
-            ->when($this->torrent, fn ($query) => $query->whereRelation('torrenttitle', 'name', 'LIKE', '%'.$this->torrent.'%'))
+            ->with(['user.group', 'staff.group', 'torrent'])
+            ->when($this->sender, fn ($query) => $query->whereRelation('staff', 'username', '=', $this->sender))
+            ->when($this->receiver, fn ($query) => $query->whereRelation('user', 'username', '=', $this->receiver))
+            ->when($this->torrent, fn ($query) => $query->whereRelation('torrent', 'name', 'LIKE', '%'.$this->torrent.'%'))
             ->when($this->reason, fn ($query) => $query->where('reason', 'LIKE', '%'.$this->reason.'%'))
             ->when($this->show === true, fn ($query) => $query->onlyTrashed())
             ->orderBy($this->sortField, $this->sortDirection)

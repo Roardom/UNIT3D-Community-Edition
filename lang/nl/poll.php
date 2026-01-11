@@ -25,4 +25,8 @@ return [
     'vote' => 'Stemmen',
     'vote-now' => 'Laat je stem nu horen!',
     'votes' => 'stemmen',
+    'already-voted-error' => 'Je hebt al op deze poll gestemd. Deze stem telt niet mee.',
+    'already-voted-result' => 'Je hebt al gestemd op deze poll. Hier is de uitslag.',
+    'expired-voted-result' => 'Deze poll is verlopen. Hier is de uitslag.',
+    'edit-poll' => 'Wijzig poll',
 ];

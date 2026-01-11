@@ -36,16 +36,17 @@ class ReportFactory extends Factory
     public function definition(): array
     {
         return [
-            'type'          => $this->faker->word(),
-            'reporter_id'   => User::factory(),
-            'staff_id'      => User::factory(),
-            'title'         => $this->faker->sentence(),
-            'message'       => $this->faker->text(),
-            'solved'        => $this->faker->boolean(),
-            'verdict'       => $this->faker->text(),
-            'reported_user' => User::factory(),
-            'torrent_id'    => Torrent::factory(),
-            'request_id'    => TorrentRequest::factory(),
+            'type'                => $this->faker->word(),
+            'title'               => $this->faker->sentence(),
+            'reporter_id'         => User::factory(),
+            'reported_user_id'    => User::factory(),
+            'reported_torrent_id' => Torrent::factory(),
+            'reported_request_id' => TorrentRequest::factory(),
+            'message'             => $this->faker->text(),
+            'assigned_to'         => User::factory(),
+            'verdict'             => $this->faker->text(),
+            'created_at'          => $this->faker->dateTime(),
+            'updated_at'          => $this->faker->optional()->dateTime(),
         ];
     }
 }

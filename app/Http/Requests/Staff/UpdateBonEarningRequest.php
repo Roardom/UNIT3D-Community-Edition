@@ -98,7 +98,7 @@ class UpdateBonEarningRequest extends FormRequest
                     '<=',
                     '>=',
                     '=',
-                    '<>',
+                    '!=',
                 ]),
             ],
             'conditions.*.operand2' => [

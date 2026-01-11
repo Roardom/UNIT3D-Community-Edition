@@ -38,6 +38,6 @@ return [
     'request-fills' => 'Richiesta esaudita',
     'request-rejections' => 'Richiesta scartata',
     'request-unclaims' => 'Richiesta non reclamata',
-    'reseed-requests' => 'Richiesta di condivisione',
+    'reseed-requests' => 'Richieste RESEED',
     'unfollows' => 'Smetti di seguire',
 ];

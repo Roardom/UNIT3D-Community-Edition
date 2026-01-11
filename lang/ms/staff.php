@@ -55,4 +55,12 @@ return [
     'chat-tools' => 'Alat Bual',
     'flush-chat' => 'Chatbox Flush',
     'seedboxes' => 'Kotak Seed Berdaftar',
+    'application' => 'Aplikasi',
+    'application-type' => 'Jenis',
+    'application-image-proofs' => 'Bukti bergambar (Image proofs)',
+    'application-referrer' => '\'Referrer\'',
+    'article-content' => 'Kandungan',
+    'blocked-ips' => 'IP yang telah dihalang (blocked)',
+    'bon-exchange' => 'Pertukaran BON',
+    'bon-earnings' => 'BON pendapatan',
 ];

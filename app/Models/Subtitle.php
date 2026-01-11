@@ -23,6 +23,7 @@ use App\Models\Scopes\ApprovedScope;
 use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Subtitle.
@@ -45,7 +46,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class Subtitle extends Model
+#[AllowDynamicProperties]
+final class Subtitle extends Model
 {
     use Auditable;
 

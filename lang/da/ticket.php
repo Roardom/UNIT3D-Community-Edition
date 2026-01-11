@@ -40,7 +40,7 @@ return [
     'attachment-limit' => '(max. 1MB pr. billede)',
     'closed-success' => 'Helpdesk-sagen blev lukket!',
     'created-success' => 'Din helpdesk-sagen blev oprettet!',
-    'deleted-success' => 'Din helpdesk-sage blev slettet!',
+    'deleted-success' => 'Din helpdesk-sagen blev slettet!',
     'note-create-success' => 'Staff note gemt!',
     'note-destroy-success' => 'Staff note fjernet!',
     'unassigned-success' => 'Helpdesk-sag blev annulleret!',

@@ -29,6 +29,7 @@ use App\Achievements\UserMade800Uploads;
 use App\Achievements\UserMade900Uploads;
 use App\Achievements\UserMadeUpload;
 use App\Bots\IRCAnnounceBot;
+use App\Bots\IRCAnnounceBotExternal;
 use App\Enums\ModerationStatus;
 use App\Models\AutomaticTorrentFreeleech;
 use App\Models\TmdbMovie;
@@ -47,7 +48,7 @@ class TorrentHelper
     {
         $appurl = config('app.url');
 
-        $torrent = Torrent::with('user')->withoutGlobalScope(ApprovedScope::class)->findOrFail($id);
+        $torrent = Torrent::query()->with('user')->withoutGlobalScope(ApprovedScope::class)->findOrFail($id);
         $torrent->created_at = Carbon::now();
         $torrent->bumped_at = Carbon::now();
         $torrent->status = ModerationStatus::APPROVED;
@@ -128,8 +129,8 @@ class TorrentHelper
 
             if ($torrent->tmdb_movie_id > 0 || $torrent->tmdb_tv_id > 0) {
                 $meta = match (true) {
-                    $category->tv_meta    => TmdbTv::find($torrent->tmdb_tv_id),
-                    $category->movie_meta => TmdbMovie::find($torrent->tmdb_movie_id),
+                    $category->tv_meta    => TmdbTv::query()->find($torrent->tmdb_tv_id),
+                    $category->movie_meta => TmdbMovie::query()->find($torrent->tmdb_movie_id),
                     default               => null,
                 };
             }
@@ -146,6 +147,9 @@ class TorrentHelper
                 )
                 ->say(\sprintf('[Link: %s/torrents/', $appurl).$id.']');
         }
+
+        // Announce to external IRC service
+        IRCAnnounceBotExternal::postAnnounceMsg($torrent);
 
         cache()->forget('announce-torrents:by-infohash:'.$torrent->info_hash);
 

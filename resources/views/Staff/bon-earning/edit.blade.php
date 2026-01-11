@@ -339,8 +339,8 @@
                                 </option>
                                 <option
                                     class="form__option"
-                                    value="<>"
-                                    x-bind:selected="condition['operator'] === '<>'"
+                                    value="!="
+                                    x-bind:selected="condition['operator'] === '!='"
                                 >
                                     &ne;
                                 </option>

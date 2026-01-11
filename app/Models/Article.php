@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Article.
@@ -34,7 +35,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int                             $user_id
  */
-class Article extends Model
+#[AllowDynamicProperties]
+final class Article extends Model
 {
     use Auditable;
 

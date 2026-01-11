@@ -55,4 +55,5 @@ return [
     'chat-tools' => 'Tērzēšanas rīki',
     'flush-chat' => 'Flush Chatbox',
     'seedboxes' => 'Reģistrētās sēklu kastes',
+    'application' => 'Pieteikšanās',
 ];

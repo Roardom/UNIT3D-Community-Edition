@@ -18,6 +18,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use AllowDynamicProperties;
 
 /**
  * App\Models\BlacklistClient.
@@ -29,7 +30,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string                          $peer_id_prefix
  */
-class BlacklistClient extends Model
+#[AllowDynamicProperties]
+final class BlacklistClient extends Model
 {
     /** @use HasFactory<\Database\Factories\BlacklistClientFactory> */
     use HasFactory;

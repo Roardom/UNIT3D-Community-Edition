@@ -5,20 +5,26 @@ jobs:
         strategy:
             matrix:
                 operating-system:
-                    - ubuntu-22.04
+                    - ubuntu-24.04
         name: ${{ matrix.operating-system }}
         runs-on: ${{ matrix.operating-system }}
         steps:
+            # 1. Checkout
             -   name: Checkout
-                uses: actions/checkout@v4
+                uses: actions/checkout@v6
                 with:
                     fetch-depth: 0
+
+            # 2. Set Permissions
             -   name: Set file permissions
                 run: sudo find ${{ github.workspace }} -type f -exec chmod 664 {} \;
+
             -   name: Set folder permissions
                 run: sudo find ${{ github.workspace }} -type d -exec chmod 775 {} \;
-            -   name: Commit Changes
-                uses: stefanzweifel/git-auto-commit-action@v5
+
+            # 3. Commit Changes
+            -   name: Commit changes
+                uses: stefanzweifel/git-auto-commit-action@v7
                 with:
                     commit_message: "automation: set git file permissions"
                     commit_user_name: unit3d-bot

@@ -47,4 +47,5 @@ return [
     'total-upload' => 'Tổng số tải lên',
     'users-in-group' => 'Người dùng trong nhóm',
     'users-per-group' => 'Người dùng mỗi nhóm',
+    'languages' => 'Ngôn ngữ',
 ];

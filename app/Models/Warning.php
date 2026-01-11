@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Warning.
@@ -38,7 +39,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class Warning extends Model
+#[AllowDynamicProperties]
+final class Warning extends Model
 {
     use Auditable;
 
@@ -66,9 +68,9 @@ class Warning extends Model
      *
      * @return BelongsTo<Torrent, $this>
      */
-    public function torrenttitle(): BelongsTo
+    public function torrent(): BelongsTo
     {
-        return $this->belongsTo(Torrent::class, 'torrent');
+        return $this->belongsTo(Torrent::class);
     }
 
     /**
@@ -76,7 +78,7 @@ class Warning extends Model
      *
      * @return BelongsTo<User, $this>
      */
-    public function warneduser(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id')->withDefault([
             'username' => 'System',
@@ -89,7 +91,7 @@ class Warning extends Model
      *
      * @return BelongsTo<User, $this>
      */
-    public function staffuser(): BelongsTo
+    public function staff(): BelongsTo
     {
         return $this->belongsTo(User::class, 'warned_by')->withDefault([
             'username' => 'System',

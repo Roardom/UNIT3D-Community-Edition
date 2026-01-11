@@ -17,7 +17,7 @@ return [
     'agent' => 'Agent',
     'alive' => 'am Leben',
     'announce-url' => 'Announce URL',
-    'announce-url-desc' => 'Beim erstellen eines Torrents muss die Announce-URL wie oben angegeben eingetragen werden. Wenn du den Torrent verwenden möchtest, ohne ihn von der Seite herunterzuladen, muss dieser auf Privat und die Quelle auf :source gesetzt werden',
+    'announce-url-desc' => 'Beim erstellen eines Torrents muss die Announce-URL wie oben angegeben eingetragen werden.',
     'announce-url-desc-url' => 'Probleme? <a href=":url">HIER</a> findest du unseren Guide',
     'announce-url-desc2' => 'TMDB und IMDB sind für alle Film/TV Uploads erforderlich! Es wird verwendet, um Poster/Hintergrundbildern und andere Meta-Daten zu parsen',
     'approved' => 'Genehmigt',

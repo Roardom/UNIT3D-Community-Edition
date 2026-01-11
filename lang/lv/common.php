@@ -176,4 +176,6 @@ return [
     'your-comment' => 'Jūsu komentārs',
     'abbrev-days' => 'D ',
     'abbrev-hours' => 'h ',
+    'abbrev-minutes' => 'm ',
+    'abbrev-months' => 'M ',
 ];

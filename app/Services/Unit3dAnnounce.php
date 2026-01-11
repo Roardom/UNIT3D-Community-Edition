@@ -32,20 +32,20 @@ class Unit3dAnnounce
 {
     /**
      * @return bool|array{}|array{
-     *     created_at: double,
-     *     last_request_at: double,
-     *     last_announce_response_at: double,
-     *     requests_per_1s: double,
-     *     requests_per_10s: double,
-     *     requests_per_60s: double,
-     *     requests_per_900s: double,
-     *     requests_per_7200s: double,
-     *     announce_responses_per_1s: double,
-     *     announce_responses_per_10s: double,
-     *     announce_responses_per_60s: double,
-     *     announce_responses_per_900s: double,
-     *     announce_responses_per_7200s: double,
-     *     announce_responses_per_second: double,
+     *     created_at: float,
+     *     last_request_at: float,
+     *     last_announce_response_at: float,
+     *     requests_per_1s: float,
+     *     requests_per_10s: float,
+     *     requests_per_60s: float,
+     *     requests_per_900s: float,
+     *     requests_per_7200s: float,
+     *     announce_responses_per_1s: float,
+     *     announce_responses_per_10s: float,
+     *     announce_responses_per_60s: float,
+     *     announce_responses_per_900s: float,
+     *     announce_responses_per_7200s: float,
+     *     announce_responses_per_second: float,
      * }
      */
     public static function getStats(): bool|array
@@ -225,7 +225,7 @@ class Unit3dAnnounce
      *             count: int,
      *             max_count: int,
      *             window: int,
-     *             updated_at: double,
+     *             updated_at: float,
      *         }
      *     },
      *     receive_leech_list_rates: array{
@@ -233,7 +233,7 @@ class Unit3dAnnounce
      *             count: int,
      *             max_count: int,
      *             window: int,
-     *             updated_at: double,
+     *             updated_at: float,
      *         }
      *     },
      * }

@@ -51,4 +51,5 @@ return [
     'you-have-received-tips' => 'Anda telah menerima',
     'you-have-sent-tips' => 'Anda telah hantar',
     'your-points' => 'Mata Anda',
+    'failed' => 'Pertukaran bonus gagal!',
 ];

@@ -44,7 +44,7 @@ return [
     'per-hour'                => 'Points per hour',
     'per-minute'              => 'Points per minute',
     'per-month'               => 'Points per month',
-    'per-second'              => 'Points per decond',
+    'per-second'              => 'Points per second',
     'per-week'                => 'Points per week',
     'per-year'                => 'Points per year',
     'pm-subject'              => 'Personal 24 hour freeleech activated',

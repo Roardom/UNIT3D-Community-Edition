@@ -39,4 +39,5 @@ return [
     'manager' => 'Pengurus',
     'no_disks_configured' => 'Tiada cakera sandaran yang dikonfigurasikan dalam config / backup.php',
     'only_local_downloads_supported' => 'Hanya muat turun dari sistem fail Tempatan disokong.',
+    'backup_process_started' => 'Proses backup baru bermula',
 ];

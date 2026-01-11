@@ -37,7 +37,7 @@ return [
     'completed_at' => 'Selesai di',
     'completed-not-seeding' => 'Anda Lengkapkan Muat Turun Ini Tetapi Tidak Ada Lagi Pembenihan Ia',
     'created_at' => 'Dicipta pada',
-    'credited' => 'Dikreditkan',
+    'credited' => 'Telah dikreditkan (Credited)',
     'current' => 'Semasa',
     'current-filters' => 'Penapis Semasa',
     'currently-leeching' => 'Pada masa ini Leeching',
@@ -206,4 +206,5 @@ return [
     'resolution' => 'Resolusi',
     'resolutions' => 'Resoluti-resolusi',
     'staff-tools' => 'Alat Kakitangan',
+    'add-to-playlist' => 'Tambah ke dalam playlist',
 ];

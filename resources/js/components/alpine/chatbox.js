@@ -270,9 +270,6 @@ document.addEventListener('alpine:init', () => {
                     this.state.chat.room = this.auth.chatroom.id;
                     this.state.chat.tab = this.auth.chatroom.name;
                     this.state.chat.activeTab = 'room' + this.state.chat.room;
-
-                    // Immediately load messages for the user's current chatroom
-                    await this.changeRoom(this.auth.chatroom.id);
                 }
             } catch (error) {
                 console.error('Error fetching rooms:', error);
@@ -393,7 +390,11 @@ document.addEventListener('alpine:init', () => {
 
                 let currentRoom = this.echoes.find((o) => o.room && o.room.id == newVal);
                 if (currentRoom) {
-                    this.changeRoom(currentRoom.room.id);
+                    if (this.state.chat.room === currentRoom.room.id) {
+                        this.fetchMessages();
+                    } else {
+                        this.state.chat.room = currentRoom.room.id;
+                    }
                     this.state.message.receiver_id = null;
                     this.state.message.bot_id = null;
                 }
@@ -465,8 +466,6 @@ document.addEventListener('alpine:init', () => {
 
             // Set up room channel with improved connection handling
             channelHandler.setupRoom(id, this);
-
-            this.state.chat.room = id;
         },
 
         leaveRoom(id) {
@@ -487,7 +486,7 @@ document.addEventListener('alpine:init', () => {
                             } else if (this.chatrooms.length > 0) {
                                 // Default to the first chatroom from the dropdown
                                 const firstChatroom = this.chatrooms[0];
-                                this.changeRoom(firstChatroom.id);
+                                this.state.chat.room = firstChatroom.id;
                             } else {
                                 console.warn('No chat tabs or chatrooms available.');
                             }
@@ -524,7 +523,7 @@ document.addEventListener('alpine:init', () => {
                             } else if (this.chatrooms.length > 0) {
                                 // Default to the first chatroom from the dropdown
                                 const firstChatroom = this.chatrooms[0];
-                                this.changeRoom(firstChatroom.id);
+                                this.state.chat.room = firstChatroom.id;
                             } else {
                                 console.warn('No chat tabs or chatrooms available.');
                             }

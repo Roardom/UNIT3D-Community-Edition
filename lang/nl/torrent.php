@@ -37,7 +37,7 @@ return [
     'completed_at' => 'Voltooid op',
     'completed-not-seeding' => 'Je hebt deze download voltooid, maar je kunt hem niet langer inzaaien',
     'created_at' => 'Gemaakt bij',
-    'credited' => 'gecrediteerd',
+    'credited' => 'Bijgeschreven',
     'current' => 'Stroom',
     'current-filters' => 'Huidige filters',
     'currently-leeching' => 'Momenteel Leeching',
@@ -202,4 +202,5 @@ return [
     'view-more' => 'Bekijk meer',
     'view-trailer' => 'Bekijk trailer',
     'votes' => 'stemmen',
+    'add-to-playlist' => 'Voeg toe aan playlist',
 ];

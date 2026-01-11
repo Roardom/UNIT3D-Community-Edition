@@ -31,4 +31,5 @@ return [
     'resurrect-complete' => 'Torrent-genoplivning fuldført! Du vil blive belønnet automatisk, når seedtime-kravene er opfyldt.',
     'resurrect-failed-pending' => 'Torrent-genoplivning mislykkedes! Denne torrent afventer allerede en genoplivning.',
     'resurrect-failed-own' => 'Torrentgenoplivning mislykkedes! Du kan ikke genoplive dine egne uploads.',
+    'howto-desc' => 'Du skal seede denne torrent i 30 dage for at opnå en vellykket genoplivning. Når din nuværende seedtid på :currentSeedtime rammer :requiredSeedtime, vil du blive belønnet med :tokens freeleech token(s).',
 ];

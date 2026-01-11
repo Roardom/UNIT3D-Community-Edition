@@ -11,7 +11,7 @@ return [
  * @author     HDVinnie <hdinnovations@protonmail.com>
  * @license    https://www.gnu.org/licenses/agpl-3.0.en.html/ GNU Affero General Public License v3.0
  */
-    'activate-account' => 'Nutzerkonto aktivieren',
+    'activate-account' => 'Konto aktivieren',
     'ban-reason' => 'Grund',
     'banned-footer' => 'Das ist was man bekommt, wenn man sich NICHT an die Regeln hält',
     'banned-header' => 'Du wurdest gebannt',

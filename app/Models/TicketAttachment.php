@@ -20,6 +20,7 @@ use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\TicketAttachment.
@@ -34,7 +35,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null                     $deleted_at
  */
-class TicketAttachment extends Model
+#[AllowDynamicProperties]
+final class TicketAttachment extends Model
 {
     use Auditable;
 

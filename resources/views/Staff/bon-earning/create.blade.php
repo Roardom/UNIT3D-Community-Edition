@@ -209,7 +209,7 @@
                                 <option class="form__option" value="<=">&leq;</option>
                                 <option class="form__option" value=">=">&geq;</option>
                                 <option class="form__option" value="=">&equals;</option>
-                                <option class="form__option" value="<>">&ne;</option>
+                                <option class="form__option" value="!=">&ne;</option>
                             </select>
                             <label
                                 class="form__label form__label--floating"

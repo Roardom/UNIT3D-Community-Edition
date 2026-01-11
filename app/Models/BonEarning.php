@@ -18,6 +18,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use AllowDynamicProperties;
 
 /**
  * App\Models\BonEarning.
@@ -30,7 +31,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string                                                                                                         $name
  * @property string                                                                                                         $description
  */
-class BonEarning extends Model
+#[AllowDynamicProperties]
+final class BonEarning extends Model
 {
     /**
      * Indicates if the model should be timestamped.

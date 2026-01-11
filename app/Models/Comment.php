@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Comment.
@@ -37,7 +38,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property string                          $commentable_type
  * @property int                             $commentable_id
  */
-class Comment extends Model
+#[AllowDynamicProperties]
+final class Comment extends Model
 {
     use Auditable;
 

@@ -277,6 +277,7 @@ return [
     'profile'                       => 'Profile',
     'profile-desc'                  => 'User :user profile registered on :title',
     'profile-privacy'               => 'Profile settings',
+    'profile-is-private'            => 'Your profile is set to private',
     'profile-privacy-torrent-count' => 'Share your total number of downloads, uploads, seeds and leeches',
     'profile-privacy-torrent-ratio' => 'Share your total upload/download data along with recorded ratio',
     'profile-privacy-torrent-seed'  => 'Share your total seeding time and average',

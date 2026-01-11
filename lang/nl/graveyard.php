@@ -22,4 +22,8 @@ return [
     'pending' => 'In afwachting',
     'resurrect' => 'herleven',
     'reward' => 'Freeleech-tokens',
+    'current-seedtime' => 'Huidige seedtime',
+    'howto-desc' => 'Je moet deze torrent seeden voor 30 dagen voor een succesvolle opstanding. Wanneer je huidige seedtijd van :currentSeedtime :requiredSeedtime bedraagt, word je beloont met :tokens freeleech tokens.',
+    'not-rewarded' => 'Niet beloond',
+    'resurrect-canceled' => 'Opstanding succesvol geannuleerd!',
 ];

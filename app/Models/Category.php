@@ -20,6 +20,7 @@ use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Category.
@@ -35,7 +36,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property bool        $tv_meta
  * @property bool        $movie_meta
  */
-class Category extends Model
+#[AllowDynamicProperties]
+final class Category extends Model
 {
     use Auditable;
 

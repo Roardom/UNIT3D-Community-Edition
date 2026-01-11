@@ -19,6 +19,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use AllowDynamicProperties;
 
 /**
  * App\Models\TmdbNetwork.
@@ -31,7 +32,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string|null $headquarters
  * @property string|null $origin_country
  */
-class TmdbNetwork extends Model
+#[AllowDynamicProperties]
+final class TmdbNetwork extends Model
 {
     /** @use HasFactory<\Database\Factories\TmdbNetworkFactory> */
     use HasFactory;

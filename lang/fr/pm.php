@@ -11,12 +11,12 @@ return [
  * @author     HDVinnie <hdinnovations@protonmail.com>
  * @license    https://www.gnu.org/licenses/agpl-3.0.en.html/ GNU Affero General Public License v3.0
  */
-    'all-marked-read' => 'Tes messages ont tous été marqués lus!',
+    'all-marked-read' => 'Vos messages ont tous été marqués lus!',
     'create' => 'Créer',
     'delete' => 'Effacer',
     'delete-success' => 'Le message a été supprimé avec succès!',
     'enter-subject' => 'Entrez le sujet',
-    'error' => 'Qu\'est-ce que tu essayes de faire ici?!',
+    'error' => 'Qu\'est-ce que vous essayez de faire ici?',
     'from' => 'De',
     'inbox' => 'Boîte de réception',
     'mark-all-read' => 'Marquer tous les messages comme lus',

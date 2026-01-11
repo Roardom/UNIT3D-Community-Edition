@@ -37,4 +37,6 @@ return [
     'unread' => 'Belum dibaca',
     'empty-inbox' => 'Kosongkan peti masuk',
     'all-marked-read' => 'Semua Mesej Anda Sudah Ditanda Sebagai Telah Dibaca',
+    'delete-success' => 'Mesej (Private Message) berjaya dibuang!',
+    'error' => 'Apa yang anda cuba lakukan ni!',
 ];

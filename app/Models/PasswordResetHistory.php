@@ -6,8 +6,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
-class PasswordResetHistory extends Model
+#[AllowDynamicProperties]
+final class PasswordResetHistory extends Model
 {
     /**
      * Indicates if the model should be timestamped.

@@ -239,4 +239,5 @@ return [
     'torrents-matched' => 'Torrent abbinati',
     'year-range' => 'Intervallo di anni',
     'reseed-requests' => 'Richiesta di condivisione',
+    'first-to-comment' => 'Commenta per primo',
 ];

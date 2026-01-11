@@ -241,4 +241,5 @@ return [
     'special-double_upload' => 'Speciel Dobbelt Upload',
     'season' => 'Sæson',
     'postponed' => 'Udskudt',
+    'reseed-requests' => 'Reseed anmodninger',
 ];

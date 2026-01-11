@@ -93,14 +93,14 @@ class ProcessIgdbGameJob implements ShouldQueue
 
         IgdbGame::query()->upsert([[
             'id'                     => $this->id,
-            'name'                   => $fetchedGame['name'],
-            'summary'                => $fetchedGame['summary'],
+            'name'                   => $fetchedGame['name'] ?? null,
+            'summary'                => $fetchedGame['summary'] ?? '',
             'first_artwork_image_id' => $fetchedGame['artworks'][0]['image_id'] ?? null,
-            'first_release_date'     => $fetchedGame['first_release_date'],
+            'first_release_date'     => $fetchedGame['first_release_date'] ?? null,
             'cover_image_id'         => $fetchedGame['cover']['image_id'] ?? null,
-            'url'                    => $fetchedGame['url'],
-            'rating'                 => $fetchedGame['rating'],
-            'rating_count'           => $fetchedGame['rating_count'],
+            'url'                    => $fetchedGame['url'] ?? null,
+            'rating'                 => $fetchedGame['rating'] ?? null,
+            'rating_count'           => $fetchedGame['rating_count'] ?? null,
             'first_video_video_id'   => $fetchedGame['videos'][0]['video_id'] ?? null,
         ]], ['id']);
 
@@ -108,7 +108,7 @@ class ProcessIgdbGameJob implements ShouldQueue
 
         $genres = [];
 
-        foreach ($fetchedGame->genres as $genre) {
+        foreach ($fetchedGame->genres ?? [] as $genre) {
             if ($genre['id'] === null || $genre['name'] === null) {
                 continue;
             }
@@ -124,7 +124,7 @@ class ProcessIgdbGameJob implements ShouldQueue
 
         $platforms = [];
 
-        foreach ($fetchedGame->platforms as $platform) {
+        foreach ($fetchedGame->platforms ?? [] as $platform) {
             if ($platform['id'] === null || $platform['name'] === null) {
                 continue;
             }
@@ -141,7 +141,7 @@ class ProcessIgdbGameJob implements ShouldQueue
 
         $companies = [];
 
-        foreach ($fetchedGame->involved_companies as $company) {
+        foreach ($fetchedGame->involved_companies ?? [] as $company) {
             if ($company['company']['id'] === null || $company['company']['name'] === null) {
                 continue;
             }

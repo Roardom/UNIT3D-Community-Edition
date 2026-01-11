@@ -19,4 +19,4 @@
 
 Please email us at hdinnovations@protonmail.com
 
-Thank you for improving the security of unit3d-community-edition.
+Thank you for improving the security of unit3d.

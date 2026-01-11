@@ -19,6 +19,7 @@ namespace App\Models;
 use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use AllowDynamicProperties;
 
 /**
  * App\Models\InternalUser.
@@ -27,7 +28,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property int $user_id
  * @property int $internal_id
  */
-class InternalUser extends Pivot
+#[AllowDynamicProperties]
+final class InternalUser extends Pivot
 {
     use Auditable;
 

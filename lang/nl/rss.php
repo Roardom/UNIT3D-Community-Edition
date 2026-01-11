@@ -26,4 +26,7 @@ return [
     'rss' => 'RSS',
     'rss-feed' => 'RSS-feed',
     'type' => 'Type',
+    'created' => 'Privé RSS feed aangemaakt',
+    'deleted' => 'RSS feed verwijderd!',
+    'error' => 'Verzoek kan niet worden verwerkt',
 ];

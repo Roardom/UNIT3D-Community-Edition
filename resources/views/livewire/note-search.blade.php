@@ -46,10 +46,10 @@
                     <tr x-data="note" data-note-id="{{ $note->id }}">
                         <td>{{ $note->id }}</td>
                         <td>
-                            <x-user-tag :anon="false" :user="$note->noteduser" />
+                            <x-user-tag :anon="false" :user="$note->user" />
                         </td>
                         <td>
-                            <x-user-tag :anon="false" :user="$note->staffuser" />
+                            <x-user-tag :anon="false" :user="$note->staff" />
                         </td>
                         {{-- format-ignore-start --}}<td style="white-space: pre-wrap">@linkify($note->message)</td>{{-- format-ignore-end --}}
                         <td>

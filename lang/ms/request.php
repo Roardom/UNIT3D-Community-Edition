@@ -77,4 +77,12 @@ return [
     'resolutions' => 'Resoluti-resolusi',
     'resolution' => 'Resolusi',
     'access-error' => 'Anda tiada akses untuk luluskan permintaan ini.',
+    'access-delete-error' => 'Anda tiada akses untuk buang permintaan (request) ini.',
+    'added-bonus' => 'Bonus ada berjaya ditambah.',
+    'added-request' => 'Permintaan (request) telah dimasukkan.',
+    'already-approved' => 'Permintaan (request) ini nampak seperti telah diluluskan (approved)',
+    'already-claimed' => 'Orang lain sudah tebus permintaan (request) ini.',
+    'already-rejected' => 'Permintaan (request) ini sudah ditolak (rejected)',
+    'approved-anon' => 'Anda telah meluluskan %s dan \'bounty\' telah diberikan kepada pengguna tanpa nama (anonymous)',
+    'approved-user' => 'Anda telah meluluskan %s dan \'bounty\' telah diberikan kepada %s',
 ];

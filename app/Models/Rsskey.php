@@ -18,6 +18,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Rsskey.
@@ -28,7 +29,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string                          $created_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  */
-class Rsskey extends Model
+#[AllowDynamicProperties]
+final class Rsskey extends Model
 {
     /**
      * Indicates if the model should be timestamped.

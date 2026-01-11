@@ -24,4 +24,6 @@ return [
     'all-deleted' => 'Visi paziņojumi dzēsti!',
     'all-marked-read' => 'Visi paziņojumi atzīmēti kā izlasīti!',
     'already-marked-read' => 'Paziņojums atzimēts, kā lasīts!',
+    'bon-gifts' => 'Bonusa Punktu davanas',
+    'comment-tags' => 'Komentāru birkas',
 ];

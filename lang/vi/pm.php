@@ -32,7 +32,7 @@ return [
     'send-to' => 'Gửi PM tới',
     'sent' => 'Gởi',
     'sent-at' => 'Gửi tại',
-    'subject' => 'Môn học',
+    'subject' => 'Tiêu đề',
     'to' => 'Đến',
     'unread' => 'Chưa đọc',
     'empty-inbox' => 'Làm trống hộp thư',

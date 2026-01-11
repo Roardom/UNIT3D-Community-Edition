@@ -21,6 +21,7 @@ use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Occupation.
@@ -29,7 +30,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int    $position
  * @property string $name
  */
-class Occupation extends Model
+#[AllowDynamicProperties]
+final class Occupation extends Model
 {
     use Auditable;
 

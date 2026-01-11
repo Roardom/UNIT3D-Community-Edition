@@ -1,7 +1,6 @@
 <?php
-
-declare(strict_types=1);
-/**
+return [
+    /**
  * NOTICE OF LICENSE.
  *
  * UNIT3D Community Edition is open-sourced software licensed under the GNU Affero General Public License v3.0
@@ -12,8 +11,6 @@ declare(strict_types=1);
  * @author     HDVinnie <hdinnovations@protonmail.com>
  * @license    https://www.gnu.org/licenses/agpl-3.0.en.html/ GNU Affero General Public License v3.0
  */
-
-return [
     /*
     |--------------------------------------------------------------------------
     | Password Reminder Language Lines
@@ -24,10 +21,9 @@ return [
     | has failed, such as for an invalid token or invalid new password.
     |
     */
-
     'password' => 'Parolanız en az altı karakter olmalı ve doğrulama ile eşleşmelidir.',
-    'reset'    => 'Parolanız sıfırlandı!',
-    'sent'     => 'Parola sıfırlama bağlantınız e-posta ile gönderildi!',
-    'token'    => 'Parola sıfırlama adresi/kodu geçersiz.',
-    'user'     => 'Bu e-posta adresi ile kayıtlı bir üye bulunmuyor.',
+    'reset' => 'Parolanız sıfırlandı!',
+    'sent' => 'Teşekkürler! Eğer bu eposta adresi bir hesapla eşleşiyorsa, parola sıfırlama bağlantısı gönderilecektir.',
+    'token' => 'Bu parola sıfırlama tokeni geçersiz.',
+    'user' => 'Bu e-posta adresi ile kayıtlı bir kullanıcı bulunmuyor.',
 ];

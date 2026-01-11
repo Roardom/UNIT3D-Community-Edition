@@ -19,6 +19,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\UserPrivacy.
@@ -67,7 +68,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property list<int> $json_request_groups
  * @property list<int> $json_other_groups
  */
-class UserPrivacy extends Model
+#[AllowDynamicProperties]
+final class UserPrivacy extends Model
 {
     /** @use HasFactory<\Database\Factories\UserPrivacyFactory> */
     use HasFactory;

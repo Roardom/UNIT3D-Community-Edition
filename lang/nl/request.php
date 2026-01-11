@@ -74,4 +74,11 @@ return [
     'voters' => 'kiezers',
     'votes' => 'stemmen',
     'yes' => 'Ja',
+    'access-error' => 'Je hebt geen toegang om deze request te accepteren.',
+    'access-delete-error' => 'Je hebt geen toegang om dit verzoek te verwijderen.',
+    'added-bonus' => 'Jouw bonus is succesvol toegevoegd.',
+    'added-request' => 'Verzoek toegevoegd.',
+    'already-approved' => 'Het lijkt erop dat dit verzoek al accepteerd is',
+    'already-claimed' => 'Iemand anders heeft dit verzoek al geclaimd.',
+    'already-rejected' => 'Het lijkt erop dat dit verzoek al afgewezen is',
 ];

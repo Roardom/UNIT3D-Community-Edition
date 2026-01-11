@@ -37,4 +37,5 @@ return [
     'unread' => 'Nelasīta',
     'empty-inbox' => 'Iztukšojiet iesūtni',
     'all-marked-read' => 'Visi jūsu ziņojumi ir atzīmēti kā izlasīti!',
+    'delete-success' => 'Privātā ziņa veiksmīgi izdzēsta!',
 ];

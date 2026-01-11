@@ -31,7 +31,7 @@ class Collection
      *     parts: ?array<
      *         int<0, max>,
      *         array{
-     *             adult: ?boolean,
+     *             adult: ?bool,
      *             backdrop_path: ?string,
      *             id: ?int,
      *             title: ?string,
@@ -43,7 +43,7 @@ class Collection
      *             genre_ids: array<int>,
      *             popularity: ?float,
      *             release_date: ?string,
-     *             video: ?boolean,
+     *             video: ?bool,
      *             vote_average: ?float,
      *             vote_count: ?int,
      *         },

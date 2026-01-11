@@ -19,6 +19,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\UserNotification.
@@ -56,7 +57,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property list<int> $json_following_groups
  * @property list<int> $json_subscription_groups
  */
-class UserNotification extends Model
+#[AllowDynamicProperties]
+final class UserNotification extends Model
 {
     /** @use HasFactory<\Database\Factories\UserNotificationFactory> */
     use HasFactory;

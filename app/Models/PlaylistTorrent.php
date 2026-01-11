@@ -20,6 +20,7 @@ use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use AllowDynamicProperties;
 
 /**
  * App\Models\PlaylistTorrent.
@@ -30,7 +31,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property int      $torrent_id
  * @property int      $tmdb_id
  */
-class PlaylistTorrent extends Pivot
+#[AllowDynamicProperties]
+final class PlaylistTorrent extends Pivot
 {
     use Auditable;
 

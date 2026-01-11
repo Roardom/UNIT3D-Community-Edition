@@ -70,4 +70,5 @@ return [
     'unpin' => 'losmaken',
     'view-all' => 'Bekijk alle onderwerpen',
     'views' => 'Keer bekeken',
+    'created-at' => 'Gemaakt om',
 ];

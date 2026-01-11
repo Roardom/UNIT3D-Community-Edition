@@ -228,7 +228,7 @@ return [
     'request-help' => 'Controlla la condivisione di statistiche e informazioni relative a richieste specifiche con gruppi a cui è consentito l accesso al tuo profilo. Queste impostazioni sono sovrascritte se non si consente a nessun gruppo di accedere alle statistiche e alle informazioni correlate richieste o se si è <strong>privati</strong>',
     'request' => 'Richiesta',
     'requested' => 'Richieste effettuate',
-    'requests' => 'richieste',
+    'requests' => 'Richieste UPLOAD',
     'request-comments' => 'Richiedi commenti Made',
     'request-notification' => 'Richiedi le impostazioni di notifica',
     'request-notification-bounty' => 'Ricevi una notifica quando un torrent richiesto ottiene una nuova taglia',

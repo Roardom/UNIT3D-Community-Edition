@@ -39,6 +39,9 @@ class ReportSearch extends Component
     public ?string $staff = null;
 
     #[Url(history: true)]
+    public ?string $judge = null;
+
+    #[Url(history: true)]
     public ?string $title = null;
 
     #[Url(history: true)]
@@ -67,19 +70,19 @@ class ReportSearch extends Component
      */
     final protected \Illuminate\Pagination\LengthAwarePaginator $reports {
         get => Report::query()
-            ->with('reported.group', 'reporter.group', 'staff.group')
+            ->with('reported.group', 'reporter.group', 'assignee.group')
             ->when($this->type !== null, fn ($query) => $query->where('type', '=', $this->type))
             ->when($this->reporter !== null, fn ($query) => $query->whereRelation('reporter', 'username', 'LIKE', '%'.$this->reporter.'%'))
             ->when($this->reported !== null, fn ($query) => $query->whereRelation('reported', 'username', 'LIKE', '%'.$this->reported.'%'))
-            ->when($this->staff !== null, fn ($query) => $query->whereRelation('staff', 'username', 'LIKE', '%'.$this->staff.'%'))
+            ->when($this->staff !== null, fn ($query) => $query->whereRelation('assignee', 'username', 'LIKE', '%'.$this->staff.'%'))
+            ->when($this->judge !== null, fn ($query) => $query->whereRelation('judge', 'username', 'LIKE', '%'.$this->judge.'%'))
             ->when($this->title !== null, fn ($query) => $query->where('title', 'LIKE', '%'.str_replace(' ', '%', '%'.$this->title.'%')))
             ->when($this->message !== null, fn ($query) => $query->where('message', 'LIKE', '%'.str_replace(' ', '%', '%'.$this->message.'%')))
             ->when($this->verdict !== null, fn ($query) => $query->where('verdict', 'LIKE', '%'.str_replace(' ', '%', '%'.$this->verdict.'%')))
-            ->when($this->status === 'open', fn ($query) => $query->where('solved', '=', false)->where(fn ($query) => $query->whereNull('snoozed_until')->orWhere('snoozed_until', '<', now())))
-            ->when($this->status === 'snoozed', fn ($query) => $query->where('solved', '=', false)->where('snoozed_until', '>', now()))
-            ->when($this->status === 'closed', fn ($query) => $query->where('solved', '=', true))
-            ->when($this->status === 'all_open', fn ($query) => $query->where('solved', '=', false))
-            ->orderBy('solved')
+            ->when($this->status === 'open', fn ($query) => $query->whereNull('solved_by')->where(fn ($query) => $query->whereNull('snoozed_until')->orWhere('snoozed_until', '<', now())))
+            ->when($this->status === 'snoozed', fn ($query) => $query->whereNull('solved_by')->where('snoozed_until', '>', now()))
+            ->when($this->status === 'closed', fn ($query) => $query->whereNotNull('solved_by'))
+            ->when($this->status === 'all_open', fn ($query) => $query->whereNull('solved_by'))
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
     }

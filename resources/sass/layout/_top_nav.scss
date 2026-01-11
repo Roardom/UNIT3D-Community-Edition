@@ -436,6 +436,16 @@
     border-radius: var(--top-nav-icon-bar-icon-border-radius);
 }
 
+.top-nav__profile-image-private-icon.top-nav__profile-image-private-icon {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    background: var(--top-nav-bg);
+    height: 17px;
+    line-height: 17px;
+    font-size: 12px;
+}
+
 /* Menu toggle
 ******************************************************************************/
 

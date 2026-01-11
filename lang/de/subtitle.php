@@ -13,10 +13,10 @@ return [
  */
     'downloads' => 'Downloads',
     'extension' => 'Erweiterungen',
-    'delete-confirm' => 'Bist du sicher, dass du dies löschen möchten?',
+    'delete-confirm' => 'Bist du sicher, dass du dies löschen möchtest?',
     'note' => 'Notiz',
-    'note-help' => 'Extra Info für diesen Untertitel',
-    'rules-title' => 'Untertitel Regeln!',
+    'note-help' => 'Extra-Info für diesen Untertitel',
+    'rules-title' => 'Untertitel-Regeln',
     'rules' => '<ul>
                                         <li>Es dürfen nur Untertitel hochgeladen werden, die korrekte Framerate, Übersetzung, Rechtschreibung und Timing haben).</li>
                                         <li>Keine Google-Übersetzungen / KI-Übersetzungen.</li>

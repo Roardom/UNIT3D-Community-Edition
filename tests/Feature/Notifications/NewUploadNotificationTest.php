@@ -33,7 +33,7 @@ uses(RefreshDatabase::class);
 
 test('upload a torrent creates a notification for followers', function (): void {
     $this->markTestIncomplete('Works locally, but fails in pipeline with:
-        file_put_contents(/home/runner/work/UNIT3D-Community-Edition/UNIT3D-Community-Edition/files/torrents/676034f8afd077.09743623.torrent): Failed to open stream: No such file or directory');
+        file_put_contents(/home/runner/work/UNIT3D/UNIT3D/files/torrents/676034f8afd077.09743623.torrent): Failed to open stream: No such file or directory');
 
     // Required for ChatRepository()
     $this->seed(UserSeeder::class);
@@ -117,7 +117,7 @@ test('upload a torrent creates a notification for followers', function (): void 
 
 test('upload a torrent does not create a notification for followers when all notifications disabled', function (): void {
     $this->markTestIncomplete('Works locally, but fails in pipeline with:
-        file_put_contents(/home/runner/work/UNIT3D-Community-Edition/UNIT3D-Community-Edition/files/torrents/676034f8afd077.09743623.torrent): Failed to open stream: No such file or directory');
+        file_put_contents(/home/runner/work/UNIT3D/UNIT3D/files/torrents/676034f8afd077.09743623.torrent): Failed to open stream: No such file or directory');
 
     // Required for ChatRepository()
     $this->seed(UserSeeder::class);
@@ -197,7 +197,7 @@ test('upload a torrent does not create a notification for followers when all not
 
 test('upload a torrent does not create a notification for followers when following upload notifications are disabled', function (): void {
     $this->markTestIncomplete('Works locally, but fails in pipeline with:
-        file_put_contents(/home/runner/work/UNIT3D-Community-Edition/UNIT3D-Community-Edition/files/torrents/676034f8afd077.09743623.torrent): Failed to open stream: No such file or directory');
+        file_put_contents(/home/runner/work/UNIT3D/UNIT3D/files/torrents/676034f8afd077.09743623.torrent): Failed to open stream: No such file or directory');
 
     // Required for ChatRepository()
     $this->seed(UserSeeder::class);
@@ -277,7 +277,7 @@ test('upload a torrent does not create a notification for followers when followi
 
 test('upload a torrent does not create a notification for followers when following upload notifications are disabled for specific group', function (): void {
     $this->markTestIncomplete('Works locally, but fails in pipeline with:
-        file_put_contents(/home/runner/work/UNIT3D-Community-Edition/UNIT3D-Community-Edition/files/torrents/676034f8afd077.09743623.torrent): Failed to open stream: No such file or directory');
+        file_put_contents(/home/runner/work/UNIT3D/UNIT3D/files/torrents/676034f8afd077.09743623.torrent): Failed to open stream: No such file or directory');
 
     // Required for ChatRepository()
     $this->seed(UserSeeder::class);

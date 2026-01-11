@@ -18,6 +18,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use AllowDynamicProperties;
 
 /**
  * App\Models\IgdbGame.
@@ -35,7 +36,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property ?\Illuminate\Support\Carbon $created_at
  * @property ?\Illuminate\Support\Carbon $updated_at
  */
-class IgdbGame extends Model
+#[AllowDynamicProperties]
+final class IgdbGame extends Model
 {
     /**
      * The attributes that are mass assignable.

@@ -118,17 +118,17 @@
             @forelse ($warnings as $warning)
                 <tr>
                     <td>
-                        <x-user-tag :anon="false" :user="$warning->warneduser" />
+                        <x-user-tag :anon="false" :user="$warning->user" />
                     </td>
                     <td>
-                        <x-user-tag :anon="false" :user="$warning->staffuser" />
+                        <x-user-tag :anon="false" :user="$warning->staff" />
                     </td>
                     <td>
                         @isset($warning->torrent)
                             <a
-                                href="{{ route('torrents.show', ['id' => $warning->torrenttitle->id]) }}"
+                                href="{{ route('torrents.show', ['id' => $warning->torrent->id]) }}"
                             >
-                                {{ $warning->torrenttitle->name }}
+                                {{ $warning->torrent->name }}
                             </a>
                         @else
                             n/a

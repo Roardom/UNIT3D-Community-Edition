@@ -48,7 +48,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->routes(function (): void {
             Route::prefix('api')
                 ->middleware(MiddlewareGroup::CHAT->value)
-                ->group(base_path('routes/vue.php'));
+                ->group(base_path('routes/chat.php'));
 
             Route::middleware(MiddlewareGroup::WEB->value)
                 ->group(base_path('routes/web.php'));
@@ -73,18 +73,21 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function configureRateLimiting(): void
     {
-        RateLimiter::for(GlobalRateLimit::WEB, fn (Request $request): Limit => $request->user()
-            ? Limit::perMinute(
+        RateLimiter::for(GlobalRateLimit::WEB, function (Request $request): Limit {
+            $user = $request->user();
+
+            return $user ? Limit::perMinute(
                 cache()->flexible(
-                    'group:'.$request->user()->group_id.':is_modo',
+                    'group:'.$user->group_id.':is_modo',
                     [5, 10],
-                    fn () => $request->user()->group()->value('is_modo')
+                    fn () => $user->group()->value('is_modo')
                 )
                     ? 60
                     : 30
             )
-                ->by('web'.$request->user()->id)
-            : Limit::perMinute(8)->by('web'.$request->ip()));
+                ->by('web'.$user->id)
+            : Limit::perMinute(8)->by('web'.$request->ip());
+        });
         RateLimiter::for(GlobalRateLimit::API, fn (Request $request) => Limit::perMinute(30)->by('api'.$request->user()->id));
         RateLimiter::for(GlobalRateLimit::ANNOUNCE, fn (Request $request) => Limit::perMinute(500)->by('announce'.$request->ip()));
         RateLimiter::for(GlobalRateLimit::CHAT, fn (Request $request) => Limit::perMinute(60)->by('chat'.$request->user()->id));
@@ -93,6 +96,8 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for(GlobalRateLimit::SEARCH, fn (Request $request): Limit => Limit::perMinute(100)->by('search:'.$request->user()->id));
         RateLimiter::for(GlobalRateLimit::TMDB, fn (): Limit => Limit::perSecond(2));
         RateLimiter::for(GlobalRateLimit::IGDB, fn (): Limit => Limit::perSecond(2));
+        RateLimiter::for(GlobalRateLimit::FORGOT_PASSWORD, fn (Request $request) => Limit::perMinute(5)->by('forgot-password'.$request->ip()));
+        RateLimiter::for(GlobalRateLimit::RESET_PASSWORD, fn (Request $request) => Limit::perMinute(5)->by('reset-password'.$request->ip()));
     }
 
     protected function removeIndexPhpFromUrl(): void

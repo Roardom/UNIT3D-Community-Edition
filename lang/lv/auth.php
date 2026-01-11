@@ -23,7 +23,10 @@ return [
     */
     'failed' => 'Šie dati neatbilst mūsu reģistram.',
     'throttle' => 'Pārāk daudz pieteikšanās mēģinājumu. Lūdzu mēģiniet vēlreiz pēc :seconds sekundēm.',
-    'activation-error' => 'Aizliegts vai nederīgs žetons vai konts jau ir apstiprināts!',
+    'activation-error' => 'Konts ir slēgts vai jau apstiprināts.',
     'activation-success' => 'Konts apstiprināts! Tagad varat pieteikties!',
     'add-image' => 'Pievienojiet citu attēla saiti',
+    'application' => 'Pieteikšanās',
+    'add-profile' => 'Pievienot vēl vienu profika saiti',
+    'allow-invite-appl' => 'Atvērtā reģistrācija ir slēgta! Reģistrēties var tikai ar ielūgumu! Taču pieteikumu reģistrācija ir atvērta. Tu esi pāradresēts uz pieteikuma lapu!',
 ];

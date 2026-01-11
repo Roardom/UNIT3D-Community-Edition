@@ -57,7 +57,7 @@
                 @forelse ($notes as $note)
                     <tr x-data="userNote" data-note-id="{{ $note->id }}">
                         <td>
-                            <x-user-tag :anon="false" :user="$note->staffuser" />
+                            <x-user-tag :anon="false" :user="$note->staff" />
                         </td>
                         {{-- format-ignore-start --}}<td style="white-space: pre-wrap">@linkify($note->message)</td>{{-- format-ignore-end --}}
                         <td>

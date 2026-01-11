@@ -18,7 +18,7 @@ return [
     // Featured Torrents
     'featured-by' => 'Vorgestellt durch',
     'featured-torrents' => 'Vorgestellte Torrents',
-    'featured-torrents-intro' => 'Hole es dir, solange du kannst!',
+    'featured-torrents-intro' => 'Hole sie dir, solange du kannst!',
     'featured-until' => 'Vorgestellt bis',
     // Latest Torrents
     'top-torrents' => 'Top Torrents',

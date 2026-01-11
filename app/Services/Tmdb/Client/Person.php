@@ -23,7 +23,7 @@ class Person
 {
     /**
      * @var array{
-     *     adult: ?boolean,
+     *     adult: ?bool,
      *     also_known_as: ?array<string>,
      *     biography: ?string,
      *     birthday: ?string,

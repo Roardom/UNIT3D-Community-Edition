@@ -49,4 +49,11 @@ return [
     'users-per-group' => 'Pengguna Per Kumpulan',
     'active' => 'Aktif',
     'languages' => 'Bahasa-bahasa',
+    'all' => 'Semua',
+    'all-time' => 'Sejak tracker ini ditubuhkan',
+    'banned' => 'Kena \'ban\'',
+    'credited' => 'Telah dikreditkan (Credited)',
+    'disabled' => '\'Disabled\'',
+    'last30days' => '30 hari terakhir',
+    'last60days' => '60 hari terakhir',
 ];

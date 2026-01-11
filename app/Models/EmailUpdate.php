@@ -18,6 +18,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\EmailUpdate.
@@ -27,7 +28,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon      $created_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  */
-class EmailUpdate extends Model
+#[AllowDynamicProperties]
+final class EmailUpdate extends Model
 {
     /**
      * Indicates if the model should be timestamped.

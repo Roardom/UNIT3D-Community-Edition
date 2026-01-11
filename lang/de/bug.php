@@ -11,7 +11,7 @@ return [
  * @author     HDVinnie <hdinnovations@protonmail.com>
  * @license    https://www.gnu.org/licenses/agpl-3.0.en.html/ GNU Affero General Public License v3.0
  */
-    'bug-report' => 'Bug Report',
+    'bug-report' => 'Fehlerbericht',
     'bug-report-description' => 'Einen Bug melden',
     'enter-description' => 'Beschreibe das Problem so gut wie möglich',
     'enter-email' => 'Bitte gebe deine E-Mail-Adresse ein',

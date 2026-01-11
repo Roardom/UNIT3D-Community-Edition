@@ -34,4 +34,5 @@ return [
     'reseed-requests' => 'Solicitação de reenvio',
     'title' => 'Título',
     'unfollows' => 'Deixar de seguir',
+    'already-marked-read' => 'Notificação já marcada como lida!',
 ];

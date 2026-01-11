@@ -110,7 +110,7 @@ The following commands are **optional** and should be run only as needed to reso
 - **Restart services:**
 
     ```sh
-    sudo systemctl restart php8.4-fpm && \
+    sudo systemctl restart php8.5-fpm && \
     sudo php artisan queue:restart && \
     sudo php artisan up
     ```

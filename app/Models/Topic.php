@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Topic.
@@ -48,7 +49,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int                             $forum_id
  */
-class Topic extends Model
+#[AllowDynamicProperties]
+final class Topic extends Model
 {
     use Auditable;
 

@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use AllowDynamicProperties;
 
 /**
  * App\Models\TmdbPerson.
@@ -42,7 +43,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property string|null $gender
  * @property string|null $homepage
  */
-class TmdbPerson extends Model
+#[AllowDynamicProperties]
+final class TmdbPerson extends Model
 {
     /** @use HasFactory<\Database\Factories\TmdbPersonFactory> */
     use HasFactory;

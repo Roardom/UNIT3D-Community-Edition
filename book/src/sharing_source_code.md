@@ -4,7 +4,7 @@ _A guide by EkoNesLeg_
 
 ## 1. Introduction
 
-As part of complying with the [GNU Affero General Public License (AGPL)](https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/LICENSE), sites that modify and distribute UNIT3D are required to share their source code. This guide provides an easy process for creating a sanitized tarball of your modified source code and encourages you to create and update an "Open Source" page on your site to make this code available.
+As part of complying with the [GNU Affero General Public License (AGPL)](https://github.com/HDInnovations/UNIT3D/blob/master/LICENSE), sites that modify and distribute UNIT3D are required to share their source code. This guide provides an easy process for creating a sanitized tarball of your modified source code and encourages you to create and update an "Open Source" page on your site to make this code available.
 
 ## 2. Setting up tarball creation
 
@@ -133,7 +133,7 @@ To create a tarball that includes only the modified source code and excludes sen
 
     ### License information
 
-    Our site runs on a modified version of [UNIT3D](https://github.com/HDInnovations/UNIT3D-Community-Edition). For more details on the license, visit the [GNU AGPL License](https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/LICENSE).
+    Our site runs on a modified version of [UNIT3D](https://github.com/HDInnovations/UNIT3D). For more details on the license, visit the [GNU AGPL License](https://github.com/HDInnovations/UNIT3D/blob/master/LICENSE).
     ```
 
 3. **Manually update this page whenever you update your site:**

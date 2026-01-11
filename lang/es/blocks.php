@@ -19,7 +19,7 @@ return [
     'featured-by' => 'Destacado por',
     'featured-torrents' => 'Torrents destacados',
     'featured-torrents-intro' => '¡Consíguelos mientras puedas!',
-    'featured-until' => 'Torrent destacado hasta el',
+    'featured-until' => 'Este es un torrent destacado hasta el',
     // Latest Torrents
     'top-torrents' => 'Mejores torrents',
     // Latest Posts

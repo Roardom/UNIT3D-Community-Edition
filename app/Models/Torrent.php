@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Torrent.
@@ -55,7 +56,7 @@ use Laravel\Scout\Searchable;
  * @property int|null                        $tmdb_movie_id
  * @property int|null                        $tmdb_tv_id
  * @property int                             $mal
- * @property int                             $igdb
+ * @property int|null                        $igdb
  * @property int|null                        $season_number
  * @property int|null                        $episode_number
  * @property int                             $free
@@ -83,7 +84,8 @@ use Laravel\Scout\Searchable;
  * @property int                             $balance_offset
  * @property int|null                        $balance_reset_at
  */
-class Torrent extends Model
+#[AllowDynamicProperties]
+final class Torrent extends Model
 {
     use Auditable;
 
@@ -642,9 +644,9 @@ class Torrent extends Model
      *
      * @return HasMany<Warning, $this>
      */
-    public function hitrun(): HasMany
+    public function warnings(): HasMany
     {
-        return $this->hasMany(Warning::class, 'torrent');
+        return $this->hasMany(Warning::class);
     }
 
     /**
@@ -764,7 +766,7 @@ class Torrent extends Model
      */
     public function reports(): HasMany
     {
-        return $this->hasMany(Report::class);
+        return $this->hasMany(Report::class, 'reported_torrent_id');
     }
 
     /**
@@ -785,6 +787,16 @@ class Torrent extends Model
     public function trump(): HasOne
     {
         return $this->hasOne(TorrentTrump::class);
+    }
+
+    /**
+     * Get the reseeds for the torrent.
+     *
+     * @return HasMany<TorrentReseed, $this>
+     */
+    public function reseeds(): HasMany
+    {
+        return $this->hasMany(TorrentReseed::class);
     }
 
     /**

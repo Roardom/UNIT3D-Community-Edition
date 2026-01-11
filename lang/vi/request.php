@@ -74,4 +74,6 @@ return [
     'voters' => 'Cử tri',
     'votes' => 'Phiếu bầu',
     'yes' => 'Vâng',
+    'resolution' => 'Độ phân giải',
+    'resolutions' => 'Độ phân giải',
 ];

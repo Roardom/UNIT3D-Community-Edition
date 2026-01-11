@@ -18,7 +18,7 @@ return [
     'blocks' => 'Khối',
     'bot' => 'Bot',
     'bots' => 'Bots',
-    'chat' => 'Trò chuyện',
+    'chat' => 'Chat',
     'config-manager' => 'Trình quản lý cấu hình',
     'dashboard' => 'bảng điều khiển',
     'failed-login-log' => 'Nhật ký đăng nhập thất bại',

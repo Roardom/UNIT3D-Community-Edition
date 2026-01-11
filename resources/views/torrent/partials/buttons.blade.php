@@ -102,8 +102,8 @@
                 <div class="dialog__form" x-bind="dialogForm">
                     <div class="bbcode-rendered" style="text-align: left">
                         <pre
-                            style="width: max-content"
-                        ><code class="torrent__nfo" style="white-space: pre;">{{ iconv('cp437', 'utf8', $torrent->nfo) }}</code></pre>
+                            class="torrent__nfo-pre"
+                        ><code class="torrent__nfo">{{ iconv('cp437', 'utf8', $torrent->nfo) }}</code></pre>
                     </div>
                 </div>
             </dialog>
@@ -389,9 +389,10 @@
             <button
                 class="form__button form__button--outlined form__button--centered"
                 x-bind="showDialog"
+                title="This torrent currently has {{ $torrent->unsolvedReports }} unsolved report(s)"
             >
                 <i class="{{ config('other.font-awesome') }} fa-fw fa-eye"></i>
-                {{ __('common.report') }}
+                {{ __('common.report') }} ({{ $torrent->unsolvedReports }})
             </button>
             <dialog class="dialog" x-bind="dialogElement">
                 <h4 class="dialog__heading">

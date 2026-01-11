@@ -20,6 +20,7 @@ use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Note.
@@ -31,7 +32,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class Note extends Model
+#[AllowDynamicProperties]
+final class Note extends Model
 {
     use Auditable;
 
@@ -57,7 +59,7 @@ class Note extends Model
      *
      * @return BelongsTo<User, $this>
      */
-    public function noteduser(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id')->withDefault([
             'username' => 'System',
@@ -70,7 +72,7 @@ class Note extends Model
      *
      * @return BelongsTo<User, $this>
      */
-    public function staffuser(): BelongsTo
+    public function staff(): BelongsTo
     {
         return $this->belongsTo(User::class, 'staff_id')->withDefault([
             'username' => 'System',

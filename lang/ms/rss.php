@@ -26,4 +26,7 @@ return [
     'rss' => 'RSS',
     'rss-feed' => 'RSS Feed',
     'type' => 'Jenis',
+    'created' => 'RSS feed peribadi berjaya dicipta',
+    'deleted' => 'RSS feed telah dibuang!',
+    'error' => 'Permintaan (request) tidak boleh diproses',
 ];

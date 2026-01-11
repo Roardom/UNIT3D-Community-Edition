@@ -12,7 +12,7 @@ return [
  * @license    https://www.gnu.org/licenses/agpl-3.0.en.html/ GNU Affero General Public License v3.0
  */
     'articles' => 'Artikel',
-    'meta-articles' => 'Artikel dan berita mengenai pelacak dan komuniti',
-    'published-at' => 'Diterbitkan Pada',
+    'meta-articles' => 'Artikel dan berita tracker ini dan komuniti',
+    'published-at' => 'Diterbitkan pada ',
     'read-more' => 'Baca Lebih Lanjut',
 ];

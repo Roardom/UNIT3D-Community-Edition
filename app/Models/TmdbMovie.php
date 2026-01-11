@@ -21,6 +21,7 @@ use App\Enums\Occupation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use AllowDynamicProperties;
 
 /**
  * App\Models\TmdbMovie.
@@ -50,7 +51,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null                     $trailer
  */
-class TmdbMovie extends Model
+#[AllowDynamicProperties]
+final class TmdbMovie extends Model
 {
     /** @use HasFactory<\Database\Factories\TmdbMovieFactory> */
     use HasFactory;

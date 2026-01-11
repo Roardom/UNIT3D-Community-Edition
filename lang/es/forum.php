@@ -63,7 +63,7 @@ return [
     'send-new-topic' => 'Publicar este hilo',
     'solved' => 'Resuelto',
     'state' => 'Estado',
-    'stats' => 'Estadísticas',
+    'stats' => 'Estad.',
     'select-all-forum' => 'Todas las categorías/foros',
     'subscribe' => 'Suscribirse',
     'subscribed' => 'Suscrito',

@@ -207,6 +207,6 @@ You can access the built-in Backups dashboard from the Staff menu. It shows each
    ```sh
    cd /var/www/html
    sudo php artisan set:all_cache
-   sudo systemctl restart php8.4-fpm
+   sudo systemctl restart php8.5-fpm
    sudo php artisan queue:restart
    ```

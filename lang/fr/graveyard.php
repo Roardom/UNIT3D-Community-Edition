@@ -11,7 +11,7 @@ return [
  * @author     HDVinnie <hdinnovations@protonmail.com>
  * @license    https://www.gnu.org/licenses/agpl-3.0.en.html/ GNU Affero General Public License v3.0
  */
-    'current-seedtime' => 'Actuelle Seedtime',
+    'current-seedtime' => 'Seedtime Actuel',
     'dead' => 'Mort',
     'graveyard' => 'Cimetière',
     'guidelines' => 'Lignes directrices',
@@ -31,4 +31,5 @@ return [
     'reward' => 'Jetons Freeleech',
     'rewarded' => 'Récompensé',
     'seedtime-goal' => 'Seedtime Objectif',
+    'howto-desc' => 'Vous devez semer ce torrent pendant 30 jours pour une résurrection réussie. Lorsque votre seedtime actuel de :currentSeedtime frappe :requiredSeedtime, vous serez récompensé :tokens token(s) freeleech.',
 ];

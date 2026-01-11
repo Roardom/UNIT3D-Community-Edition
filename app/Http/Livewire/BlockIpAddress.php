@@ -49,7 +49,7 @@ class BlockIpAddress extends Component
 
         $this->validate();
 
-        BlockedIp::create([
+        BlockedIp::query()->create([
             'ip_address' => $this->ipAddress,
             'reason'     => $this->reason,
             'user_id'    => auth()->user()->id,
@@ -66,6 +66,8 @@ class BlockIpAddress extends Component
     {
         if (auth()->user()->group->is_modo) {
             $blockedIp->delete();
+
+            cache()->forget('blocked-ips');
 
             $this->dispatch('success', type: 'success', message: 'IP has successfully been deleted!');
         } else {

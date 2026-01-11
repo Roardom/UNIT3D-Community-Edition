@@ -20,8 +20,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use AllowDynamicProperties;
 
-class Participant extends Model
+#[AllowDynamicProperties]
+final class Participant extends Model
 {
     use SoftDeletes;
 

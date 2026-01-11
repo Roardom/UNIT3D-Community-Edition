@@ -20,6 +20,7 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Peer.
@@ -40,7 +41,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property bool                            $connectable
  * @property bool                            $active
  */
-class Peer extends Model
+#[AllowDynamicProperties]
+final class Peer extends Model
 {
     /** @use HasFactory<\Database\Factories\PeerFactory> */
     use HasFactory;

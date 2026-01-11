@@ -20,6 +20,7 @@ use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Distributor.
@@ -27,7 +28,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int    $id
  * @property string $name
  */
-class Distributor extends Model
+#[AllowDynamicProperties]
+final class Distributor extends Model
 {
     use Auditable;
 

@@ -47,4 +47,7 @@ return [
     'total-upload' => 'Total des uploads',
     'users-in-group' => 'Utilisateurs du groupe',
     'users-per-group' => 'Utilisateurs par groupe',
+    'active' => 'Actif',
+    'all-time' => 'Tous les temps',
+    'banned' => 'Banni',
 ];

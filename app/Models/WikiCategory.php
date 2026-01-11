@@ -19,6 +19,7 @@ namespace App\Models;
 use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use AllowDynamicProperties;
 
 /**
  * App\Models\WikiCategory.
@@ -28,7 +29,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $icon
  * @property int    $position
  */
-class WikiCategory extends Model
+#[AllowDynamicProperties]
+final class WikiCategory extends Model
 {
     use Auditable;
 

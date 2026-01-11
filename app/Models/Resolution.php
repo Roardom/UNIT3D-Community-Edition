@@ -20,6 +20,7 @@ use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Resolution.
@@ -28,7 +29,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $name
  * @property int    $position
  */
-class Resolution extends Model
+#[AllowDynamicProperties]
+final class Resolution extends Model
 {
     use Auditable;
 

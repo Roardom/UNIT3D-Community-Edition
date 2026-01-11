@@ -20,6 +20,7 @@ use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Permission.
@@ -31,7 +32,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property bool $reply_topic
  * @property bool $start_topic
  */
-class ForumPermission extends Model
+#[AllowDynamicProperties]
+final class ForumPermission extends Model
 {
     use Auditable;
 

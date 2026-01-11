@@ -119,8 +119,10 @@
                                             overflow-wrap: break-word;
                                         "
                                     >
-                                        {{ $key }}: {{ Js::from($value['old']) }} &rarr;
-                                        {{ Js::from($value['new']) }}
+                                        {{ $key }}:
+                                        {{ json_encode($value['old'], JSON_THROW_ON_ERROR) }}
+                                        &rarr;
+                                        {{ json_encode($value['new'], JSON_THROW_ON_ERROR) }}
                                     </li>
                                 @endforeach
                             </ul>

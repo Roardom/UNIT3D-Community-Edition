@@ -18,6 +18,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use AllowDynamicProperties;
 
 /**
  * App\Models\Gift.
@@ -29,7 +30,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string                     $message
  * @property \Illuminate\Support\Carbon $created_at
  */
-class Gift extends Model
+#[AllowDynamicProperties]
+final class Gift extends Model
 {
     protected $guarded = [];
 

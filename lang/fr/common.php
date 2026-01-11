@@ -4,7 +4,7 @@ return [
     'account' => 'Compte',
     'achievement-title' => 'Titre de la réalisation',
     'achievement-unlocked' => 'Vous avez débloqué <span class="badge-extra">:name</span> la réalisation',
-    'active' => 'actif',
+    'active' => 'Actif',
     'active-warning' => 'Avertissement actif',
     'add' => 'Ajouter',
     'added' => 'Ajoutée',
