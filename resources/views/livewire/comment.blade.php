@@ -30,9 +30,7 @@
                         class="post__quote"
                         title="{{ __('forum.quote') }}"
                         x-on:click="
-                            input = document.getElementById(
-                                '{{ $comment->isParent() ? 'new-comment__textarea' : 'reply-comment' }}'
-                            );
+                            input = document.getElementById('reply-comment');
                             if (input.value !== '') {
                                 input.value += '\n\n';
                             }
