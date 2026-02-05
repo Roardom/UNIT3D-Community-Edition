@@ -487,7 +487,7 @@ return [
             'self' => true,
 
             'allow' => [
-		'wss://'.env('VITE_REVERB_HOST').(env('VITE_REVERB_PORT') && env('VITE_REVERB_PORT') != 443 ? ':'.env('VITE_REVERB_PORT') : '').'/app/'.env('VITE_REVERB_APP_KEY'),
+                'wss://'.env('VITE_REVERB_HOST').(env('VITE_REVERB_PORT') && env('VITE_REVERB_PORT') != 443 ? ':'.env('VITE_REVERB_PORT') : '').'/app/'.env('VITE_REVERB_APP_KEY'),
                 'https://api.themoviedb.org/',
             ],
         ],
