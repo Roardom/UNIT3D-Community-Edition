@@ -17,7 +17,6 @@ declare(strict_types=1);
 use App\Http\Livewire\Comments;
 use App\Models\Article;
 use App\Models\Bot;
-use App\Models\Chatroom;
 use App\Models\Comment;
 use App\Models\Group;
 use App\Models\User;
@@ -37,9 +36,6 @@ test('user comments on article creates a notification for staff', function (): v
 
     $bot = Bot::factory()->create([
         'command' => 'Systembot',
-    ]);
-    $chat = Chatroom::factory()->create([
-        'name' => config('chat.system_chatroom'),
     ]);
 
     $group = Group::factory()->create([
@@ -91,9 +87,6 @@ test('staff comments on own article does not create a notification for staff', f
     $bot = Bot::factory()->create([
         'command' => 'Systembot',
     ]);
-    $chat = Chatroom::factory()->create([
-        'name' => config('chat.system_chatroom'),
-    ]);
 
     $staffGroup = Group::factory()->create([
         'can_comment' => true,
@@ -132,9 +125,6 @@ test('user comments on article does not a notification for staff user when all n
 
     $bot = Bot::factory()->create([
         'command' => 'Systembot',
-    ]);
-    $chat = Chatroom::factory()->create([
-        'name' => config('chat.system_chatroom'),
     ]);
 
     $group = Group::factory()->create([

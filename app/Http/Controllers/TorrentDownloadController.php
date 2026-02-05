@@ -22,6 +22,8 @@ use App\Models\Scopes\ApprovedScope;
 use App\Models\Torrent;
 use App\Models\TorrentDownload;
 use App\Models\User;
+use App\Models\FreeleechToken;
+use App\Services\Unit3dAnnounce;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -84,6 +86,27 @@ class TorrentDownloadController extends Controller
         $torrentDownload->torrent_id = $id;
         $torrentDownload->type = $rsskey ? 'RSS/API using '.$request->header('User-Agent') : 'Site using '.$request->header('User-Agent');
         $torrentDownload->save();
+
+        // Auto-apply a freeleech token if the user has enabled the setting
+        $settings = $user->settings;
+
+        if (
+            $settings?->auto_freeleech_apply &&
+            $user->fl_tokens >= max(1, $settings->auto_freeleech_min_tokens) &&
+            !cache()->get("freeleech_token:{$user->id}:{$torrent->id}")
+        ) {
+            FreeleechToken::query()->create([
+                'user_id'    => $user->id,
+                'torrent_id' => $torrent->id,
+            ]);
+
+            Unit3dAnnounce::addFreeleechToken($user->id, $torrent->id);
+
+            $user->decrement('fl_tokens');
+            cache()->put("freeleech_token:{$user->id}:{$torrent->id}", true);
+
+            $torrent->searchable();
+        }
 
         return response()->streamDownload(
             function () use ($id, $user, $torrent): void {

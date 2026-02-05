@@ -5,24 +5,10 @@
 @endsection
 
 @section('breadcrumbs')
-    <li class="breadcrumbV2">
-        <a href="{{ route('stats') }}" class="breadcrumb__link">
-            {{ __('stat.stats') }}
-        </a>
-    </li>
-    <li class="breadcrumbV2">
-        <a href="{{ route('groups') }}" class="breadcrumb__link">
-            {{ __('stat.groups') }}
-        </a>
-    </li>
-    <li class="breadcrumb--active">{{ __('common.groups') }} requirements</li>
+    <li class="breadcrumb--active">{{ __('common.groups') }}</li>
 @endsection
 
-@section('nav-tabs')
-    @include('partials.statsgroupmenu')
-@endsection
-
-@section('page', 'page__stats--group-requirements')
+@section('page', 'page__group--index')
 
 @section('main')
     <section class="panelV2">

@@ -167,7 +167,7 @@ class TorrentController extends Controller
 
         $fileTree = [];
 
-        foreach ($torrent->files->sortBy('name') as $index => $file) {
+        foreach ($torrent->files as $file) {
             $parts = explode('/', trim($file->name, '/'));
 
             $current = &$fileTree;
@@ -195,6 +195,14 @@ class TorrentController extends Controller
         $calculateTotals = function (array &$children) use (&$calculateTotals): array {
             $totalSize = 0;
             $totalCount = 0;
+
+            uksort($children, function ($a, $b) use ($children) {
+                if ($children[$a]['type'] !== $children[$b]['type']) {
+                    return ($children[$a]['type'] === 'file') <=> ($children[$b]['type'] === 'file');
+                }
+
+                return strnatcasecmp((string) $a, (string) $b);
+            });
 
             foreach ($children as &$child) {
                 if ($child['type'] === 'directory') {

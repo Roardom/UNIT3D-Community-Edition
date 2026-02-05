@@ -215,6 +215,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('groups.index') }}">
+                        <i class="{{ config('other.font-awesome') }} fa-users"></i>
+                        {{ __('common.groups') }}
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('internal') }}">
                         <i class="{{ config('other.font-awesome') }} fa-star-shooting"></i>
                         {{ __('common.internal') }}

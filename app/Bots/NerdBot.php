@@ -314,16 +314,14 @@ class NerdBot
             }
 
             // Create message
-            $roomId = 0;
-            $this->chatRepository->privateMessage($target->id, $roomId, $message, 1, $this->bot->id);
-            $this->chatRepository->privateMessage(1, $roomId, $txt, $target->id, $this->bot->id);
+            $this->chatRepository->privateMessage($target->id, $message, 1, $this->bot->id);
+            $this->chatRepository->privateMessage(1, $txt, $target->id, $this->bot->id);
 
             return response('success');
         }
 
         if ($type === 'echo') {
-            $roomId = 0;
-            $this->chatRepository->botMessage($this->bot->id, $roomId, $txt, $target->id);
+            $this->chatRepository->botMessage($this->bot->id, $txt, $target->id);
 
             return response('success');
         }

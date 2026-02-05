@@ -16,7 +16,8 @@ declare(strict_types=1);
 
 use App\Models\Invite;
 use App\Models\User;
-use Database\Seeders\GroupSeeder;
+use Database\Seeders\ChatroomSeeder;
+use Database\Seeders\ChatStatusSeeder;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
@@ -26,7 +27,8 @@ use function Pest\Laravel\assertDatabaseMissing;
 use function Pest\Laravel\seed;
 
 beforeEach(function (): void {
-    seed(GroupSeeder::class);
+    seed(ChatroomSeeder::class);
+    seed(ChatStatusSeeder::class);
     Event::fake(Registered::class);
 });
 
@@ -48,6 +50,7 @@ test('user registration is available when enabled', function (): void {
     ]);
 
     $email = fake()->freeEmail;
+    $password = fake()->regexify('[A-Z]{5}[a-z]{5}[0-9]{4}!');
 
     $this->get('/register')
         ->assertOk()
@@ -56,9 +59,9 @@ test('user registration is available when enabled', function (): void {
     $this->post('/register', [
         'username'              => 'testuser',
         'email'                 => $email,
-        'password'              => 'password',
-        'password_confirmation' => 'password',
-    ])->assertRedirectToRoute('home.index');
+        'password'              => $password,
+        'password_confirmation' => $password,
+    ])->assertRedirectToRoute('verification.notice');
 
     assertDatabaseHas('users', [
         'username'          => 'testuser',
@@ -95,6 +98,7 @@ test('user can register using invite code', function (): void {
     ]);
 
     $email = fake()->freeEmail;
+    $password = fake()->regexify('[A-Z]{5}[a-z]{5}[0-9]{4}!');
 
     $this->get('/register?code=testcode')
         ->assertOk()
@@ -103,11 +107,11 @@ test('user can register using invite code', function (): void {
     $this->post('/register?code=testcode', [
         'username'              => 'testuser',
         'email'                 => $email,
-        'password'              => 'password',
-        'password_confirmation' => 'password',
+        'password'              => $password,
+        'password_confirmation' => $password,
     ])
         ->assertSessionHasNoErrors()
-        ->assertRedirectToRoute('home.index');
+        ->assertRedirectToRoute('verification.notice');
 
     assertDatabaseHas('users', [
         'username'          => 'testuser',
@@ -137,6 +141,7 @@ test('user cannot register using invalid invite code', function (): void {
     ]);
 
     $email = fake()->freeEmail;
+    $password = fake()->regexify('[A-Z]{5}[a-z]{5}[0-9]{4}!');
 
     $this->get('/register?code=testcode')
         ->assertOk()
@@ -145,8 +150,8 @@ test('user cannot register using invalid invite code', function (): void {
     $this->post('/register?code=testcode', [
         'username'              => 'testuser',
         'email'                 => $email,
-        'password'              => 'password',
-        'password_confirmation' => 'password',
+        'password'              => $password,
+        'password_confirmation' => $password,
     ])
         ->assertSessionHasErrors('code')
         ->assertRedirectToRoute('home.index');
@@ -173,6 +178,7 @@ test('user cannot confirm email using invalid hash', function (): void {
     ]);
 
     $email = fake()->freeEmail;
+    $password = fake()->regexify('[A-Z]{5}[a-z]{5}[0-9]{4}!');
 
     $this->get('/register?code=testcode')
         ->assertOk()
@@ -181,11 +187,11 @@ test('user cannot confirm email using invalid hash', function (): void {
     $this->post('/register?code=testcode', [
         'username'              => 'testuser',
         'email'                 => $email,
-        'password'              => 'password',
-        'password_confirmation' => 'password',
+        'password'              => $password,
+        'password_confirmation' => $password,
     ])
         ->assertSessionHasNoErrors()
-        ->assertRedirectToRoute('home.index');
+        ->assertRedirectToRoute('verification.notice');
 
     assertDatabaseHas('users', [
         'username'          => 'testuser',
@@ -223,6 +229,7 @@ test('user can register using invite code with internal note assigned', function
     ]);
 
     $email = fake()->freeEmail;
+    $password = fake()->regexify('[A-Z]{5}[a-z]{5}[0-9]{4}!');
 
     $this->get('/register?code=testcode')
         ->assertOk()
@@ -231,11 +238,11 @@ test('user can register using invite code with internal note assigned', function
     $this->post('/register?code=testcode', [
         'username'              => 'testuser',
         'email'                 => $email,
-        'password'              => 'password',
-        'password_confirmation' => 'password',
+        'password'              => $password,
+        'password_confirmation' => $password,
     ])
         ->assertSessionHasNoErrors()
-        ->assertRedirectToRoute('home.index');
+        ->assertRedirectToRoute('verification.notice');
 
     assertDatabaseHas('users', [
         'username'          => 'testuser',

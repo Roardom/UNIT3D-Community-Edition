@@ -248,9 +248,8 @@ class ChatController extends Controller
                 }
             }
 
-            $roomId = 0;
             $ignore = $botId > 0 && $receiverId == 1 ? true : null;
-            $message = $this->chatRepository->privateMessage($userId, $roomId, $message, $receiverId, null, $ignore);
+            $message = $this->chatRepository->privateMessage($userId, $message, $receiverId, null, $ignore);
 
             return new ChatMessageResource($message);
         }

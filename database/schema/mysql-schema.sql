@@ -85,7 +85,8 @@ CREATE TABLE `application_image_proofs` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `application_image_proofs_application_id_index` (`application_id`)
+  KEY `application_image_proofs_application_id_foreign` (`application_id`),
+  CONSTRAINT `application_image_proofs_application_id_foreign` FOREIGN KEY (`application_id`) REFERENCES `applications` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `application_url_proofs`;
@@ -98,7 +99,8 @@ CREATE TABLE `application_url_proofs` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `application_url_proofs_application_id_index` (`application_id`)
+  KEY `application_url_proofs_application_id_foreign` (`application_id`),
+  CONSTRAINT `application_url_proofs_application_id_foreign` FOREIGN KEY (`application_id`) REFERENCES `applications` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `applications`;
@@ -165,13 +167,19 @@ CREATE TABLE `automatic_torrent_freeleeches` (
   `position` int unsigned NOT NULL,
   `name_regex` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `size` bigint unsigned DEFAULT NULL,
-  `category_id` int unsigned DEFAULT NULL,
-  `type_id` int unsigned DEFAULT NULL,
-  `resolution_id` int unsigned DEFAULT NULL,
+  `category_id` smallint unsigned DEFAULT NULL,
+  `type_id` smallint unsigned DEFAULT NULL,
+  `resolution_id` smallint unsigned DEFAULT NULL,
   `freeleech_percentage` int unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `automatic_torrent_freeleeches_category_id_foreign` (`category_id`),
+  KEY `automatic_torrent_freeleeches_type_id_foreign` (`type_id`),
+  KEY `automatic_torrent_freeleeches_resolution_id_foreign` (`resolution_id`),
+  CONSTRAINT `automatic_torrent_freeleeches_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `automatic_torrent_freeleeches_resolution_id_foreign` FOREIGN KEY (`resolution_id`) REFERENCES `resolutions` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `automatic_torrent_freeleeches_type_id_foreign` FOREIGN KEY (`type_id`) REFERENCES `types` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `bans`;
@@ -469,9 +477,11 @@ CREATE TABLE `donations` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `donations_user_id_index` (`user_id`),
-  KEY `donations_gifted_user_id_index` (`gifted_user_id`),
-  KEY `donations_package_id_index` (`package_id`)
+  KEY `donations_package_id_index` (`package_id`),
+  KEY `donations_user_id_foreign` (`user_id`),
+  KEY `donations_gifted_user_id_foreign` (`gifted_user_id`),
+  CONSTRAINT `donations_gifted_user_id_foreign` FOREIGN KEY (`gifted_user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `donations_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `email_updates`;
@@ -587,8 +597,8 @@ CREATE TABLE `forum_permissions` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `permissions_group_id_forum_id_unique` (`group_id`,`forum_id`),
   KEY `fk_permissions_forums1_idx` (`forum_id`),
-  KEY `fk_permissions_groups1_idx` (`group_id`),
   KEY `permissions_group_id_forum_id_read_topic_index` (`group_id`,`forum_id`,`read_topic`),
+  CONSTRAINT `forum_permissions_group_id_foreign` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `permissions_forum_id_foreign` FOREIGN KEY (`forum_id`) REFERENCES `forums` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1000,6 +1010,8 @@ CREATE TABLE `likes` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `likes_user_id_foreign` (`user_id`),
+  KEY `likes_post_id_foreign` (`post_id`),
+  CONSTRAINT `likes_post_id_foreign` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `likes_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1021,7 +1033,7 @@ DROP TABLE IF EXISTS `messages`;
 CREATE TABLE `messages` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int unsigned NOT NULL,
-  `chatroom_id` int unsigned NOT NULL,
+  `chatroom_id` int unsigned DEFAULT NULL,
   `receiver_id` int unsigned DEFAULT NULL,
   `bot_id` int unsigned DEFAULT NULL,
   `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1030,6 +1042,10 @@ CREATE TABLE `messages` (
   PRIMARY KEY (`id`),
   KEY `messages_user_id_foreign` (`user_id`),
   KEY `messages_receiver_id_foreign` (`receiver_id`),
+  KEY `messages_bot_id_foreign` (`bot_id`),
+  KEY `messages_chatroom_id_foreign` (`chatroom_id`),
+  CONSTRAINT `messages_bot_id_foreign` FOREIGN KEY (`bot_id`) REFERENCES `bots` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `messages_chatroom_id_foreign` FOREIGN KEY (`chatroom_id`) REFERENCES `chatrooms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `messages_receiver_id_foreign` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `messages_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1240,9 +1256,9 @@ CREATE TABLE `playlist_torrents` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `playlist_torrents_playlist_id_torrent_id_tmdb_id_unique` (`playlist_id`,`torrent_id`,`tmdb_id`),
-  KEY `playlist_torrents_playlist_id_index` (`playlist_id`),
   KEY `playlist_torrents_tmdb_id_index` (`tmdb_id`),
   KEY `playlist_torrents_torrent_id_foreign` (`torrent_id`),
+  CONSTRAINT `playlist_torrents_playlist_id_foreign` FOREIGN KEY (`playlist_id`) REFERENCES `playlists` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `playlist_torrents_torrent_id_foreign` FOREIGN KEY (`torrent_id`) REFERENCES `torrents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1376,8 +1392,11 @@ CREATE TABLE `reports` (
   KEY `reports_reporter_id_foreign` (`reporter_id`),
   KEY `reports_reported_user_id_index` (`reported_user_id`),
   KEY `reports_reported_torrent_id_index` (`reported_torrent_id`),
-  KEY `reports_reported_request_id_index` (`reported_request_id`),
   KEY `reports_solved_by_assigned_to_snoozed_until_index` (`solved_by`,`assigned_to`,`snoozed_until`),
+  KEY `reports_reported_request_id_foreign` (`reported_request_id`),
+  KEY `reports_assigned_to_foreign` (`assigned_to`),
+  CONSTRAINT `reports_assigned_to_foreign` FOREIGN KEY (`assigned_to`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `reports_reported_request_id_foreign` FOREIGN KEY (`reported_request_id`) REFERENCES `requests` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `reports_reported_user_id_foreign` FOREIGN KEY (`reported_user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `reports_reporter_id_foreign` FOREIGN KEY (`reporter_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `reports_solved_by_foreign` FOREIGN KEY (`solved_by`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
@@ -1396,8 +1415,9 @@ CREATE TABLE `request_bounty` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `request_id` (`requests_id`),
   KEY `request_bounty_user_id_foreign` (`user_id`),
+  KEY `request_bounty_requests_id_foreign` (`requests_id`),
+  CONSTRAINT `request_bounty_requests_id_foreign` FOREIGN KEY (`requests_id`) REFERENCES `requests` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `request_bounty_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `check_request_bounty_seedbonus` CHECK ((`seedbonus` >= 0))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1413,8 +1433,9 @@ CREATE TABLE `request_claims` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `request_id` (`request_id`),
   KEY `request_claims_user_id_foreign` (`user_id`),
+  KEY `request_claims_request_id_foreign` (`request_id`),
+  CONSTRAINT `request_claims_request_id_foreign` FOREIGN KEY (`request_id`) REFERENCES `requests` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `request_claims_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1547,9 +1568,7 @@ CREATE TABLE `seedboxes` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `clients_ip_unique` (`ip`),
   KEY `clients_user_id_foreign` (`user_id`),
-  KEY `clients_name_unique` (`name`),
   CONSTRAINT `clients_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1610,11 +1629,12 @@ CREATE TABLE `subtitles` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `subtitles_language_id_index` (`language_id`),
   KEY `subtitles_verified_index` (`verified`),
   KEY `subtitles_user_id_foreign` (`user_id`),
   KEY `subtitles_moderated_by_foreign` (`moderated_by`),
   KEY `subtitles_torrent_id_foreign` (`torrent_id`),
+  KEY `subtitles_language_id_foreign` (`language_id`),
+  CONSTRAINT `subtitles_language_id_foreign` FOREIGN KEY (`language_id`) REFERENCES `media_languages` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `subtitles_moderated_by_foreign` FOREIGN KEY (`moderated_by`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `subtitles_torrent_id_foreign` FOREIGN KEY (`torrent_id`) REFERENCES `torrents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `subtitles_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
@@ -1650,8 +1670,9 @@ CREATE TABLE `ticket_attachments` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `ticket_attachments_ticket_id_index` (`ticket_id`),
   KEY `ticket_attachments_user_id_foreign` (`user_id`),
+  KEY `ticket_attachments_ticket_id_foreign` (`ticket_id`),
+  CONSTRAINT `ticket_attachments_ticket_id_foreign` FOREIGN KEY (`ticket_id`) REFERENCES `tickets` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `ticket_attachments_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1678,8 +1699,10 @@ CREATE TABLE `ticket_notes` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `ticket_notes_user_id_index` (`user_id`),
-  KEY `ticket_notes_ticket_id_index` (`ticket_id`)
+  KEY `ticket_notes_user_id_foreign` (`user_id`),
+  KEY `ticket_notes_ticket_id_foreign` (`ticket_id`),
+  CONSTRAINT `ticket_notes_ticket_id_foreign` FOREIGN KEY (`ticket_id`) REFERENCES `tickets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `ticket_notes_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `ticket_priorities`;
@@ -1715,10 +1738,12 @@ CREATE TABLE `tickets` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `tickets_category_id_index` (`category_id`),
-  KEY `tickets_priority_id_index` (`priority_id`),
   KEY `tickets_user_id_foreign` (`user_id`),
   KEY `tickets_staff_id_foreign` (`staff_id`),
+  KEY `tickets_category_id_foreign` (`category_id`),
+  KEY `tickets_priority_id_foreign` (`priority_id`),
+  CONSTRAINT `tickets_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `ticket_categories` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `tickets_priority_id_foreign` FOREIGN KEY (`priority_id`) REFERENCES `ticket_priorities` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `tickets_staff_id_foreign` FOREIGN KEY (`staff_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `tickets_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2174,13 +2199,10 @@ CREATE TABLE `torrents` (
   KEY `imdb` (`imdb`),
   KEY `tvdb` (`tvdb`),
   KEY `mal` (`mal`),
-  KEY `moderated_by` (`moderated_by`),
   KEY `torrents_igdb_index` (`igdb`),
   KEY `torrents_type_id_index` (`type_id`),
   KEY `torrents_resolution_id_index` (`resolution_id`),
   KEY `torrents_personal_release_index` (`personal_release`),
-  KEY `torrents_distributor_id_index` (`distributor_id`),
-  KEY `torrents_region_id_index` (`region_id`),
   KEY `torrents_status_index` (`status`),
   KEY `torrents_seeders_index` (`seeders`),
   KEY `torrents_leechers_index` (`leechers`),
@@ -2203,7 +2225,13 @@ CREATE TABLE `torrents` (
   KEY `torrents_category_id_status_deleted_at_tv_id_size_index` (`category_id`,`status`,`deleted_at`,`tmdb_tv_id`,`size`),
   KEY `torrents_movie_id_index` (`tmdb_movie_id`),
   KEY `torrents_tv_id_index` (`tmdb_tv_id`),
+  KEY `torrents_distributor_id_foreign` (`distributor_id`),
+  KEY `torrents_region_id_foreign` (`region_id`),
+  KEY `torrents_moderated_by_foreign` (`moderated_by`),
   CONSTRAINT `torrents_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE RESTRICT,
+  CONSTRAINT `torrents_distributor_id_foreign` FOREIGN KEY (`distributor_id`) REFERENCES `distributors` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `torrents_moderated_by_foreign` FOREIGN KEY (`moderated_by`) REFERENCES `users` (`id`),
+  CONSTRAINT `torrents_region_id_foreign` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `torrents_resolution_id_foreign` FOREIGN KEY (`resolution_id`) REFERENCES `resolutions` (`id`) ON DELETE RESTRICT,
   CONSTRAINT `torrents_type_id_foreign` FOREIGN KEY (`type_id`) REFERENCES `types` (`id`) ON DELETE RESTRICT,
   CONSTRAINT `torrents_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
@@ -2317,6 +2345,8 @@ CREATE TABLE `user_audibles` (
   KEY `user_audibles_bot_id_index` (`bot_id`),
   KEY `user_audibles_status_index` (`status`),
   KEY `user_audibles_target_id_foreign` (`target_id`),
+  CONSTRAINT `user_audibles_bot_id_foreign` FOREIGN KEY (`bot_id`) REFERENCES `bots` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_audibles_room_id_foreign` FOREIGN KEY (`room_id`) REFERENCES `chatrooms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `user_audibles_target_id_foreign` FOREIGN KEY (`target_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `user_audibles_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2339,6 +2369,8 @@ CREATE TABLE `user_echoes` (
   KEY `user_echoes_room_id_index` (`room_id`),
   KEY `user_echoes_bot_id_index` (`bot_id`),
   KEY `user_echoes_target_id_foreign` (`target_id`),
+  CONSTRAINT `user_echoes_bot_id_foreign` FOREIGN KEY (`bot_id`) REFERENCES `bots` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_echoes_room_id_foreign` FOREIGN KEY (`room_id`) REFERENCES `chatrooms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `user_echoes_target_id_foreign` FOREIGN KEY (`target_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `user_echoes_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2539,6 +2571,8 @@ CREATE TABLE `user_settings` (
   `standalone_css` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `show_poster` tinyint(1) NOT NULL DEFAULT '0',
   `unbookmark_torrents_on_completion` tinyint(1) NOT NULL,
+  `auto_freeleech_apply` tinyint(1) NOT NULL DEFAULT '0',
+  `auto_freeleech_min_tokens` int unsigned NOT NULL DEFAULT '0',
   `show_adult_content` tinyint(1) NOT NULL DEFAULT '1',
   `torrent_sort_field` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `torrent_search_autofocus` tinyint(1) NOT NULL DEFAULT '1',
@@ -2601,11 +2635,16 @@ CREATE TABLE `users` (
   UNIQUE KEY `users_passkey_unique` (`passkey`),
   UNIQUE KEY `users_rsskey_unique` (`rsskey`),
   UNIQUE KEY `users_api_token_unique` (`api_token`),
-  KEY `fk_users_groups_idx` (`group_id`),
   KEY `users_read_rules_index` (`read_rules`),
   KEY `users_deleted_at_index` (`deleted_at`),
   KEY `users_deleted_by_foreign` (`deleted_by`),
+  KEY `users_group_id_foreign` (`group_id`),
+  KEY `users_chatroom_id_foreign` (`chatroom_id`),
+  KEY `users_chat_status_id_foreign` (`chat_status_id`),
+  CONSTRAINT `users_chat_status_id_foreign` FOREIGN KEY (`chat_status_id`) REFERENCES `chat_statuses` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `users_chatroom_id_foreign` FOREIGN KEY (`chatroom_id`) REFERENCES `chatrooms` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `users_deleted_by_foreign` FOREIGN KEY (`deleted_by`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `users_group_id_foreign` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `check_users_seedbonus` CHECK ((`seedbonus` >= 0))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -3103,3 +3142,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (369,'2025_11_29_10
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (370,'2026_01_06_231535_remove_unnecessary_bigints',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (371,'2026_01_07_040502_mark_columns_as_unsigned',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (372,'2026_01_09_015532_alter_table_reports_make_verdict_nullable',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (373,'2026_01_14_120000_add_auto_freeleech_to_user_settings',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (374,'2026_01_27_073136_add_foreign_keys_everywhere',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (375,'2026_02_02_180456_add_foreign_keys_echoes_audibles_messages',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (376,'2026_02_03_012707_drop_keys_from_seedboxes',1);

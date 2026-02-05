@@ -16,7 +16,6 @@ declare(strict_types=1);
 
 use App\Http\Livewire\Comments;
 use App\Models\Bot;
-use App\Models\Chatroom;
 use App\Models\Comment;
 use App\Models\Group;
 use App\Models\TorrentRequest;
@@ -37,9 +36,6 @@ test('comment own request does not create a notification for self', function ():
 
     $bot = Bot::factory()->create([
         'command' => 'Systembot',
-    ]);
-    $chat = Chatroom::factory()->create([
-        'name' => config('chat.system_chatroom'),
     ]);
 
     $group = Group::factory()->create([
@@ -81,9 +77,6 @@ test('comment a request creates a notification for the requester', function (): 
 
     $bot = Bot::factory()->create([
         'command' => 'Systembot',
-    ]);
-    $chat = Chatroom::factory()->create([
-        'name' => config('chat.system_chatroom'),
     ]);
 
     $group = Group::factory()->create([
@@ -134,9 +127,6 @@ test('comment a request creates a notification for the requester when request co
 
     $bot = Bot::factory()->create([
         'command' => 'Systembot',
-    ]);
-    $chat = Chatroom::factory()->create([
-        'name' => config('chat.system_chatroom'),
     ]);
 
     $group = Group::factory()->create([
@@ -190,9 +180,6 @@ test('comment a request creates a notification for the requester when all notifi
     $bot = Bot::factory()->create([
         'command' => 'Systembot',
     ]);
-    $chat = Chatroom::factory()->create([
-        'name' => config('chat.system_chatroom'),
-    ]);
 
     $group = Group::factory()->create([
         'can_comment' => true,
@@ -239,9 +226,6 @@ test('comment a request creates a notification for the requester when request co
     $bot = Bot::factory()->create([
         'command' => 'Systembot',
     ]);
-    $chat = Chatroom::factory()->create([
-        'name' => config('chat.system_chatroom'),
-    ]);
 
     $group = Group::factory()->create([
         'can_comment' => true,
@@ -287,9 +271,6 @@ test('comment a request creates a notification for the requester when request co
 
     $bot = Bot::factory()->create([
         'command' => 'Systembot',
-    ]);
-    $chat = Chatroom::factory()->create([
-        'name' => config('chat.system_chatroom'),
     ]);
 
     $group = Group::factory()->create([

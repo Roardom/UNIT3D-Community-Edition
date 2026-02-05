@@ -247,6 +247,12 @@ parameters:
 			path: app/Http/Controllers/API/TorrentController.php
 
 		-
+			message: '#^Call to function is_int\(\) with string\|null will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 1
+			path: app/Http/Controllers/Auth/RegisteredUserController.php
+
+		-
 			message: '#^Method App\\Http\\Controllers\\AnnounceController\:\:index\(\) never returns null so it can be removed from the return type\.$#'
 			identifier: return.unusedType
 			count: 1
@@ -457,36 +463,6 @@ parameters:
 			path: app/Http/Livewire/TorrentRequestSearch.php
 
 		-
-			message: '#^Access to an undefined property App\\Models\\Torrent\:\:\$meta\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Http/Livewire/TorrentSearch.php
-
-		-
-			message: '#^Anonymous function should return Illuminate\\Support\\Collection\<int, string\|null\> but returns Illuminate\\Support\\Collection\<int, string\|null\>\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Http/Livewire/TorrentSearch.php
-
-		-
-			message: '#^Get hook for property App\\Http\\Livewire\\TorrentSearch\:\:\$groupedTorrents should return Illuminate\\Pagination\\LengthAwarePaginator\<int, App\\Models\\TmdbMovie\|App\\Models\\TmdbTv\|null\> but returns Illuminate\\Pagination\\LengthAwarePaginator\<int, App\\Models\\TmdbMovie\|App\\Models\\TmdbTv\|null\>\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Http/Livewire/TorrentSearch.php
-
-		-
-			message: '#^Get hook for property App\\Http\\Livewire\\TorrentSearch\:\:\$primaryLanguages should return Illuminate\\Support\\Collection\<int, string\|null\> but returns Illuminate\\Support\\Collection\<int, string\|null\>\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Http/Livewire/TorrentSearch.php
-
-		-
-			message: '#^Parameter \#3 \$callback of method Illuminate\\Cache\\Repository\:\:flexible\(\) expects callable\(\)\: Illuminate\\Support\\Collection\<int, string\|null\>, Closure\(\)\: Illuminate\\Support\\Collection\<int, string\|null\> given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Http/Livewire/TorrentSearch.php
-
-		-
 			message: '#^Method App\\Http\\Middleware\\SetLanguage\:\:setSystemLocale\(\) has parameter \$request with no type specified\.$#'
 			identifier: missingType.parameter
 			count: 1
@@ -559,20 +535,8 @@ parameters:
 			path: app/Providers/AppServiceProvider.php
 
 		-
-			message: '#^Method Laravel\\Fortify\\Contracts\\LoginResponse@anonymous/app/Providers/FortifyServiceProvider\.php\:51\:\:toResponse\(\) should return Illuminate\\Http\\RedirectResponse but returns Illuminate\\Http\\RedirectResponse\|true\.$#'
+			message: '#^Method Laravel\\Fortify\\Contracts\\LoginResponse@anonymous/app/Providers/FortifyServiceProvider\.php\:48\:\:toResponse\(\) should return Illuminate\\Http\\RedirectResponse but returns Illuminate\\Http\\RedirectResponse\|true\.$#'
 			identifier: return.type
-			count: 1
-			path: app/Providers/FortifyServiceProvider.php
-
-		-
-			message: '#^Method Laravel\\Fortify\\Contracts\\RegisterViewResponse@anonymous/app/Providers/FortifyServiceProvider\.php\:96\:\:toResponse\(\) never returns Illuminate\\Http\\RedirectResponse so it can be removed from the return type\.$#'
-			identifier: return.unusedType
-			count: 1
-			path: app/Providers/FortifyServiceProvider.php
-
-		-
-			message: '#^Method Laravel\\Fortify\\Contracts\\VerifyEmailResponse@anonymous/app/Providers/FortifyServiceProvider\.php\:107\:\:toResponse\(\) never returns Illuminate\\View\\View so it can be removed from the return type\.$#'
-			identifier: return.unusedType
 			count: 1
 			path: app/Providers/FortifyServiceProvider.php
 
@@ -653,6 +617,12 @@ parameters:
 			identifier: foreach.nonIterable
 			count: 1
 			path: database/migrations/2022_12_30_090351_update_user_privacy_table.php
+
+		-
+			message: '#^Call to function is_int\(\) with string\|null will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 3
+			path: database/seeders/UserSeeder.php
 
 		-
 			message: '#^Variable \$level might not be defined\.$#'

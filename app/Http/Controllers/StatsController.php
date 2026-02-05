@@ -280,24 +280,6 @@ class StatsController extends Controller
     }
 
     /**
-     * Show Group Requirements.
-     */
-    public function groupsRequirements(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-    {
-        $user = auth()->user();
-
-        return view('stats.groups.groups-requirements', [
-            'current'           => Carbon::now(),
-            'user'              => $user,
-            'user_avg_seedtime' => DB::table('history')->where('user_id', '=', $user->id)->avg('seedtime'),
-            'user_account_age'  => (int) Carbon::now()->diffInSeconds($user->created_at, true),
-            'user_seed_size'    => $user->seedingTorrents()->sum('size'),
-            'user_uploads'      => $user->torrents()->count(),
-            'groups'            => Group::query()->orderBy('position')->where('is_modo', '=', 0)->get(),
-        ]);
-    }
-
-    /**
      * Show Extra-Stats Languages.
      */
     public function languages(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -360,7 +342,6 @@ class StatsController extends Controller
                 [3600, 2 * 24 * 3600],
                 fn () => Peer::query()
                     ->select([
-                        'agent',
                         DB::raw("SUBSTRING_INDEX(SUBSTRING_INDEX(agent, '/', 1), ' ', 1) AS prefix"),
                         DB::raw('COUNT(DISTINCT torrent_id) AS single_seed_count'),
                     ])

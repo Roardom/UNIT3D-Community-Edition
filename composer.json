@@ -46,7 +46,7 @@
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.16.3",
         "brianium/paratest": "^7.16.0",
-        "calebdw/larastan": "3.7.1",
+        "calebdw/larastan": "^3.8.7",
         "calebdw/larastan-livewire": "^2.3.0",
         "fakerphp/faker": "^1.24.1",
         "jasonmccreary/laravel-test-assertions": "^2.8.0",
@@ -58,7 +58,7 @@
         "pestphp/pest-plugin-laravel": "^4.0.0",
         "pestphp/pest-plugin-livewire": "^4.0.1",
         "pestphp/pest-plugin-type-coverage": "^4.0.3",
-        "phpstan/phpstan": "^2.1.33",
+        "phpstan/phpstan": "^2.1.36",
         "phpunit/phpunit": "^12.5.4",
         "ryoluo/sail-ssl": "^1.4.0",
         "spatie/laravel-ignition": "^2.9.1",

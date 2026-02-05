@@ -366,13 +366,13 @@
                                             <h3 class="meta-chip__value">
                                                 <strong>
                                                     {{ $movie->title }}
-                                                    ({{ $movie->release_date->format('Y') }})
+                                                    ({{ $movie->release_date?->format('Y') }})
                                                 </strong>
                                             </h3>
                                         @else
                                             <h3 class="meta-chip__value">
                                                 {{ $movie->title }}
-                                                ({{ $movie->release_date->format('Y') }})
+                                                ({{ $movie->release_date?->format('Y') }})
                                             </h3>
                                         @endif
                                     </a>

@@ -16,7 +16,6 @@ declare(strict_types=1);
 
 use App\Http\Livewire\Comments;
 use App\Models\Bot;
-use App\Models\Chatroom;
 use App\Models\Comment;
 use App\Models\Group;
 use App\Models\Playlist;
@@ -37,9 +36,6 @@ test('comments on playlist creates a notification for playlist owner', function 
 
     $bot = Bot::factory()->create([
         'command' => 'Systembot',
-    ]);
-    $chat = Chatroom::factory()->create([
-        'name' => config('chat.system_chatroom'),
     ]);
 
     $group = Group::factory()->create([
@@ -87,9 +83,6 @@ test('user comments on own playlist does not create a notification for self', fu
     $bot = Bot::factory()->create([
         'command' => 'Systembot',
     ]);
-    $chat = Chatroom::factory()->create([
-        'name' => config('chat.system_chatroom'),
-    ]);
 
     $group = Group::factory()->create([
         'can_comment' => true,
@@ -127,9 +120,6 @@ test('comments on playlist does not create a notification for playlist owner whe
 
     $bot = Bot::factory()->create([
         'command' => 'Systembot',
-    ]);
-    $chat = Chatroom::factory()->create([
-        'name' => config('chat.system_chatroom'),
     ]);
 
     $group = Group::factory()->create([

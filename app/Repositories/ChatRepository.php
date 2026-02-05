@@ -43,12 +43,12 @@ class ChatRepository
         return $message;
     }
 
-    public function botMessage(int $botId, int $roomId, string $message, ?int $receiver = null): void
+    public function botMessage(int $botId, string $message, ?int $receiver = null): void
     {
         $save = Message::query()->create([
             'bot_id'      => $botId,
             'user_id'     => 1,
-            'chatroom_id' => 0,
+            'chatroom_id' => null,
             'message'     => $message,
             'receiver_id' => $receiver,
         ]);
@@ -64,11 +64,11 @@ class ChatRepository
         $message->delete();
     }
 
-    public function privateMessage(int $userId, int $roomId, string $message, ?int $receiver = null, ?int $bot = null, ?bool $ignore = null): Message
+    public function privateMessage(int $userId, string $message, ?int $receiver = null, ?int $bot = null, ?bool $ignore = null): Message
     {
         $save = Message::query()->create([
             'user_id'     => $userId,
-            'chatroom_id' => 0,
+            'chatroom_id' => null,
             'message'     => $message,
             'receiver_id' => $receiver,
             'bot_id'      => $bot,
