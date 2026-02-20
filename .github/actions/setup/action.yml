@@ -30,7 +30,7 @@ runs:
             shell: bash
 
         -   name: Restore Composer cache
-            uses: actions/cache/restore@v4
+            uses: actions/cache@v4
             with:
                 path: ${{ steps.composer-cache.outputs.dir }}
                 key: unit3d-${{ inputs.operating-system }}-php${{ inputs.php-version }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -43,12 +43,6 @@ runs:
             run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --optimize-autoloader
             shell: bash
 
-        -   name: Save Composer cache
-            uses: actions/cache/save@v4
-            with:
-                path: ${{ steps.composer-cache.outputs.dir }}
-                key: unit3d-${{ inputs.operating-system }}-php${{ inputs.php-version }}-composer-${{ hashFiles('**/composer.lock') }}
-
         # 3. Bun Dependencies
         -   name: Setup Bun
             uses: oven-sh/setup-bun@v2
@@ -56,7 +50,7 @@ runs:
                 bun-version: latest
 
         -   name: Restore Bun cache
-            uses: actions/cache/restore@v4
+            uses: actions/cache@v4
             with:
                 path: ~/.bun/install/cache
                 key: unit3d-${{ inputs.operating-system }}-php${{ inputs.php-version }}-bun-${{ hashFiles('**/bun.lockb') }}
@@ -70,12 +64,6 @@ runs:
         -   name: Compile assets
             run: bun run build
             shell: bash
-
-        -   name: Save Bun cache
-            uses: actions/cache/save@v4
-            with:
-                path: ~/.bun/install/cache
-                key: unit3d-${{ inputs.operating-system }}-php${{ inputs.php-version }}-bun-${{ hashFiles('**/bun.lockb') }}
 
         # 4. Prepare Application
         -   name: Prepare Laravel environment

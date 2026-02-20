@@ -22,7 +22,7 @@ jobs:
                     bun-version: latest
 
             -   name: Restore Bun cache
-                uses: actions/cache/restore@v4
+                uses: actions/cache@v4
                 with:
                     path: ~/.bun/install/cache
                     key: unit3d-${{ matrix.operating-system }}-bun-${{ hashFiles('**/bun.lockb') }}
@@ -32,16 +32,9 @@ jobs:
             -   name: Install Bun dependencies
                 run: bun ci
 
-            -   name: Save Bun cache
-                uses: actions/cache/save@v4
-                if: always()
-                with:
-                    path: ~/.bun/install/cache
-                    key: unit3d-${{ matrix.operating-system }}-bun-${{ hashFiles('**/bun.lockb') }}
-
             # 3. Run Spell Check
             -   name: Restore CSpell cache
-                uses: actions/cache/restore@v4
+                uses: actions/cache@v4
                 with:
                     path: .cspell.cache
                     key: unit3d-${{ matrix.operating-system }}-cspell-${{ github.run_id }}
@@ -50,10 +43,3 @@ jobs:
 
             -   name: Run CSpell
                 run: bunx cspell --no-progress --cache --cache-location .cspell.cache/spell-results "**"
-
-            -   name: Save CSpell cache
-                uses: actions/cache/save@v4
-                if: always()
-                with:
-                    path: .cspell.cache
-                    key: unit3d-${{ matrix.operating-system }}-cspell-${{ github.run_id }}

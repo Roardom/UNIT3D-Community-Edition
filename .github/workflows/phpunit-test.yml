@@ -44,7 +44,7 @@ jobs:
 
             # 3. PHPUnit Tests
             -   name: Restore PHPUnit cache
-                uses: actions/cache/restore@v4
+                uses: actions/cache@v4
                 with:
                     path: .phpunit.cache
                     key: unit3d-${{ matrix.operating-system }}-php${{ matrix.php-version }}-phpunit-${{ github.run_id }}
@@ -60,10 +60,3 @@ jobs:
                     DB_DATABASE: unit3d
                     DB_PASSWORD: null
                     CACHE_STORE: array
-
-            -   name: Save PHPUnit cache
-                uses: actions/cache/save@v4
-                if: always()
-                with:
-                    path: .phpunit.cache
-                    key: unit3d-${{ matrix.operating-system }}-php${{ matrix.php-version }}-phpunit-${{ github.run_id }}

@@ -22,7 +22,7 @@ jobs:
                     bun-version: latest
 
             -   name: Restore Bun cache
-                uses: actions/cache/restore@v4
+                uses: actions/cache@v4
                 with:
                     path: ~/.bun/install/cache
                     key: unit3d-${{ matrix.operating-system }}-bun-${{ hashFiles('**/bun.lockb') }}
@@ -32,16 +32,9 @@ jobs:
             -   name: Install Bun dependencies
                 run: bun ci
 
-            -   name: Save Bun cache
-                uses: actions/cache/save@v4
-                if: always()
-                with:
-                    path: ~/.bun/install/cache
-                    key: unit3d-${{ matrix.operating-system }}-bun-${{ hashFiles('**/bun.lockb') }}
-
             # 3. Format Files
             -   name: Restore Prettier cache
-                uses: actions/cache/restore@v4
+                uses: actions/cache@v4
                 with:
                     path: .prettier.cache
                     key: unit3d-${{ matrix.operating-system }}-prettier-${{ github.run_id }}
@@ -50,13 +43,6 @@ jobs:
 
             -   name: Run Prettier
                 run: bunx prettier --cache --cache-location .prettier.cache/format-results -w *
-
-            -   name: Save Prettier cache
-                uses: actions/cache/save@v4
-                if: always()
-                with:
-                    path: .prettier.cache
-                    key: unit3d-${{ matrix.operating-system }}-prettier-${{ github.run_id }}
 
             # 4. Commit Changes
             -   name: Commit changes

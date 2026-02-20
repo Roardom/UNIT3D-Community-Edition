@@ -43,7 +43,7 @@ jobs:
 
             # 3. PHPStan Analysis
             -   name: Restore PHPStan cache
-                uses: actions/cache/restore@v4
+                uses: actions/cache@v4
                 with:
                     path: .phpstan.cache
                     key: unit3d-${{ matrix.operating-system }}-php${{ matrix.php-version }}-phpstan-${{ github.run_id }}
@@ -52,10 +52,3 @@ jobs:
 
             -   name: Run Larastan
                 run: ./vendor/bin/phpstan analyse -vvv --memory-limit=2G
-
-            -   name: Save PHPStan cache
-                uses: actions/cache/save@v4
-                if: always()
-                with:
-                    path: .phpstan.cache
-                    key: unit3d-${{ matrix.operating-system }}-php${{ matrix.php-version }}-phpstan-${{ github.run_id }}
