@@ -53,6 +53,8 @@ class TmdbNetworkSearch extends Component
     {
         return view('livewire.tmdb-network-search', [
             'networks' => $this->networks,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

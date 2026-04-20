@@ -1,4 +1,24 @@
-<div style="display: flex; flex-direction: column; row-gap: 1rem">
+@section('title')
+    <title>Reports - {{ __('staff.staff-dashboard') }} - {{ config('other.title') }}</title>
+@endsection
+
+@section('meta')
+    <meta name="description" content="Reports - {{ __('staff.staff-dashboard') }}" />
+@endsection
+
+@section('breadcrumbs')
+    <li class="breadcrumbV2">
+        <a href="{{ route('staff.dashboard.index') }}" class="breadcrumb__link">
+            {{ __('staff.staff-dashboard') }}
+        </a>
+    </li>
+    <li class="breadcrumb--active">
+        {{ __('staff.reports-log') }}
+    </li>
+@endsection
+
+@section('page', 'page__staff-report--index')
+<article>
     <section class="panelV2">
         <header class="panel__header">
             <h2 class="panel__heading">{{ __('common.search') }}</h2>
@@ -136,7 +156,7 @@
             </form>
         </div>
     </section>
-    <div class="panelV2">
+    <section class="panelV2">
         <h2 class="panel__heading">{{ __('staff.reports-log') }}</h2>
         <div class="data-table-wrapper">
             <table class="data-table">
@@ -226,5 +246,5 @@
             </table>
         </div>
         {{ $reports->links('partials.pagination') }}
-    </div>
-</div>
+    </section>
+</article>

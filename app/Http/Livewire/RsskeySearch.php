@@ -63,6 +63,8 @@ class RsskeySearch extends Component
     {
         return view('livewire.rsskey-search', [
             'rsskeys' => $this->rsskeys,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

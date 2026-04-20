@@ -26,16 +26,6 @@ use Illuminate\Http\Request;
 class ResurrectionController extends Controller
 {
     /**
-     * Show user resurrections.
-     */
-    public function index(Request $request, User $user): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-    {
-        abort_unless($request->user()->group->is_modo || $request->user()->is($user), 403);
-
-        return view('user.resurrection.index', ['user' => $user]);
-    }
-
-    /**
      * Resurrect A Torrent.
      */
     public function store(Request $request, User $user): \Illuminate\Http\RedirectResponse

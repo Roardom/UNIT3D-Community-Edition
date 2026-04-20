@@ -85,6 +85,8 @@ class UnregisteredInfoHashSearch extends Component
     {
         return view('livewire.unregistered-info-hash-search', [
             'unregisteredInfoHashes' => $this->unregisteredInfoHashes,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

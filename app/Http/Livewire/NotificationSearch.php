@@ -18,6 +18,7 @@ namespace App\Http\Livewire;
 
 use App\Models\User;
 use App\Traits\LivewireSort;
+use Illuminate\Http\Request;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -101,6 +102,11 @@ class NotificationSearch extends Component
     #[Url(history: true)]
     public string $sortDirection = 'desc';
 
+    final public function mount(Request $request, User $user): void
+    {
+        abort_unless($request->user()->is($user), 403);
+    }
+
     /**
      * @var \Illuminate\Pagination\LengthAwarePaginator<int, \Illuminate\Notifications\DatabaseNotification>
      */
@@ -143,6 +149,8 @@ class NotificationSearch extends Component
         return view('livewire.notification-search', [
             'user'          => User::query()->with(['group'])->findOrFail(auth()->id()),
             'notifications' => $this->notifications,
-        ]);
+        ])
+            ->extends('layout.default')
+            ->section('content');
     }
 }

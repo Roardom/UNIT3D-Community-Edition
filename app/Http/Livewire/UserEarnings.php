@@ -20,6 +20,7 @@ use App\Models\BonEarning;
 use App\Models\User;
 use App\Models\Peer;
 use App\Traits\LivewireSort;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -49,9 +50,11 @@ class UserEarnings extends Component
     #[Url(history: true)]
     public bool $showMorePrecision = false;
 
-    final public function mount(int $userId): void
+    final public function mount(Request $request, User $user): void
     {
-        $this->user = User::query()->find($userId);
+        abort_unless($request->user()->is($user) || $request->user()->group->is_modo, 403);
+
+        $this->user = $user;
     }
 
     final public function updatingSearch(): void
@@ -229,6 +232,8 @@ class UserEarnings extends Component
             'total'       => $this->total,
             'torrents'    => $this->torrents,
             'bonEarnings' => $this->bonEarnings,
-        ]);
+        ])
+            ->extends('layout.default')
+            ->section('content');
     }
 }

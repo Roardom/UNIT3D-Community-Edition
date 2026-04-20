@@ -59,6 +59,8 @@ class PasswordResetHistorySearch extends Component
     {
         return view('livewire.password-reset-history-search', [
             'passwordResetHistories' => $this->passwordResetHistories,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

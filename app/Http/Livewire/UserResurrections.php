@@ -19,6 +19,7 @@ namespace App\Http\Livewire;
 use App\Models\Resurrection;
 use App\Models\User;
 use App\Traits\LivewireSort;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -48,9 +49,11 @@ class UserResurrections extends Component
     #[Url(history: true)]
     public string $sortDirection = 'desc';
 
-    final public function mount(int $userId): void
+    final public function mount(Request $request, User $user): void
     {
-        $this->user = User::query()->find($userId);
+        abort_unless($request->user()->group->is_modo || $request->user()->is($user), 403);
+
+        $this->user = $user;
     }
 
     final public function updatingSearch(): void
@@ -97,6 +100,8 @@ class UserResurrections extends Component
     {
         return view('livewire.user-resurrections', [
             'resurrections' => $this->resurrections,
-        ]);
+        ])
+            ->extends('layout.default')
+            ->section('content');
     }
 }

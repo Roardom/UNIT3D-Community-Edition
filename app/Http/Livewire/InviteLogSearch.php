@@ -173,6 +173,8 @@ class InviteLogSearch extends Component
     {
         return view('livewire.invite-log-search', [
             'invites' => $this->invites,
-        ]);
+        ])
+            ->extends('layout.default')
+            ->section('content');
     }
 }

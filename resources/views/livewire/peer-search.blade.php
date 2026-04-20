@@ -1,4 +1,23 @@
-<div style="display: flex; flex-direction: column; row-gap: 1rem">
+@section('title')
+    <title>Peers - {{ config('other.title') }}</title>
+@endsection
+
+@section('breadcrumbs')
+    <li class="breadcrumbV2">
+        <a href="{{ route('staff.dashboard.index') }}" class="breadcrumb__link">
+            {{ __('staff.staff-dashboard') }}
+        </a>
+    </li>
+    <li class="breadcrumb--active">Peers</li>
+@endsection
+
+@section('nav-tabs')
+    @include('Staff.partials.user-info-search')
+@endsection
+
+@section('page', 'page__staff-peer--index')
+
+<article>
     <section class="panelV2">
         <header class="panel__header">
             <h2 class="panel__heading">{{ __('common.search') }}</h2>
@@ -470,4 +489,4 @@
             {{ $peers->links('partials.pagination') }}
         </div>
     </section>
-</div>
+</article>

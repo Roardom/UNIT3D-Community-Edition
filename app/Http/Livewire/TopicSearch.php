@@ -131,6 +131,8 @@ class TopicSearch extends Component
         return view('livewire.topic-search', [
             'topics'          => $this->topics,
             'forumCategories' => $this->forumCategories,
-        ]);
+        ])
+            ->extends('layout.default')
+            ->section('content');
     }
 }

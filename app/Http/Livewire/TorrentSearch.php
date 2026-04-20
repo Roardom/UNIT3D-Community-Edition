@@ -830,6 +830,8 @@ class TorrentSearch extends Component
                 default  => $this->torrents,
             },
             'torrentHealth' => $this->torrentHealth,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

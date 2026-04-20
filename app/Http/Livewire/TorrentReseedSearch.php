@@ -75,6 +75,8 @@ class TorrentReseedSearch extends Component
     {
         return view('livewire.torrent-reseed-search', [
             'torrentReseeds' => $this->torrentReseeds,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

@@ -1,3 +1,15 @@
+@section('title')
+    <title>{{ __('common.subtitles') }} - {{ config('other.title') }}</title>
+@endsection
+
+@section('breadcrumbs')
+    <li class="breadcrumb--active">
+        {{ __('common.subtitles') }}
+    </li>
+@endsection
+
+@section('page', 'page__subtitle--index')
+
 <article class="sidebar2 sidebar--inverse">
     <div>
         <section class="panelV2">

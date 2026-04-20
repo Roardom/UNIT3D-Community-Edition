@@ -154,7 +154,9 @@ class BackupPanel extends Component
 
     final public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('livewire.backup-panel');
+        return view('livewire.backup-panel')
+            ->extends('layout.default')
+            ->section('content');
     }
 
     /**

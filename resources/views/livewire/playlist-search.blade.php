@@ -1,3 +1,11 @@
+@section('breadcrumbs')
+    <li class="breadcrumb--active">
+        {{ __('playlist.playlists') }}
+    </li>
+@endsection
+
+@section('page', 'page__playlist--index')
+
 <section class="panelV2">
     <header class="panel__header">
         <h2 class="panel__heading">{{ __('playlist.playlists') }}</h2>

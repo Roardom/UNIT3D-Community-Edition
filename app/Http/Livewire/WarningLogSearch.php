@@ -72,6 +72,8 @@ class WarningLogSearch extends Component
     {
         return view('livewire.warning-log-search', [
             'warnings' => $this->warnings,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

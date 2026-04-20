@@ -1,3 +1,15 @@
+@section('title')
+    <title>{{ __('ticket.helpdesk') }} - {{ config('other.title') }}</title>
+@endsection
+
+@section('breadcrumbs')
+    <li class="breadcrumb--active">
+        {{ __('ticket.helpdesk') }}
+    </li>
+@endsection
+
+@section('page', 'page__ticket--index')
+
 <section class="panelV2" x-data="tabs($wire.entangle('tab').live)">
     <header class="panel__header">
         <h2 class="panel__heading">{{ __('ticket.helpdesk') }}</h2>

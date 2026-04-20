@@ -20,6 +20,7 @@ use App\Models\UnregisteredInfoHash;
 use App\Models\User;
 use App\Traits\CastLivewireProperties;
 use App\Traits\LivewireSort;
+use Illuminate\Http\Request;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -43,9 +44,11 @@ class UserUnregisteredInfoHashSearch extends Component
     #[Url(history: true)]
     public string $sortDirection = 'desc';
 
-    final public function mount(int $userId): void
+    final public function mount(Request $request, User $user): void
     {
-        $this->user = User::query()->find($userId);
+        abort_unless($request->user()->group->is_modo || $request->user()->is($user), 403);
+
+        $this->user = $user;
     }
 
     final public function updatingSearch(): void
@@ -81,6 +84,8 @@ class UserUnregisteredInfoHashSearch extends Component
     {
         return view('livewire.user-unregistered-info-hash-search', [
             'unregisteredInfoHashes' => $this->unregisteredInfoHashes,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

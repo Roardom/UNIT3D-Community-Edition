@@ -51,14 +51,6 @@ class PostController extends Controller
     }
 
     /**
-     * Posts Index.
-     */
-    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-    {
-        return view('forum.post.index');
-    }
-
-    /**
      * Store A New Post To A Topic.
      */
     public function store(Request $request): \Illuminate\Http\RedirectResponse

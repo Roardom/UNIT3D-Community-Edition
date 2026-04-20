@@ -1,4 +1,32 @@
-<div style="display: flex; flex-direction: column; row-gap: 1rem">
+@section('title')
+    <title>
+        {{ __('common.user') }} {{ __('common.search') }} - {{ __('staff.staff-dashboard') }} -
+        {{ config('other.title') }}
+    </title>
+@endsection
+
+@section('meta')
+    <meta name="description" content="User search - {{ __('staff.staff-dashboard') }}" />
+@endsection
+
+@section('nav-tabs')
+    @include('Staff.partials.user-info-search')
+@endsection
+
+@section('breadcrumbs')
+    <li class="breadcrumbV2">
+        <a href="{{ route('staff.dashboard.index') }}" class="breadcrumb__link">
+            {{ __('staff.staff-dashboard') }}
+        </a>
+    </li>
+    <li class="breadcrumb--active">
+        {{ __('common.users') }}
+    </li>
+@endsection
+
+@section('page', 'page__staff-user--index')
+
+<article>
     <section class="panelV2">
         <header class="panel__header">
             <h2 class="panel__heading">{{ __('common.search') }}</h2>
@@ -138,99 +166,97 @@
             </form>
         </div>
     </section>
-    <div>
-        <section class="panelV2">
-            <h2 class="panel__heading">{{ __('common.users') }}</h2>
-            <div class="data-table-wrapper">
-                <table class="data-table">
-                    <tbody>
+    <section class="panelV2">
+        <h2 class="panel__heading">{{ __('common.users') }}</h2>
+        <div class="data-table-wrapper">
+            <table class="data-table">
+                <tbody>
+                    <tr>
+                        <th>Avatar</th>
+                        <th wire:click="sortBy('username')" role="columnheader button">
+                            {{ __('common.username') }}
+                            @include('livewire.includes._sort-icon', ['field' => 'username'])
+                        </th>
+                        <th wire:click="sortBy('group_id')" role="columnheader button">
+                            {{ __('common.group') }}
+                            @include('livewire.includes._sort-icon', ['field' => 'group_id'])
+                        </th>
+                        <th wire:click="sortBy('email')" role="columnheader button">
+                            {{ __('common.email') }}
+                            @include('livewire.includes._sort-icon', ['field' => 'email'])
+                        </th>
+                        <th wire:click="sortBy('created_at')" role="columnheader button">
+                            {{ __('user.registration-date') }}
+                            @include('livewire.includes._sort-icon', ['field' => 'created_at'])
+                        </th>
+                        <th wire:click="sortBy('last_login')" role="columnheader button">
+                            {{ __('user.last-login') }}
+                            @include('livewire.includes._sort-icon', ['field' => 'last_login'])
+                        </th>
+                        <th wire:click="sortBy('last_action')" role="columnheader button">
+                            {{ __('user.last-action') }}
+                            @include('livewire.includes._sort-icon', ['field' => 'last_action'])
+                        </th>
+                        <th>{{ __('common.action') }}</th>
+                    </tr>
+                    @forelse ($users as $user)
                         <tr>
-                            <th>Avatar</th>
-                            <th wire:click="sortBy('username')" role="columnheader button">
-                                {{ __('common.username') }}
-                                @include('livewire.includes._sort-icon', ['field' => 'username'])
-                            </th>
-                            <th wire:click="sortBy('group_id')" role="columnheader button">
-                                {{ __('common.group') }}
-                                @include('livewire.includes._sort-icon', ['field' => 'group_id'])
-                            </th>
-                            <th wire:click="sortBy('email')" role="columnheader button">
-                                {{ __('common.email') }}
-                                @include('livewire.includes._sort-icon', ['field' => 'email'])
-                            </th>
-                            <th wire:click="sortBy('created_at')" role="columnheader button">
-                                {{ __('user.registration-date') }}
-                                @include('livewire.includes._sort-icon', ['field' => 'created_at'])
-                            </th>
-                            <th wire:click="sortBy('last_login')" role="columnheader button">
-                                {{ __('user.last-login') }}
-                                @include('livewire.includes._sort-icon', ['field' => 'last_login'])
-                            </th>
-                            <th wire:click="sortBy('last_action')" role="columnheader button">
-                                {{ __('user.last-action') }}
-                                @include('livewire.includes._sort-icon', ['field' => 'last_action'])
-                            </th>
-                            <th>{{ __('common.action') }}</th>
+                            <td>
+                                <img
+                                    src="{{ $user->image === null ? url('img/profile.png') : route('authenticated_images.user_avatar', ['user' => $user]) }}"
+                                    alt=""
+                                    class="user-search__avatar"
+                                />
+                            </td>
+                            <td colspan="2">
+                                <x-user-tag :anon="false" :user="$user" />
+                            </td>
+                            <td>{{ $user->email }}</td>
+                            <td>
+                                <time
+                                    datetime="{{ $user->created_at }}"
+                                    title="{{ $user->created_at }}"
+                                >
+                                    {{ $user->created_at }}
+                                </time>
+                            </td>
+                            <td>
+                                <time
+                                    datetime="{{ $user->last_login }}"
+                                    title="{{ $user->last_login }}"
+                                >
+                                    {{ $user->last_login ?? 'Never' }}
+                                </time>
+                            </td>
+                            <td>
+                                <time
+                                    datetime="{{ $user->last_action }}"
+                                    title="{{ $user->last_action }}"
+                                >
+                                    {{ $user->last_action ?? 'Never' }}
+                                </time>
+                            </td>
+                            <td>
+                                <menu class="data-table__actions">
+                                    <li class="data-table__action">
+                                        <a
+                                            class="form__button form__button--text"
+                                            href="{{ route('staff.users.edit', ['user' => $user]) }}"
+                                        >
+                                            {{ __('common.edit') }}
+                                        </a>
+                                    </li>
+                                </menu>
+                            </td>
                         </tr>
-                        @forelse ($users as $user)
-                            <tr>
-                                <td>
-                                    <img
-                                        src="{{ $user->image === null ? url('img/profile.png') : route('authenticated_images.user_avatar', ['user' => $user]) }}"
-                                        alt=""
-                                        class="user-search__avatar"
-                                    />
-                                </td>
-                                <td colspan="2">
-                                    <x-user-tag :anon="false" :user="$user" />
-                                </td>
-                                <td>{{ $user->email }}</td>
-                                <td>
-                                    <time
-                                        datetime="{{ $user->created_at }}"
-                                        title="{{ $user->created_at }}"
-                                    >
-                                        {{ $user->created_at }}
-                                    </time>
-                                </td>
-                                <td>
-                                    <time
-                                        datetime="{{ $user->last_login }}"
-                                        title="{{ $user->last_login }}"
-                                    >
-                                        {{ $user->last_login ?? 'Never' }}
-                                    </time>
-                                </td>
-                                <td>
-                                    <time
-                                        datetime="{{ $user->last_action }}"
-                                        title="{{ $user->last_action }}"
-                                    >
-                                        {{ $user->last_action ?? 'Never' }}
-                                    </time>
-                                </td>
-                                <td>
-                                    <menu class="data-table__actions">
-                                        <li class="data-table__action">
-                                            <a
-                                                class="form__button form__button--text"
-                                                href="{{ route('staff.users.edit', ['user' => $user]) }}"
-                                            >
-                                                {{ __('common.edit') }}
-                                            </a>
-                                        </li>
-                                    </menu>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="8">No users</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-            {{ $users->links('partials.pagination') }}
-        </section>
-    </div>
-</div>
+                    @empty
+                        <tr>
+                            <td colspan="8">No users</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        {{ $users->links('partials.pagination') }}
+    </section>
+</article>

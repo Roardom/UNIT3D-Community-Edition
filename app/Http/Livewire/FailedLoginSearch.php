@@ -80,6 +80,8 @@ class FailedLoginSearch extends Component
         return view('livewire.failed-login-search', [
             'failedLogins'        => $this->failedLogins,
             'failedLoginsTop10Ip' => $this->failedLoginsTop10Ip,
-        ]);
+        ])
+            ->extends('layout.with-main-and-sidebar')
+            ->section('main');
     }
 }

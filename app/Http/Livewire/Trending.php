@@ -298,6 +298,8 @@ class Trending extends Component
                 default        => $this->works,
             },
             'metaTypes' => $this->metaTypes,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

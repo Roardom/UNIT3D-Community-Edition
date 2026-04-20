@@ -85,6 +85,8 @@ class SubtitleSearch extends Component
     {
         return view('livewire.subtitle-search', [
             'subtitles' => $this->subtitles,
-        ]);
+        ])
+            ->extends('layout.default')
+            ->section('content');
     }
 }

@@ -1,4 +1,29 @@
-<div style="display: flex; flex-direction: column; gap: 1rem">
+@section('title')
+    <title>
+        {{ __('backup.backup') }} {{ __('backup.manager') }} - {{ __('staff.staff-dashboard') }}
+        - {{ config('other.title') }}
+    </title>
+@endsection
+
+@section('meta')
+    <meta
+        name="description"
+        content="{{ __('backup.backup') }} {{ __('backup.manager') }} - {{ __('staff.staff-dashboard') }}"
+    />
+@endsection
+
+@section('breadcrumbs')
+    <li class="breadcrumbV2">
+        <a href="{{ route('staff.dashboard.index') }}" class="breadcrumb__link">
+            {{ __('staff.staff-dashboard') }}
+        </a>
+    </li>
+    <li class="breadcrumb--active">{{ __('backup.backup') }} {{ __('backup.manager') }}</li>
+@endsection
+
+@section('page', 'page__staff-backup-manager--index')
+
+<article>
     <section class="panelV2" x-data>
         <header class="panel__header">
             <h2 class="panel__heading">UNIT3D backup manager</h2>
@@ -177,4 +202,4 @@
           })
         }
     </script>
-</div>
+</article>

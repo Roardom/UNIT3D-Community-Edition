@@ -19,6 +19,7 @@ namespace App\Http\Livewire;
 use App\Models\Bookmark;
 use App\Models\User;
 use App\Traits\LivewireSort;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -39,9 +40,11 @@ class UserBookmarks extends Component
     #[Url(history: true)]
     public string $sortDirection = 'desc';
 
-    final public function mount(int $userId): void
+    final public function mount(Request $request, User $user): void
     {
-        $this->user = User::query()->find($userId);
+        abort_unless($request->user()->is($user) || $request->user()->group->is_modo, 403);
+
+        $this->user = $user;
     }
 
     /**
@@ -82,6 +85,8 @@ class UserBookmarks extends Component
     {
         return view('livewire.user-bookmarks', [
             'bookmarks' => $this->bookmarks,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

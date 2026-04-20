@@ -1,4 +1,19 @@
-<div style="display: flex; flex-direction: column; row-gap: 1rem">
+@section('title')
+    <title>History - {{ config('other.title') }}</title>
+@endsection
+
+@section('breadcrumbs')
+    <li class="breadcrumbV2">
+        <a href="{{ route('staff.dashboard.index') }}" class="breadcrumb__link">
+            {{ __('staff.staff-dashboard') }}
+        </a>
+    </li>
+    <li class="breadcrumb--active">History</li>
+@endsection
+
+@section('page', 'page__staff-history--index')
+
+<article>
     <section class="panelV2">
         <header class="panel__header">
             <h2 class="panel__heading">{{ __('common.search') }}</h2>
@@ -555,4 +570,4 @@
             {{ $histories->links('partials.pagination') }}
         </div>
     </section>
-</div>
+</article>

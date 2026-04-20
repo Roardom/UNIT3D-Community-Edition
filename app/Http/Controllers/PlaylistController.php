@@ -44,14 +44,6 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Display All Playlists.
-     */
-    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-    {
-        return view('playlist.index');
-    }
-
-    /**
      * Show Playlist Create Form.
      */
     public function create(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View

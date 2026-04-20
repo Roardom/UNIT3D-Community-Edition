@@ -42,14 +42,6 @@ class RequestController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     */
-    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-    {
-        return view('requests.index');
-    }
-
-    /**
      * Display The Torrent Request.
      */
     public function show(Request $request, TorrentRequest $torrentRequest): \Illuminate\Contracts\View\Factory|\Illuminate\View\View

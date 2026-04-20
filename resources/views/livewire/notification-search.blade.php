@@ -1,3 +1,15 @@
+@section('title')
+    <title>{{ __('notification.notifications') }} - {{ config('other.title') }}</title>
+@endsection
+
+@section('breadcrumbs')
+    <li class="breadcrumb--active">
+        {{ __('notification.notifications') }}
+    </li>
+@endsection
+
+@section('page', 'page__user-notification--index')
+
 <article class="sidebar2">
     <div>
         <section class="panelV2">

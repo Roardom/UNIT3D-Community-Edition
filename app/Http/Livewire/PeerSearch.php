@@ -241,6 +241,8 @@ class PeerSearch extends Component
     {
         return view('livewire.peer-search', [
             'peers' => $this->peers,
-        ]);
+        ])
+            ->extends('layout.default')
+            ->section('content');
     }
 }

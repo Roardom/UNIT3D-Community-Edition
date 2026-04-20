@@ -1,3 +1,25 @@
+@section('breadcrumbs')
+    <li class="breadcrumbV2">
+        <a href="{{ route('users.show', ['user' => $user]) }}" class="breadcrumb__link">
+            {{ $user->username }}
+        </a>
+    </li>
+    <li class="breadcrumbV2">
+        <a href="{{ route('users.earnings.index', ['user' => $user]) }}" class="breadcrumb__link">
+            {{ __('bon.bonus') }} {{ __('bon.points') }}
+        </a>
+    </li>
+    <li class="breadcrumb--active">
+        {{ __('bon.earnings') }}
+    </li>
+@endsection
+
+@section('nav-tabs')
+    @include('user.buttons.user')
+@endsection
+
+@section('page', 'page__user-earning--index')
+
 <article class="sidebar2">
     <div>
         <section class="panelV2" x-data="toggle">

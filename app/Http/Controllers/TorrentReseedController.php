@@ -34,14 +34,6 @@ class TorrentReseedController extends Controller
     }
 
     /**
-     * Display a listing of torrent reseed requests.
-     */
-    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
-    {
-        return view('torrent-reseed.index');
-    }
-
-    /**
      * Reseed Request A Torrent.
      */
     public function store(Request $request, int $id): \Illuminate\Http\RedirectResponse

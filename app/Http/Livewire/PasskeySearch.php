@@ -63,6 +63,8 @@ class PasskeySearch extends Component
     {
         return view('livewire.passkey-search', [
             'passkeys' => $this->passkeys,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

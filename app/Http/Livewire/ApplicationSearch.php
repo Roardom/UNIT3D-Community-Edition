@@ -81,6 +81,8 @@ class ApplicationSearch extends Component
     {
         return view('livewire.application-search', [
             'applications' => $this->applications
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

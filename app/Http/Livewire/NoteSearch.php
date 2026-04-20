@@ -56,7 +56,9 @@ class NoteSearch extends Component
     {
         return view('livewire.note-search', [
             'notes' => $this->notes,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 
     final public function destroy(Note $note): void

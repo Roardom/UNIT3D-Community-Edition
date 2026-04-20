@@ -52,14 +52,6 @@ class SubtitleController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     */
-    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-    {
-        return view('subtitle.index');
-    }
-
-    /**
      * Show the form for creating a new resource.
      */
     public function create(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\View\View

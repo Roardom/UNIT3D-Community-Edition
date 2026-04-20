@@ -338,6 +338,8 @@ class TorrentRequestSearch extends Component
             'torrentRequests'          => $this->torrentRequests,
             'torrentRequestStat'       => $this->torrentRequestStat,
             'torrentRequestBountyStat' => $this->torrentRequestBountyStat,
-        ]);
+        ])
+            ->extends('layout.default')
+            ->section('content');
     }
 }

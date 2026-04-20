@@ -35,14 +35,6 @@ use Exception;
 class ApplicationController extends Controller
 {
     /**
-     * Display All Applications.
-     */
-    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-    {
-        return view('Staff.application.index');
-    }
-
-    /**
      * Get A Application.
      */
     public function show(int $id): \Illuminate\Contracts\View\Factory|\Illuminate\View\View

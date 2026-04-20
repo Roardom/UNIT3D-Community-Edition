@@ -52,14 +52,6 @@ class TopicController extends Controller
     }
 
     /**
-     * Topics index.
-     */
-    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-    {
-        return view('forum.topic.index');
-    }
-
-    /**
      * Show Topic.
      */
     public function show(Request $request, int $id): \Illuminate\Contracts\View\Factory|\Illuminate\View\View|\Illuminate\Http\RedirectResponse

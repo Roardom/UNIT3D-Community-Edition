@@ -68,6 +68,8 @@ class WatchlistSearch extends Component
     {
         return view('livewire.watchlist-search', [
             'watchedUsers' => $this->users,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

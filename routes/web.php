@@ -213,7 +213,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
 
         // Requests System
         Route::prefix('requests')->name('requests.')->group(function (): void {
-            Route::get('/', [App\Http\Controllers\RequestController::class, 'index'])->name('index');
+            Route::livewire('/', App\Http\Livewire\TorrentRequestSearch::class)->name('index');
             Route::get('/create', [App\Http\Controllers\RequestController::class, 'create'])->name('create');
             Route::post('/', [App\Http\Controllers\RequestController::class, 'store'])->name('store');
             Route::get('/{torrentRequest}/edit', [App\Http\Controllers\RequestController::class, 'edit'])->name('edit');
@@ -243,9 +243,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
         });
 
         // Trending System
-        Route::prefix('trending')->name('trending.')->group(function (): void {
-            Route::get('/', [App\Http\Controllers\TrendingController::class, 'index'])->name('index');
-        });
+        Route::livewire('/trending', App\Http\Livewire\Trending::class)->name('trending.index')->lazy();
 
         // Torrents System
         Route::prefix('torrents/moderation')->name('staff.moderation.')->group(function (): void {
@@ -254,7 +252,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
         });
 
         Route::prefix('torrents')->name('torrents.')->group(function (): void {
-            Route::get('/', [App\Http\Controllers\TorrentController::class, 'index'])->name('index');
+            Route::livewire('/', App\Http\Livewire\TorrentSearch::class)->name('index');
             Route::get('/create', [App\Http\Controllers\TorrentController::class, 'create'])->name('create');
             Route::post('/', [App\Http\Controllers\TorrentController::class, 'store'])->name('store');
             Route::get('/{id}{hash?}', [App\Http\Controllers\TorrentController::class, 'show'])->name('show')->whereNumber('id');
@@ -286,9 +284,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
             Route::post('/{id}/refundable', [App\Http\Controllers\TorrentBuffController::class, 'setRefundable'])->name('refundable')->whereNumber('id');
         });
 
-        Route::prefix('torrent-reseed')->name('torrent-reseed.')->group(function (): void {
-            Route::get('/', [App\Http\Controllers\TorrentReseedController::class, 'index'])->name('index');
-        });
+        Route::livewire('/torrent-reseed', App\Http\Livewire\TorrentReseedSearch::class)->name('torrent-reseed.index');
 
         Route::prefix('torrent')->name('torrent.trump.')->group(function (): void {
             Route::post('/{torrent}/trump', [App\Http\Controllers\TorrentTrumpController::class, 'store'])->name('store');
@@ -307,7 +303,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
 
         // Playlist System
         Route::prefix('playlists')->name('playlists.')->group(function (): void {
-            Route::get('/', [App\Http\Controllers\PlaylistController::class, 'index'])->name('index');
+            Route::livewire('/', App\Http\Livewire\PlaylistSearch::class)->name('index');
             Route::get('/create', [App\Http\Controllers\PlaylistController::class, 'create'])->name('create');
             Route::post('/', [App\Http\Controllers\PlaylistController::class, 'store'])->name('store');
             Route::get('/{playlist}', [App\Http\Controllers\PlaylistController::class, 'show'])->name('show');
@@ -339,7 +335,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
 
         // Subtitles System
         Route::prefix('subtitles')->name('subtitles.')->group(function (): void {
-            Route::get('/', [App\Http\Controllers\SubtitleController::class, 'index'])->name('index');
+            Route::livewire('/', App\Http\Livewire\SubtitleSearch::class)->name('index');
             Route::get('/create', [App\Http\Controllers\SubtitleController::class, 'create'])->name('create');
             Route::post('/', [App\Http\Controllers\SubtitleController::class, 'store'])->name('store');
             Route::patch('/{subtitle}', [App\Http\Controllers\SubtitleController::class, 'update'])->name('update');
@@ -349,7 +345,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
 
         // Tickets System
         Route::prefix('tickets')->name('tickets.')->group(function (): void {
-            Route::get('/', [App\Http\Controllers\TicketController::class, 'index'])->name('index');
+            Route::livewire('/', App\Http\Livewire\TicketSearch::class)->name('index');
             Route::get('/create', [App\Http\Controllers\TicketController::class, 'create'])->name('create');
             Route::post('/', [App\Http\Controllers\TicketController::class, 'store'])->name('store');
             Route::get('/{ticket}', [App\Http\Controllers\TicketController::class, 'show'])->name('show');
@@ -364,19 +360,17 @@ Route::middleware(SetLanguage::class)->group(function (): void {
         })->scopeBindings();
 
         // Missing System
-        Route::prefix('missing')->name('missing.')->group(function (): void {
-            Route::get('/', [App\Http\Controllers\MissingController::class, 'index'])->name('index');
-        });
+        Route::livewire('/missing', App\Http\Livewire\MissingMediaSearch::class)->name('missing.index');
 
         // Mediahub
         Route::prefix('mediahub')->group(function (): void {
             Route::get('/', [App\Http\Controllers\MediaHub\HomeController::class, 'index'])->name('mediahub.index');
             Route::get('/genres', [App\Http\Controllers\MediaHub\TmdbGenreController::class, 'index'])->name('mediahub.genres.index');
-            Route::get('/networks', [App\Http\Controllers\MediaHub\TmdbNetworkController::class, 'index'])->name('mediahub.networks.index');
-            Route::get('/companies', [App\Http\Controllers\MediaHub\TmdbCompanyController::class, 'index'])->name('mediahub.companies.index');
-            Route::get('/persons', [App\Http\Controllers\MediaHub\TmdbPersonController::class, 'index'])->name('mediahub.persons.index');
+            Route::livewire('/networks', App\Http\Livewire\TmdbNetworkSearch::class)->name('mediahub.networks.index');
+            Route::livewire('/companies', App\Http\Livewire\TmdbCompanySearch::class)->name('mediahub.companies.index');
+            Route::livewire('/persons', App\Http\Livewire\TmdbPersonSearch::class)->name('mediahub.persons.index');
             Route::get('/persons/{id}', [App\Http\Controllers\MediaHub\TmdbPersonController::class, 'show'])->name('mediahub.persons.show')->whereNumber('id');
-            Route::get('/collections', [App\Http\Controllers\MediaHub\TmdbCollectionController::class, 'index'])->name('mediahub.collections.index');
+            Route::livewire('/collections', App\Http\Livewire\TmdbCollectionSearch::class)->name('mediahub.collections.index');
             Route::get('/collections/{id}', [App\Http\Controllers\MediaHub\TmdbCollectionController::class, 'show'])->name('mediahub.collections.show')->whereNumber('id');
         });
 
@@ -385,17 +379,17 @@ Route::middleware(SetLanguage::class)->group(function (): void {
             // Forum System
             Route::name('forums.')->group(function (): void {
                 Route::get('/', [App\Http\Controllers\ForumController::class, 'index'])->name('index');
-                Route::get('/{id}', [App\Http\Controllers\ForumController::class, 'show'])->name('show')->whereNumber('id');
+                Route::livewire('/{id}', App\Http\Livewire\ForumTopicSearch::class)->name('show')->whereNumber('id');
             });
 
             // Forum Category System
             Route::prefix('categories')->name('forums.categories.')->group(function (): void {
-                Route::get('/{id}', [App\Http\Controllers\ForumCategoryController::class, 'show'])->name('show')->whereNumber('id');
+                Route::livewire('/{id}', App\Http\Livewire\ForumCategoryTopicSearch::class)->name('show')->whereNumber('id');
             });
 
             // Posts System
             Route::prefix('posts')->name('posts.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\PostController::class, 'index'])->name('index');
+                Route::livewire('/', App\Http\Livewire\PostSearch::class)->name('index');
                 Route::post('/', [App\Http\Controllers\PostController::class, 'store'])->name('store');
                 Route::get('/{id}/edit', [App\Http\Controllers\PostController::class, 'edit'])->name('edit');
                 Route::patch('/{id}', [App\Http\Controllers\PostController::class, 'update'])->name('update');
@@ -404,7 +398,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
 
             //Topics System
             Route::prefix('topics')->name('topics.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\TopicController::class, 'index'])->name('index');
+                Route::livewire('/', App\Http\Livewire\TopicSearch::class)->name('index');
                 Route::get('/forum/{id}/create', [App\Http\Controllers\TopicController::class, 'create'])->name('create')->whereNumber('id');
                 Route::post('/forum/{id}', [App\Http\Controllers\TopicController::class, 'store'])->name('store')->whereNumber('id');
                 Route::get('/{topicId}/posts/{postId}', [App\Http\Controllers\TopicController::class, 'permalink'])->name('permalink')->whereNumber(['topicId', 'postId']);
@@ -450,14 +444,10 @@ Route::middleware(SetLanguage::class)->group(function (): void {
             });
 
             // Bookmarks
-            Route::prefix('bookmarks')->name('bookmarks.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\User\BookmarkController::class, 'index'])->name('index');
-            });
+            Route::livewire('/bookmarks', App\Http\Livewire\UserBookmarks::class)->name('bookmarks.index');
 
             // Earnings
-            Route::prefix('earnings')->name('earnings.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\User\EarningController::class, 'index'])->name('index');
-            });
+            Route::livewire('/earnings', App\Http\Livewire\UserEarnings::class)->name('earnings.index');
 
             // History
             Route::prefix('torrents')->name('history.')->group(function (): void {
@@ -517,7 +507,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
 
             // Notifications
             Route::prefix('notifications')->name('notifications.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\User\NotificationController::class, 'index'])->name('index');
+                Route::livewire('/', App\Http\Livewire\NotificationSearch::class)->name('index');
                 Route::patch('/mass-update', [App\Http\Controllers\User\NotificationController::class, 'massUpdate'])->name('mass_update');
                 Route::patch('/{notification}', [App\Http\Controllers\User\NotificationController::class, 'update'])->name('update');
                 Route::delete('/mass-destroy', [App\Http\Controllers\User\NotificationController::class, 'massDestroy'])->name('mass_destroy');
@@ -550,7 +540,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
 
             // Resurrections
             Route::prefix('resurrections')->name('resurrections.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\User\ResurrectionController::class, 'index'])->name('index');
+                Route::livewire('/', App\Http\Livewire\UserResurrections::class)->name('index');
                 Route::post('/', [App\Http\Controllers\User\ResurrectionController::class, 'store'])->name('store');
                 Route::delete('/{resurrection}', [App\Http\Controllers\User\ResurrectionController::class, 'destroy'])->name('destroy');
             })->scopeBindings();
@@ -563,9 +553,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
             });
 
             // Two-Factor Authentication
-            Route::prefix('two-factor-auth')->name('two_factor_auth.')->group(function (): void {
-                Route::get('/edit', [App\Http\Controllers\User\TwoFactorAuthController::class, 'edit'])->name('edit');
-            });
+            Route::livewire('two-factor-auth/edit', App\Http\Livewire\TwoFactorAuthForm::class)->name('two_factor_auth.edit');
 
             // Email
             Route::prefix('email')->name('email.')->group(function (): void {
@@ -631,9 +619,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
             });
 
             // Unregistered Info Hashes
-            Route::prefix('unregistered-info-hashes')->name('unregistered_info_hashes.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\User\UnregisteredInfoHashController::class, 'index'])->name('index');
-            });
+            Route::livewire('/unregistered-info-hashes', App\Http\Livewire\UserUnregisteredInfoHashSearch::class)->name('unregistered_info_hashes.index');
 
             // Warnings
             Route::prefix('warnings')->name('warnings.')->group(function (): void {
@@ -663,14 +649,10 @@ Route::middleware(SetLanguage::class)->group(function (): void {
             });
 
             // Announces
-            Route::prefix('announces')->name('announces.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\AnnounceController::class, 'index'])->name('index');
-            });
+            Route::livewire('/announces', App\Http\Livewire\AnnounceSearch::class)->name('announces.index');
 
             // Apikeys
-            Route::prefix('apikeys')->name('apikeys.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\ApikeyController::class, 'index'])->name('index');
-            });
+            Route::livewire('/apikeys', App\Http\Livewire\ApikeySearch::class)->name('apikeys.index');
 
             // Articles System
             Route::prefix('articles')->name('articles.')->group(function (): void {
@@ -684,7 +666,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
 
             // Applications System
             Route::prefix('applications')->name('applications.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\ApplicationController::class, 'index'])->name('index');
+                Route::livewire('/', App\Http\Livewire\ApplicationSearch::class)->name('index');
                 Route::get('/{id}', [App\Http\Controllers\Staff\ApplicationController::class, 'show'])->name('show')->whereNumber('id');
                 Route::post('/{id}/approve', [App\Http\Controllers\Staff\ApplicationController::class, 'approve'])->name('approve')->whereNumber('id');
                 Route::post('/{id}/reject', [App\Http\Controllers\Staff\ApplicationController::class, 'reject'])->name('reject')->whereNumber('id');
@@ -697,9 +679,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
             });
 
             // Authentications Log
-            Route::prefix('authentications')->name('authentications.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\AuthenticationController::class, 'index'])->name('index');
-            });
+            Route::livewire('/authentications', App\Http\Livewire\FailedLoginSearch::class)->name('authentications.index');
 
             // Automatic Torrent Freeleeches
             Route::prefix('automatic-torrent-freeleeches')->name('automatic_torrent_freeleeches.')->group(function (): void {
@@ -712,9 +692,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
             });
 
             // Backup System
-            Route::prefix('backups')->name('backups.')->middleware(CheckForOwner::class)->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\BackupController::class, 'index'])->name('index');
-            });
+            Route::livewire('/backups', App\Http\Livewire\BackupPanel::class)->name('backups.index')->middleware(CheckForOwner::class);
 
             // Ban System
             Route::prefix('bans')->name('bans.')->group(function (): void {
@@ -739,9 +717,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
             });
 
             // Block Ip System
-            Route::prefix('blocked-ips')->name('blocked_ips.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\BlockedIpController::class, 'index'])->name('index');
-            });
+            Route::livewire('/blocked-ips', App\Http\Livewire\BlockIpAddress::class)->name('blocked_ips.index');
 
             // Bon Exchanges
             Route::prefix('bon-exchanges')->name('bon_exchanges.')->group(function (): void {
@@ -841,9 +817,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
             });
 
             // Email Updates
-            Route::prefix('email-updates')->name('email_updates.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\EmailUpdateController::class, 'index'])->name('index');
-            });
+            Route::livewire('/email-updates', App\Http\Livewire\EmailUpdateSearch::class)->name('email_updates.index');
 
             // Giveaways
             Route::prefix('giveaways')->name('giveaways.')->group(function (): void {
@@ -899,27 +873,36 @@ Route::middleware(SetLanguage::class)->group(function (): void {
             });
 
             // Gifts Log
-            Route::prefix('gifts')->name('gifts.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\GiftController::class, 'index'])->name('index');
-            });
+            Route::livewire('/gifts', App\Http\Livewire\GiftLogSearch::class)->name('gifts.index');
 
             // History
-            Route::prefix('histories')->name('histories.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\HistoryController::class, 'index'])->name('index');
+            Route::livewire('/histories', App\Http\Livewire\HistorySearch::class)->name('histories.index');
+
+            // Internals System
+            Route::prefix('internals')->name('internals.')->group(function (): void {
+                Route::get('/', [App\Http\Controllers\Staff\InternalController::class, 'index'])->name('index');
+                Route::get('/{internal}/edit', [App\Http\Controllers\Staff\InternalController::class, 'edit'])->name('edit');
+                Route::patch('/{internal}', [App\Http\Controllers\Staff\InternalController::class, 'update'])->name('update');
+                Route::get('/create', [App\Http\Controllers\Staff\InternalController::class, 'create'])->name('create');
+                Route::post('/', [App\Http\Controllers\Staff\InternalController::class, 'store'])->name('store');
+                Route::delete('/{internal}', [App\Http\Controllers\Staff\InternalController::class, 'destroy'])->name('destroy');
+            });
+
+            // Internal Users
+            Route::prefix('internal-users')->name('internal_users.')->group(function (): void {
+                Route::post('/', [App\Http\Controllers\Staff\InternalUserController::class, 'store'])->name('store');
+                Route::delete('/{internalUser}', [App\Http\Controllers\Staff\InternalUserController::class, 'destroy'])->name('destroy');
+                Route::patch('/{internalUser}', [App\Http\Controllers\Staff\InternalUserController::class, 'update'])->name('update');
             });
 
             // Invites Log
-            Route::prefix('invites')->name('invites.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\InviteController::class, 'index'])->name('index');
-            });
+            Route::livewire('/invites', App\Http\Livewire\InviteLogSearch::class)->name('invites.index');
 
             // Laravel Log Viewer
             Route::livewire('/laravel-log', App\Http\Livewire\LaravelLogViewer::class)->middleware(CheckForOwner::class)->name('laravel-log.index');
 
             // Leakers
-            Route::prefix('leakers')->name('leakers.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\LeakerController::class, 'index'])->name('index');
-            });
+            Route::livewire('/leakers', App\Http\Livewire\LeakerSearch::class)->name('leakers.index');
 
             // Mass Actions
             Route::prefix('mass-actions')->group(function (): void {
@@ -948,6 +931,9 @@ Route::middleware(SetLanguage::class)->group(function (): void {
                 Route::delete('/{mediaLanguage}', [App\Http\Controllers\Staff\MediaLanguageController::class, 'destroy'])->name('destroy');
             });
 
+            // User Staff Notes
+            Route::livewire('/notes', App\Http\Livewire\NoteSearch::class)->name('notes.index');
+
             //Pages System
             Route::prefix('pages')->name('pages.')->group(function (): void {
                 Route::get('/', [App\Http\Controllers\Staff\PageController::class, 'index'])->name('index');
@@ -959,19 +945,13 @@ Route::middleware(SetLanguage::class)->group(function (): void {
             });
 
             // Passkeys
-            Route::prefix('passkeys')->name('passkeys.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\PasskeyController::class, 'index'])->name('index');
-            });
+            Route::livewire('/passkeys', App\Http\Livewire\PasskeySearch::class)->name('passkeys.index');
 
             // Password Reset Histories
-            Route::prefix('password-reset-histories')->name('password_reset_histories.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\PasswordResetHistoryController::class, 'index'])->name('index');
-            });
+            Route::livewire('/password-reset-histories', App\Http\Livewire\PasswordResetHistorySearch::class)->name('password_reset_histories.index');
 
             // Peers
-            Route::prefix('peers')->name('peers.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\PeerController::class, 'index'])->name('index');
-            });
+            Route::livewire('/peers', App\Http\Livewire\PeerSearch::class)->name('peers.index');
 
             // Playlist Categories System
             Route::prefix('playlist-categories')->name('playlist_categories.')->group(function (): void {
@@ -1004,25 +984,13 @@ Route::middleware(SetLanguage::class)->group(function (): void {
                 Route::delete('/{region}', [App\Http\Controllers\Staff\RegionController::class, 'destroy'])->name('destroy');
             });
 
-            // Registered Seedboxes
-            Route::prefix('seedboxes')->name('seedboxes.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\SeedboxController::class, 'index'])->name('index');
-                Route::delete('/{seedbox}', [App\Http\Controllers\Staff\SeedboxController::class, 'destroy'])->name('destroy');
-            });
-
             // Reports
             Route::prefix('reports')->name('reports.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\ReportController::class, 'index'])->name('index');
+                Route::livewire('/', App\Http\Livewire\ReportSearch::class)->name('index');
                 Route::get('/{report}', [App\Http\Controllers\Staff\ReportController::class, 'show'])->name('show');
                 Route::patch('/{report}', [App\Http\Controllers\Staff\ReportController::class, 'update'])->name('update');
                 Route::post('/{report}/assignee', [App\Http\Controllers\Staff\ReportAssigneeController::class, 'store'])->name('assignee.store');
                 Route::delete('/{report}/assignee', [App\Http\Controllers\Staff\ReportAssigneeController::class, 'destroy'])->name('assignee.destroy');
-            });
-
-            // Snoozed Reports
-            Route::prefix('snoozed-reports')->name('snoozed_reports.')->group(function (): void {
-                Route::post('/{report}', [App\Http\Controllers\Staff\SnoozedReportController::class, 'store'])->name('store');
-                Route::delete('/{report}', [App\Http\Controllers\Staff\SnoozedReportController::class, 'destroy'])->name('destroy');
             });
 
             // Resolutions
@@ -1046,8 +1014,18 @@ Route::middleware(SetLanguage::class)->group(function (): void {
             });
 
             // RSS Keys
-            Route::prefix('rsskeys')->name('rsskeys.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\RsskeyController::class, 'index'])->name('index');
+            Route::livewire('/rsskeys', App\Http\Livewire\RsskeySearch::class)->name('rsskeys.index');
+
+            // Registered Seedboxes
+            Route::prefix('seedboxes')->name('seedboxes.')->group(function (): void {
+                Route::get('/', [App\Http\Controllers\Staff\SeedboxController::class, 'index'])->name('index');
+                Route::delete('/{seedbox}', [App\Http\Controllers\Staff\SeedboxController::class, 'destroy'])->name('destroy');
+            });
+
+            // Snoozed Reports
+            Route::prefix('snoozed-reports')->name('snoozed_reports.')->group(function (): void {
+                Route::post('/{report}', [App\Http\Controllers\Staff\SnoozedReportController::class, 'store'])->name('store');
+                Route::delete('/{report}', [App\Http\Controllers\Staff\SnoozedReportController::class, 'destroy'])->name('destroy');
             });
 
             // Ticket Categories
@@ -1087,9 +1065,7 @@ Route::middleware(SetLanguage::class)->group(function (): void {
             });
 
             // Unregistered Torrents
-            Route::prefix('unregistered-info-hashes')->name('unregistered_info_hashes.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\UnregisteredInfoHashController::class, 'index'])->name('index');
-            });
+            Route::livewire('/unregistered-info-hashes', App\Http\Livewire\UnregisteredInfoHashSearch::class)->name('unregistered_info_hashes.index');
 
             // Upload Contests
             Route::prefix('upload-contests')->name('upload_contests.')->group(function (): void {
@@ -1110,46 +1086,22 @@ Route::middleware(SetLanguage::class)->group(function (): void {
                 });
             });
 
-            // User Staff Notes
-            Route::prefix('notes')->name('notes.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\NoteController::class, 'index'])->name('index');
-            });
-
             // User Tools TODO: Leaving since we will be refactoring users and roles
             Route::prefix('users')->name('users.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\UserController::class, 'index'])->name('index');
+                Route::livewire('/', App\Http\Livewire\UserSearch::class)->name('index');
                 Route::patch('/{user:username}', [App\Http\Controllers\Staff\UserController::class, 'update'])->name('update')->withTrashed();
                 Route::get('/{user:username}/edit', [App\Http\Controllers\Staff\UserController::class, 'edit'])->name('edit');
                 Route::patch('/{user:username}/permissions', [App\Http\Controllers\Staff\UserController::class, 'permissions'])->name('update_permissions');
                 Route::delete('/{user:username}', [App\Http\Controllers\Staff\UserController::class, 'destroy'])->name('destroy');
             });
 
-            // Warnings Log
-            Route::prefix('warnings')->name('warnings.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\WarningController::class, 'index'])->name('index');
-            });
-
-            // Internals System
-            Route::prefix('internals')->name('internals.')->group(function (): void {
-                Route::get('/', [App\Http\Controllers\Staff\InternalController::class, 'index'])->name('index');
-                Route::get('/{internal}/edit', [App\Http\Controllers\Staff\InternalController::class, 'edit'])->name('edit');
-                Route::patch('/{internal}', [App\Http\Controllers\Staff\InternalController::class, 'update'])->name('update');
-                Route::get('/create', [App\Http\Controllers\Staff\InternalController::class, 'create'])->name('create');
-                Route::post('/', [App\Http\Controllers\Staff\InternalController::class, 'store'])->name('store');
-                Route::delete('/{internal}', [App\Http\Controllers\Staff\InternalController::class, 'destroy'])->name('destroy');
-            });
-
-            // Internal Users
-            Route::prefix('internal-users')->name('internal_users.')->group(function (): void {
-                Route::post('/', [App\Http\Controllers\Staff\InternalUserController::class, 'store'])->name('store');
-                Route::delete('/{internalUser}', [App\Http\Controllers\Staff\InternalUserController::class, 'destroy'])->name('destroy');
-                Route::patch('/{internalUser}', [App\Http\Controllers\Staff\InternalUserController::class, 'update'])->name('update');
-            });
-
             // Uploader System
             Route::prefix('uploaders')->name('uploaders.')->group(function (): void {
                 Route::get('/', [App\Http\Controllers\Staff\UploaderController::class, 'index'])->name('index');
             });
+
+            // Warnings Log
+            Route::livewire('/warnings', App\Http\Livewire\WarningLogSearch::class)->name('warnings.index');
 
             // Watchlist
             Route::prefix('watchlist')->name('watchlist.')->group(function (): void {

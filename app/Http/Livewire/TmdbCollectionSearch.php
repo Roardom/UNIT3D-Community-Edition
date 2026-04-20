@@ -54,6 +54,8 @@ class TmdbCollectionSearch extends Component
     {
         return view('livewire.tmdb-collection-search', [
             'collections' => $this->collections,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

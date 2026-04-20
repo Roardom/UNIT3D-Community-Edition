@@ -54,6 +54,8 @@ class TmdbCompanySearch extends Component
     {
         return view('livewire.tmdb-company-search', [
             'companies' => $this->companies,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

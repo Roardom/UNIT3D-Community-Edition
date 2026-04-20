@@ -25,14 +25,6 @@ use Illuminate\Http\Request;
 class TicketController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    final public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-    {
-        return view('ticket.index');
-    }
-
-    /**
      * Show the form for creating a new resource.
      */
     final public function create(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View

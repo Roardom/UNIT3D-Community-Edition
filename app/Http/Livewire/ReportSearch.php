@@ -91,6 +91,8 @@ class ReportSearch extends Component
     {
         return view('livewire.report-search', [
             'reports' => $this->reports,
-        ]);
+        ])
+            ->extends('layout.default')
+            ->section('content');
     }
 }

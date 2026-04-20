@@ -94,6 +94,8 @@ class PlaylistSearch extends Component
         return view('livewire.playlist-search', [
             'playlists'          => $this->playlists,
             'playlistCategories' => $this->playlistCategories,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

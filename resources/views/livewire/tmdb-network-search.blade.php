@@ -1,3 +1,24 @@
+@section('title')
+    <title>{{ __('mediahub.networks') }} - {{ config('other.title') }}</title>
+@endsection
+
+@section('meta')
+    <meta name="description" content="{{ __('mediahub.networks') }}" />
+@endsection
+
+@section('breadcrumbs')
+    <li class="breadcrumbV2">
+        <a href="{{ route('mediahub.index') }}" class="breadcrumb__link">
+            {{ __('mediahub.title') }}
+        </a>
+    </li>
+    <li class="breadcrumb--active">
+        {{ __('mediahub.networks') }}
+    </li>
+@endsection
+
+@section('page', 'page__network--index')
+
 <section class="panelV2">
     <header class="panel__header">
         <h2 class="panel__heading">{{ __('mediahub.networks') }}</h2>

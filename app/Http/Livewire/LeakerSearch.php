@@ -88,6 +88,8 @@ class LeakerSearch extends Component
         return view('livewire.leaker-search', [
             'leakers'        => $this->leakers,
             'torrentIdCount' => $this->torrentIdCount,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

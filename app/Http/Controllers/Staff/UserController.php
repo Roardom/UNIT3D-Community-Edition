@@ -45,14 +45,6 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     /**
-     * Users List.
-     */
-    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-    {
-        return view('Staff.user.index');
-    }
-
-    /**
      * User Edit Form.
      */
     public function edit(Request $request, User $user): \Illuminate\Contracts\View\Factory|\Illuminate\View\View

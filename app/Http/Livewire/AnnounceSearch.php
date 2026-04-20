@@ -69,6 +69,8 @@ class AnnounceSearch extends Component
     {
         return view('livewire.announce-search', [
             'announces' => $this->announces,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

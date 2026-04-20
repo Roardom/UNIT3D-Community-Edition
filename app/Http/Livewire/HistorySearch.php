@@ -156,6 +156,8 @@ class HistorySearch extends Component
     {
         return view('livewire.history-search', [
             'histories' => $this->histories,
-        ]);
+        ])
+            ->extends('layout.default')
+            ->section('content');
     }
 }

@@ -22,14 +22,6 @@ use App\Models\TmdbPerson;
 class TmdbPersonController extends Controller
 {
     /**
-     * Display All Persons.
-     */
-    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-    {
-        return view('mediahub.person.index');
-    }
-
-    /**
      * Show A Person.
      */
     public function show(int $id): \Illuminate\Contracts\View\Factory|\Illuminate\View\View

@@ -114,6 +114,8 @@ class UserSearch extends Component
         return view('livewire.user-search', [
             'users'  => $this->users,
             'groups' => $this->groups,
-        ]);
+        ])
+            ->extends('layout.default')
+            ->section('content');
     }
 }

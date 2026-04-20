@@ -63,6 +63,8 @@ class ApikeySearch extends Component
     {
         return view('livewire.apikey-search', [
             'apikeys' => $this->apikeys,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

@@ -75,6 +75,8 @@ class TmdbPersonSearch extends Component
         return view('livewire.tmdb-person-search', [
             'persons'         => $this->persons,
             'firstCharacters' => $this->firstCharacters,
-        ]);
+        ])
+            ->extends('layout.default')
+            ->section('content');
     }
 }

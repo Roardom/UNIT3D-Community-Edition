@@ -88,6 +88,8 @@ class TicketSearch extends Component
     {
         return view('livewire.ticket-search', [
             'tickets' => $this->tickets,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

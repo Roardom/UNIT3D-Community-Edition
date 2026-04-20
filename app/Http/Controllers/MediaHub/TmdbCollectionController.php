@@ -22,14 +22,6 @@ use App\Models\TmdbCollection;
 class TmdbCollectionController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-    {
-        return view('mediahub.collection.index');
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(int $id): \Illuminate\Contracts\View\Factory|\Illuminate\View\View

@@ -30,14 +30,6 @@ use App\Models\User;
 class ReportController extends Controller
 {
     /**
-     * Display All Reports.
-     */
-    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-    {
-        return view('Staff.report.index');
-    }
-
-    /**
      * Show A Report.
      */
     public function show(Report $report): \Illuminate\Contracts\View\Factory|\Illuminate\View\View

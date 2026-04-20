@@ -19,7 +19,7 @@
 
 @section('page', 'page__staff-torrent-download--index')
 
-<div style="display: flex; flex-direction: column; row-gap: 1rem">
+<article>
     <section class="panelV2">
         <header class="panel__header">
             <h2 class="panel__heading">{{ __('common.search') }}</h2>
@@ -237,7 +237,9 @@
                                             :anon="false"
                                         />
                                     </td>
-                                    <td>{{ $torrentDownload->torrent?->id ?? 'Not found' }}</td>
+                                    <td>
+                                        {{ $torrentDownload->torrent?->id ?? 'Not found' }}
+                                    </td>
                                     <td>
                                         @if ($torrentDownload->torrent !== null)
                                             <a
@@ -266,4 +268,4 @@
         </div>
         {{ $torrentDownloads->links('partials.pagination') }}
     </section>
-</div>
+</article>

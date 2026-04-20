@@ -1,4 +1,16 @@
-<div class="page__requests request-search__component">
+@section('title')
+    <title>{{ __('request.requests') }} - {{ config('other.title') }}</title>
+@endsection
+
+@section('breadcrumbs')
+    <li class="breadcrumb--active">
+        {{ __('request.requests') }}
+    </li>
+@endsection
+
+@section('page', 'page__request--index')
+
+<article class="page__requests request-search__component">
     <search class="compact-search request-search__filters" x-data="toggle">
         <div class="compact-search__visible-default">
             <p class="form__group">
@@ -443,4 +455,4 @@
             </div>
         </dl>
     </section>
-</div>
+</article>

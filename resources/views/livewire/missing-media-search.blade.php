@@ -1,3 +1,13 @@
+@section('title')
+    <title>Missing media</title>
+@endsection
+
+@section('breadcrumbs')
+    <li class="breadcrumb--active">Missing media</li>
+@endsection
+
+@section('page', 'page__missing--index')
+
 <section class="panelV2">
     <header class="panel__header">
         <h2 class="panel__heading">Missing media</h2>

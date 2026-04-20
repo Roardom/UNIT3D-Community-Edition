@@ -1,3 +1,29 @@
+@section('title')
+    <title>
+        {{ __('common.user') }} notes - {{ __('staff.staff-dashboard') }} -
+        {{ config('other.title') }}
+    </title>
+@endsection
+
+@section('meta')
+    <meta name="description" content="User notes - {{ __('staff.staff-dashboard') }}" />
+@endsection
+
+@section('nav-tabs')
+    @include('Staff.partials.user-info-search')
+@endsection
+
+@section('breadcrumbs')
+    <li class="breadcrumbV2">
+        <a href="{{ route('staff.dashboard.index') }}" class="breadcrumb__link">
+            {{ __('staff.staff-dashboard') }}
+        </a>
+    </li>
+    <li class="breadcrumb--active">
+        {{ __('staff.user-notes') }}
+    </li>
+@endsection
+
 <section class="panelV2">
     <header class="panel__header">
         <h2 class="panel__heading">{{ __('staff.user-notes') }}</h2>

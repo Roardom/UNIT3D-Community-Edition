@@ -16,6 +16,8 @@ declare(strict_types=1);
 
 namespace App\Http\Livewire;
 
+use App\Models\User;
+use Illuminate\Http\Request;
 use Laravel\Fortify\Actions\ConfirmTwoFactorAuthentication;
 use Laravel\Fortify\Actions\DisableTwoFactorAuthentication;
 use Laravel\Fortify\Actions\EnableTwoFactorAuthentication;
@@ -48,8 +50,10 @@ class TwoFactorAuthForm extends Component
     /**
      * Mount the component.
      */
-    final public function mount(): void
+    final public function mount(Request $request, User $user): void
     {
+        abort_unless($request->user()->is($user), 403);
+
         if (Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm') &&
             null === auth()->user()->two_factor_confirmed_at) {
             app(DisableTwoFactorAuthentication::class)(auth()->user());
@@ -141,6 +145,10 @@ class TwoFactorAuthForm extends Component
      */
     final public function render(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('livewire.two-factor-auth-form');
+        return view('livewire.two-factor-auth-form', [
+            'user' => $this->user,
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

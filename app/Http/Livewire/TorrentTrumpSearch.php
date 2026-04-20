@@ -64,7 +64,7 @@ class TorrentTrumpSearch extends Component
         return view('livewire.torrent-trump-search', [
             'torrentTrumps' => $this->torrentTrumps,
         ])
-            ->extends('layout.default')
-            ->section('content');
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

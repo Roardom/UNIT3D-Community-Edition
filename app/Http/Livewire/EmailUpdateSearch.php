@@ -59,6 +59,8 @@ class EmailUpdateSearch extends Component
     {
         return view('livewire.email-update-search', [
             'emailUpdates' => $this->emailUpdates,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

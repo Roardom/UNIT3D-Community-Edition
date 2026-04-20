@@ -51,8 +51,12 @@ class ForumCategoryTopicSearch extends Component
 
     public ForumCategory $category;
 
-    final public function mount(ForumCategory $category): void
+    final public function mount(int $id): void
     {
+        $category = ForumCategory::query()
+            ->whereHas('forums', fn ($query) => $query->authorized(canReadTopic: true))
+            ->findOrFail($id);
+
         $this->category = $category;
     }
 
@@ -122,6 +126,8 @@ class ForumCategoryTopicSearch extends Component
     {
         return view('livewire.forum-category-topic-search', [
             'topics' => $this->topics,
-        ]);
+        ])
+            ->extends('layout.default')
+            ->section('content');
     }
 }

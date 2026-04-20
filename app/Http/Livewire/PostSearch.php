@@ -57,6 +57,8 @@ class PostSearch extends Component
     {
         return view('livewire.post-search', [
             'posts' => $this->posts,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

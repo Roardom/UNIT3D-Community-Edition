@@ -65,14 +65,6 @@ class TorrentController extends Controller
     }
 
     /**
-     * Display a listing of the Torrent resource.
-     */
-    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-    {
-        return view('torrent.index');
-    }
-
-    /**
      * Display The Torrent resource.
      *
      * @throws JsonException

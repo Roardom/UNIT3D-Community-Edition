@@ -57,10 +57,10 @@ class ForumTopicSearch extends Component
 
     public ?ForumPermission $permission;
 
-    final public function mount(Forum $forum): void
+    final public function mount(int $id): void
     {
-        $this->forum = $forum;
-        $this->subscription = Subscription::query()->where('user_id', '=', auth()->id())->where('forum_id', '=', $forum->id)->first();
+        $this->forum = Forum::query()->findOrFail($id);
+        $this->subscription = Subscription::query()->where('user_id', '=', auth()->id())->where('forum_id', '=', $id)->first();
         $this->state = $this->forum->default_topic_state_filter ?: '';
         $this->permission = ForumPermission::query()
             ->where('group_id', '=', auth()->user()->group_id)
@@ -134,6 +134,8 @@ class ForumTopicSearch extends Component
     {
         return view('livewire.forum-topic-search', [
             'topics' => $this->topics,
-        ]);
+        ])
+            ->extends('layout.default')
+            ->section('content');
     }
 }

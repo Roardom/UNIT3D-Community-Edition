@@ -90,6 +90,8 @@ class BlockIpAddress extends Component
     {
         return view('livewire.block-ip-address', [
             'ipAddresses' => $this->ipAddresses,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

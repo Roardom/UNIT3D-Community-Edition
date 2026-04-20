@@ -74,6 +74,11 @@ class MissingMediaSearch extends Component
 
     final public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('livewire.missing-media-search', ['medias' => $this->medias, 'types' => $this->types]);
+        return view('livewire.missing-media-search', [
+            'medias' => $this->medias,
+            'types'  => $this->types,
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }

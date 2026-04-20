@@ -67,6 +67,8 @@ class GiftLogSearch extends Component
     {
         return view('livewire.gift-log-search', [
             'gifts' => $this->gifts,
-        ]);
+        ])
+            ->extends('layout.with-main')
+            ->section('main');
     }
 }
